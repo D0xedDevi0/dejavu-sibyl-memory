@@ -62,7 +62,8 @@ def session_b(memory: Memory, frame: dict, *, phrases: list[str] | None = None) 
 
 def run_sessions(*, crisis_frame: dict | None = None,
                  base_frame: dict | None = None,
-                 db_path: str | None = None) -> dict:
+                 db_path: str | None = None,
+                 config: Config | None = None) -> dict:
     """Full echo loop across two logical sessions on one store.
 
     Returns a structured dict the demo/tests can assert on.
@@ -70,6 +71,7 @@ def run_sessions(*, crisis_frame: dict | None = None,
     crisis = crisis_frame or {"vix": 52.0, "credit_stress": 2.2}
     base = base_frame or {"vix": 18.0, "credit_stress": 0.3}
     db = db_path or os.path.join(tempfile.mkdtemp(), "memory.db")
+    config = config or Config()
 
     # Session A (fresh store).
     a = Memory(db)
@@ -81,12 +83,16 @@ def run_sessions(*, crisis_frame: dict | None = None,
     recalled_book = session_b(b, crisis)
     b.close()
 
+    # The recalled decision becomes an onchain action on Base.
+    receipt = execute(recalled_book, config)
+
     return {
         "db": db,
         "crisis_frame": crisis,
         "base_frame": base,
         "learned_book": learned_book.to_dict(),
         "recalled_book": recalled_book.to_dict(),
+        "onchain": receipt.as_dict(),
     }
 
 
@@ -120,12 +126,16 @@ def main(argv: list[str] | None = None) -> int:
     book = session_b(mem2, crisis)
     mem2.close()
 
+    # Turn the recalled decision into a Base onchain action.
+    receipt = execute(book, cfg)
+
     result = {
         "db": db,
         "frame": crisis,
         "equity_weight": book.equity,
         "rationale": book.rationale,
         "loaded": not args.wipe,
+        "onchain": receipt.as_dict(),
     }
     if args.json:
         print(json.dumps(result, indent=2))
@@ -136,6 +146,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[SESSION B] equity weight = {book.equity:.2f}  "
           f"({'memory-loaded' if not args.wipe else 'NAIVE - memory wiped'})")
     print(f"[SESSION B] stored DB: {db}")
+    print(f"[ONCHAIN] action={receipt.action} dry_run={receipt.dry_run}")
+    if receipt.tx_hash:
+        print(f"[ONCHAIN] tx {receipt.tx_hash}")
+        print(f"[ONCHAIN] explorer {receipt.explorer_url}")
     return 0
 
 

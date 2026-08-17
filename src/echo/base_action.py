@@ -1,16 +1,36 @@
-"""Onchain leg for the echo loop (Base). Wired in M3 of the build window.
+"""Onchain leg for the echo loop (Base Mainnet).
 
-The memory-driven decision produces a Book; this module turns it into a REAL
-Base transaction (x402 payment or wallet operation) and returns a tx hash for
-the demo. Until M3, `execute` runs in dry-run and returns a receipt struct.
+The memory-driven decision (a Book) becomes a REAL Base transaction. Two modes
+used in the demo:
+
+  * `de_risk`  (recalled a crisis lesson) -> transfer dust ETH to the fee
+    recipient, labelled a de-risk / hedge settlement. Tx hash is the proof the
+    agent *acted onchain because it remembered*.
+  * `hold`     (no stress / naive)         -> a dust self-transfer (keep-alive).
+
+`execute()` defaults to dry-run for safety. Set `dry_run=False` (env
+`ECHO_DRY_RUN=0`, or `Config(dry_run=False)`) to broadcast a real tx.
+
+Verified live (2026-08-17):
+  * RPC mainnet.base.org  -> chainId 0x2105 (8453)
+  * agent wallet 0x23129c0472172D75bEd1e6dd061301796760Ecd9, ~5e-05 ETH, 409 prior txs
+  * gas price ~0.006 gwei (Base is cheap; a dust transfer costs fractions of a cent)
 """
 
 from __future__ import annotations
 
+import json
+import urllib.request
 from dataclasses import dataclass, field
 from typing import Any
 
+from eth_account import Account
+from eth_account.datastructures import SignedTransaction
+
 from .config import Config
+
+_RPC_HEADERS = {"Content-Type": "application/json", "User-Agent": "curl/8"}
+DUST = 1_000  # wei; a symbolic, near-free amount (transaction, not value, is the point)
 
 
 @dataclass
@@ -31,25 +51,80 @@ class OnchainReceipt:
         }
 
 
+def _rpc(url: str, method: str, params: list) -> Any:
+    req = urllib.request.Request(
+        url, data=json.dumps({"jsonrpc": "2.0", "id": 1, "method": method,
+                              "params": params}).encode(),
+        headers=_RPC_HEADERS,
+    )
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return json.loads(resp.read().decode())["result"]
+
+
+def _load_account(config: Config) -> Account:
+    raw = config.wallet_key.read_text().strip()
+    if not raw.startswith("0x"):
+        raw = "0x" + raw
+    return Account.from_key(raw)
+
+
+def _broadcast(url: str, signed: SignedTransaction) -> str:
+    req = urllib.request.Request(
+        url, data=json.dumps({"jsonrpc": "2.0", "id": 1,
+                              "method": "eth_sendRawTransaction",
+                              "params": [signed.raw_transaction.hex()]}).encode(),
+        headers=_RPC_HEADERS,
+    )
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return json.loads(resp.read().decode())["result"]
+
+
 def execute(book, config: Config) -> OnchainReceipt:
-    """Turn a Book into an onchain action on Base.
+    """Turn a Book into an onchain action on Base Mainnet.
 
-    M3: when a real x402 / wallet-op path is confirmed, replace the dry-run
-    body with an actual broadcast. `dry_run` keeps this safe until then.
+    With memory (de-risk) the agent moves dust to the fee recipient — an actual
+    executed transaction. The tx hash is the demo's "it didn't just remember, it
+    acted" proof.
     """
-    # Memory-driven decision -> what the wallet should do.
-    if book.equity <= 0.05:
-        action = "x402_payment_de_risk"
-        details = {"mode": "de-risk", "equity_target": book.equity}
-    else:
-        action = "x402_payment_hold"
-        details = {"mode": "hold", "equity_target": book.equity}
+    action = "de_risk" if book.equity <= 0.05 else "hold"
+    details = {"equity_target": round(book.equity, 3),
+               "rationale": book.rationale}
 
+    # ---- dry-run: no broadcast, everything else simulated ----------------
     if config.dry_run:
         return OnchainReceipt(
             dry_run=True, action=action, details=details,
             tx_hash=None, explorer_url=None,
         )
 
-    # TODO(M3): broadcast real tx using config.rpc_url, wallet_key, escrow.
-    raise NotImplementedError("M3 wires the real Base transaction here.")
+    # ---- real broadcast --------------------------------------------------
+    acct = _load_account(config)
+    # feeRecipient may be a short/placeholder form; only use it if valid.
+    to = acct.address  # self-transfer is the safe, always-valid default
+    if action == "de_risk" and Account.is_address(config.fee_recipient):
+        to = config.fee_recipient
+    chain_id = int(_rpc(config.rpc_url, "eth_chainId", []), 16)
+    nonce = int(_rpc(config.rpc_url, "eth_getTransactionCount", [acct.address, "latest"]), 16)
+    gas_price = int(_rpc(config.rpc_url, "eth_gasPrice", []), 16)
+    gas_limit = 21000
+
+    tx = {
+        "to": to,
+        "value": DUST,
+        "gas": gas_limit,
+        "gasPrice": gas_price,
+        "nonce": nonce,
+        "chainId": chain_id,
+    }
+    signed = acct.sign_transaction(tx)
+    tx_hash = _broadcast(config.rpc_url, signed)
+    explorer = config.BASE_EXPLORER.rstrip("/") + "/" + tx_hash
+
+    details.update({
+        "from": acct.address, "to": to, "value_wei": DUST,
+        "chain_id": chain_id, "nonce": nonce, "gas_price_gwei": round(gas_price / 1e9, 4),
+    })
+    return OnchainReceipt(
+        dry_run=False, action=action, details=details,
+        tx_hash=tx_hash, explorer_url=explorer,
+    )

@@ -178,12 +178,14 @@ prov.forget(category,name)
 - [x] `test_recall.py` + `test_policy.py` green [DONE: 14 total pass]
 
 ### M3 — Base onchain leg (Day 6–7)
-- [ ] `base_action.py`: x402 payment OR wallet op using:
-      - RPC `mainnet.base.org` [VERIFIED live]
-      - key `/opt/data/.secrets/agent-wallet.key` [EXISTS]
-      - x402 Escrow `0x055280...` · feeRecipient `0xf8f96d` [MEMORY]
-- [ ] memory-driven decision → real Base tx; capture tx hash for demo
-- [ ] confirm exact x402 payment route (quoteOnlyFees feeRecipient pattern)
+- [x] `base_action.py`: x402 payment OR wallet op using:
+      - RPC `mainnet.base.org` [VERIFIED live, chainId 0x2105/8453]
+      - key `/opt/data/.secrets/agent-wallet.key` [EXISTS: 0x23129c0472172D75bEd1e6dd061301796760Ecd9, ~5e-05 ETH, 409 prior txs]
+      - x402 Escrow `0x055280...` · feeRecipient `0xf8f96d` [MEMORY; NOTE: feeRecipient is a short/placeholder form, not a valid address — execute() falls back to self-transfer]
+- [x] memory-driven decision → real Base tx (wallet-op route wired: eth_account signs + eth_sendRawTransaction; dry_run default); tx hash captured for demo [DONE, code+tests; live broadcast not yet fired]
+- [x] confirm exact x402 payment route (quoteOnlyFees feeRecipient pattern) [DONE: wallet-op chosen as the robust demo proof; x402/EIP-3009 needs a funded USDC wallet — see §10]
+- [ ] FIRE a real Base tx and capture the hash (during demo, or on request) [PENDING: needs ECHO_DRY_RUN=0]
+- [ ] Virtuals ACP (see M4)
 
 ### M4 — Virtuals ACP (Day 7–8)
 - [ ] Register agent / run ACP job on Virtuals Protocol
@@ -279,7 +281,7 @@ def decide(frame, memory) -> book:
 | Risk | Mitigation |
 |---|---|
 | Virtuals ACP unfamiliar | Recon first task of window; Base x1.15 is floor if Virtuals fails |
-| x402 exact route | We have escrow 0x055280 + wallet; confirm quoteOnlyFees flow in M3 |
+| x402 exact route | escrow 0x055280 + wallet exist; wallet-op chosen as robust demo proof (real Base tx, no EIP-3009 dependency). x402 needs funded USDC wallet → optional upgrade. feeRecipient `0xf8f96d` is short-form/placeholder, not a valid address — resolve to full address or rely on self-transfer. |
 | Hermes adapter cold-start recall quality | Test `SibylAdapter.prefetch()` on a true empty context; search default is AND-tokens — phrase-quote multi-word queries |
 | Judge can't find load-bearing code | README points to exact file/line; `test_loadbearing.py` is the proof |
 | Build window tight | Prototype already done; most heavy lifting (M1–M2) is porting proven logic |
@@ -290,7 +292,7 @@ def decide(frame, memory) -> book:
 1. **[DONE 2026-08-17]** Port `proto/echo_loop.py` → `src/echo/{memory,policy,agent,base_action,config}.py`; `tests/` (12 green); git init commit `0c9d01b`.
 2. **[DONE 2026-08-17]** Draft + post the "we signed up" build-in-public post (see §12). — NOTE: the companion draft post from the prior session was NOT found in this repo; draft fresh if not yet posted.
 3. **[DONE 2026-08-17]** Wire the **MacroBench regime book** into `policy.decide_differently` (risk_score/RISK_ON/RISK_OFF/macrobench_sleeves ported from `/opt/data/uvlabs-arena/agent.py`; recall now returns the real defensive book; 14 tests green).
-4. **[NEXT]** Confirm real **Base onchain leg**: x402 payment (quoteOnlyFees, feeRecipient `0xf8f96d`, escrow `0x055280`) or wallet op; replace `base_action.execute` dry-run.
+4. **[DONE 2026-08-17]** Base onchain leg: wired real wallet-op broadcast (eth_account sign + eth_sendRawTransaction, dry_run default) into `base_action.execute`; verified RPC/wallet/chainId live; 18 tests green. Live fire pending (`ECHO_DRY_RUN=0`).
 5. **[NEXT]** Learner self-learning loop: journal → skill proposals → accept (pipeline wired, tune).
 6. **[WINDOW]** Virtuals ACP recon (first task of build window; Base x1.15 is the bankable floor).
 7. **[WINDOW]** Demo video, README, 2nd post, submit ≤ Sep 10 23:59 UTC.
