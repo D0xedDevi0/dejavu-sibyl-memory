@@ -1,0 +1,15 @@
+{
+  "trials": 200,
+  "stressed_trials": 150,
+  "mean_return_memory_pct": -2.828,
+  "mean_return_no_memory_pct": -9.9,
+  "mean_loss_averted_pp": 7.072,
+  "avg_equity_memory": 0.157,
+  "avg_equity_no_memory": 0.55,
+  "pct_trials_decision_changed": 75.0,
+  "model": {
+    "crisis_equity_return": -0.18,
+    "defensive_equity_return": -0.03,
+    "rest_return": 0.0
+  }
+}

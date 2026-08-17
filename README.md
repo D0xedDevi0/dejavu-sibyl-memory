@@ -62,7 +62,24 @@ frame, different decision — **because of memory**.
 
 **Executed Base transaction (verified onchain, status 1):**
 [`0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a`](https://basescan.org/tx/0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a)
-— block 50104833, from/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`.
+(and `0x5175ae5a244b907753cacca9d529c87042ee11332c6e05cf4624d9016d4793dd`, block 50108439 — the memory-loaded de-risk)
+
+## Measured evidence (ablation benchmark)
+Not one anecdote — a *measured claim*. `demo/ablation_benchmark.py` runs the real
+`decide_differently` + Sibyl Memory across 200 randomly-sampled frames (150
+stressed), applying the same crisis P&L model to the book with vs. without memory:
+
+| metric | NO memory | WITH memory |
+|---|---|---|
+| mean crisis return | **-9.90%** | **-2.83%** |
+| avg equity exposure | 0.55 | 0.157 |
+| loss averted | — | **+7.07pp** |
+
+Memory changed the decision in **75%** of trials. Reproduce: `pytest tests/test_ablation.py` or `python demo/ablation_benchmark.py` → `demo/ablation_figure.png`.
+
+![ablation figure](demo/ablation_figure.png)
+
+From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx block 50104833.
 
 ## How memory made this possible
 
