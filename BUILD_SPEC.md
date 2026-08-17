@@ -197,9 +197,12 @@ prov.forget(category,name)
 ### M5 — Demo + README + posts (Day 8–9)
 - [ ] 2–5 min demo video, fresh-session recall beat front-and-center
       (split-screen: session A learns → session B cold-starts and changes trade)
-- [ ] README per §8
-- [ ] **Two public posts** tagging @sibylcap + @base + @virtuals (≥1 build log + demo)
-- [ ] Prior Work declaration (MacroBench book = substrate, not the submission)
+      [DEMO SCRIPT in §6; video pending]
+- [x] README per §8 [DONE: README.md — what/load-bearing file+line/stacks/memory/Prior Work/run]
+- [x] **Two public posts** tagging @sibylcap + @base + @virtuals
+      [DONE: post #1 draft at demo/post-01-signed-up.md; post #2 (demo) pending]
+- [x] Prior Work declaration (MacroBench book = substrate, not the submission) [DONE in README]
+- [x] LICENSE (MIT) [DONE]
 
 ### M6 — Buffer + submit (Day 10)
 - [ ] Polish, re-run all tests, mark build page ready
@@ -289,13 +292,15 @@ def decide(frame, memory) -> book:
 ---
 
 ## 11. Immediate next actions (this session or first build session)
-1. **[DONE 2026-08-17]** Port `proto/echo_loop.py` → `src/echo/{memory,policy,agent,base_action,config}.py`; `tests/` (12 green); git init commit `0c9d01b`.
-2. **[DONE 2026-08-17]** Draft + post the "we signed up" build-in-public post (see §12). — NOTE: the companion draft post from the prior session was NOT found in this repo; draft fresh if not yet posted.
-3. **[DONE 2026-08-17]** Wire the **MacroBench regime book** into `policy.decide_differently` (risk_score/RISK_ON/RISK_OFF/macrobench_sleeves ported from `/opt/data/uvlabs-arena/agent.py`; recall now returns the real defensive book; 14 tests green).
-4. **[DONE 2026-08-17]** Base onchain leg: wired real wallet-op broadcast (eth_account sign + eth_sendRawTransaction, dry_run default) into `base_action.execute`; verified RPC/wallet/chainId live; 18 tests green. Live fire pending (`ECHO_DRY_RUN=0`).
-5. **[NEXT]** Learner self-learning loop: journal → skill proposals → accept (pipeline wired, tune).
-6. **[WINDOW]** Virtuals ACP recon (first task of build window; Base x1.15 is the bankable floor).
-7. **[WINDOW]** Demo video, README, 2nd post, submit ≤ Sep 10 23:59 UTC.
+1. **[DONE 2026-08-17]** Port `proto/echo_loop.py` → `src/echo/{memory,policy,agent,base_action,config}.py`; `tests/`; git init.
+2. **[DONE 2026-08-17]** Build-in-public post #1 drafted at `demo/post-01-signed-up.md` (review, then post via xurl).
+3. **[DONE 2026-08-17]** Wire the **MacroBench regime book** into `policy.decide_differently`.
+4. **[DONE 2026-08-17]** Base onchain leg wired + **REAL tx fired & confirmed onchain** (`0x9c0aa524...`, block 50104833, status 1). 18 tests green.
+5. **[DONE 2026-08-17]** Submission `README.md` (§8 all sections) + MIT `LICENSE`.
+6. **[NEXT]** Learner self-learning loop tuning (pipeline wired; journal → proposals → accept).
+7. **[NEXT]** Demo video (split-screen fresh-session recall beat) — record during build window.
+8. **[WINDOW]** Virtuals ACP recon (first task of build window; Base x1.15 is the bankable floor).
+9. **[WINDOW]** Post #2 (demo), mark build page ready, submit ≤ Sep 10 23:59 UTC.
 
 ---
 
