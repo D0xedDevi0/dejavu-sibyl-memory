@@ -18,7 +18,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest>=8"]
+test = ["pytest>=8", "pillow>=10"]
+# NOTE: demo/build_demo_video.py also needs ffmpeg (present on ubuntu-latest CI).
 
 [project.scripts]
 echo = "echo.agent:main"
