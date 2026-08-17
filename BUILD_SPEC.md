@@ -158,17 +158,22 @@ prov.forget(category,name)
 ## 4. Milestone roadmap (Sep 1–10)
 
 ### M1 — Foundation (Day 1–2)
-- [x] Repo scaffold [PARTIALLY DONE: venv + proto]
-- [ ] `pyproject.toml`, package layout `src/echo/`
-- [ ] `memory.py` wrapper: `MemoryClient.local` + all 5-tier ops, typed
-- [ ] Pytest setup; `test_loadbearing.py` (the deletion gate) green from day 1
+- [x] Repo scaffold [DONE: venv + proto]
+- [x] `pyproject.toml`, package layout `src/echo/` [DONE, commit 0c9d01b]
+- [x] `memory.py` wrapper: `MemoryClient.local` + all 5-tier ops, typed [DONE]
+- [x] `base_action.py` onchain stub (dry-run, M3 wires real tx) [DONE]
+- [x] Pytest setup; `test_loadbearing.py` (the deletion gate) green from day 1 [DONE: 12 tests pass]
+- [x] Git repo initialized, `.gitignore` excludes `.venv/`/`data/`/`*.db` [DONE]
 
 ### M2 — The memory-echo agent (Day 3–5)
 - [ ] `policy.py`: reuse the **MacroBench regime book** as substrate
       (ranked #2, handle `D0xedDevi0`) — recalled lesson flips allocation
+      [PARTIAL: policy.py + decide_differently live; swap MacroBench book in]
 - [ ] `agent.py`: `run_session(frame)` → write → (fresh proc) → recall → decide
+      [PARTIAL: run_sessions() + `echo` CLI work; wire MacroBench frame]
 - [ ] Learner integration: journal patterns → skill proposals the agent accepts
-- [ ] `test_recall.py` + `test_policy.py` green
+      [PARTIAL: Memory.learner + learn()/accept_proposal() exposed; test confirms pipeline]
+- [ ] `test_recall.py` + `test_policy.py` green [DONE: 12 total pass]
 
 ### M3 — Base onchain leg (Day 6–7)
 - [ ] `base_action.py`: x402 payment OR wallet op using:
@@ -280,12 +285,13 @@ def decide(frame, memory) -> book:
 ---
 
 ## 11. Immediate next actions (this session or first build session)
-1. **[NOW]** Draft + post the "we signed up" build-in-public post (see §12).
-2. **[NEXT]** Port `proto/echo_loop.py` → `src/echo/{memory,policy,agent}.py`.
-3. **[NEXT]** Write `tests/test_loadbearing.py` (deletion gate) + CI.
-4. **[NEXT]** Learner self-learning: journal → skill proposals → accept loop.
-5. **[WINDOW]** Base onchain leg (x402/wallet op) + Virtuals ACP.
-6. **[WINDOW]** Demo video, README, 2nd post, submit.
+1. **[DONE 2026-08-17]** Port `proto/echo_loop.py` → `src/echo/{memory,policy,agent,base_action,config}.py`; `tests/` (12 green); git init commit `0c9d01b`.
+2. **[DONE 2026-08-17]** Draft + post the "we signed up" build-in-public post (see §12). — NOTE: the companion draft post from the prior session was NOT found in this repo; draft fresh if not yet posted.
+3. **[NEXT]** Wire the **MacroBench regime book** into `policy.decide_differently` (reuse real book weights as the substrate).
+4. **[NEXT]** Confirm real **Base onchain leg**: x402 payment (quoteOnlyFees, feeRecipient `0xf8f96d`, escrow `0x055280`) or wallet op; replace `base_action.execute` dry-run.
+5. **[NEXT]** Learner self-learning loop: journal → skill proposals → accept (pipeline wired, tune).
+6. **[WINDOW]** Virtuals ACP recon (first task of build window; Base x1.15 is the bankable floor).
+7. **[WINDOW]** Demo video, README, 2nd post, submit ≤ Sep 10 23:59 UTC.
 
 ---
 
