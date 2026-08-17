@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "echo-memory"
+version = "0.1.0"
+description = "NEURAL_MESH x Sibyl Memory — memory-echo loop. An agent whose onchain decisions are driven by its own persistent memory."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "NEURAL_MESH / D0xedDev" }]
+keywords = ["memory", "agent", "sibyl", "base", "onchain", "hackathon"]
+dependencies = [
+    "sibyl-memory-client==0.6.1",
+    "sibyl-memory-cli==0.3.22",
+    "sibyl-memory-hermes==0.3.15",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+echo = "echo.agent:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

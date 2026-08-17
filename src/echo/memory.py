@@ -1,0 +1,144 @@
+"""Sibyl Memory wrapper for the echo loop.
+
+Thin, typed facade over `sibyl_memory_client.MemoryClient` covering all five
+storage tiers (HOT state / WARM entities / COLD journal / REF reference / ARCH
+archive) plus the Learner (self-learning / skill proposals).
+
+The load-bearing calls for the hackathon are `write_lesson`, `recall_lessons`,
+and `search` — these are what make memory drive the decision. See README for
+exact file/line pointers for judges.
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import Any
+
+from sibyl_memory_client import Learner, MemoryClient
+
+log = logging.getLogger(__name__)
+
+LESSON_CATEGORY = "lesson"
+
+
+class Memory:
+    """Local, headless, file-backed Sibyl store (no account, no network)."""
+
+    def __init__(self, db_path: str | Path, *, tenant_id: str | None = None):
+        self.db_path = Path(db_path)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        # `local()` returns a client whose `.storage` is a property (not a method).
+        kw: dict[str, Any] = {}
+        if tenant_id:
+            kw["tenant_id"] = tenant_id
+        self.client = MemoryClient.local(str(self.db_path), **kw)
+        self._learner = None  # lazy: Learner(st) requires the Storage property
+
+    # ---- lifecycle --------------------------------------------------------
+    def close(self) -> None:
+        if self.client is not None:
+            self.client.storage.close()
+
+    @property
+    def exists(self) -> bool:
+        return self.db_path.exists() and self.db_path.stat().st_size > 0
+
+    def delete_store(self) -> None:
+        """Wipe the entire store. This is what breaks a memory-less agent."""
+        self.close()
+        self.db_path.unlink(missing_ok=True)
+
+    # ---- WARM: entities (single source of truth per (category, name)) -----
+    def write_lesson(self, name: str, lesson: str, *, frame: dict | None = None,
+                     outcome: dict | None = None, status: str = "active") -> dict:
+        body: dict[str, Any] = {"lesson": lesson}
+        if frame is not None:
+            body["frame"] = frame
+        if outcome is not None:
+            body["outcome"] = outcome
+        return self.client.set_entity(LESSON_CATEGORY, name, body, status=status)
+
+    def get_lesson(self, name: str) -> dict:
+        return self.client.get_entity(LESSON_CATEGORY, name)
+
+    def list_lessons(self, *, status: str | None = None, limit: int = 100) -> list[dict]:
+        return self.client.list_entities(LESSON_CATEGORY, status=status, limit=limit)
+
+    # ---- COLD: journal (append-only audit) --------------------------------
+    def write_event(self, *, evaluated: Any = None, acted: Any = None,
+                    forward: Any = None, extra: Any = None) -> str:
+        return self.client.write_event(
+            evaluated=evaluated, acted=acted, forward=forward, extra=extra
+        )
+
+    def read_events(self, *, limit: int = 50, since: str | None = None,
+                    until: str | None = None) -> list[dict]:
+        return self.client.read_events(limit=limit, since=since, until=until)
+
+    # ---- REFERENCE / STATE (HOT) ------------------------------------------
+    def set_reference(self, key: str, body: Any, metadata: dict | None = None) -> None:
+        self.client.set_reference(key, body, metadata=metadata)
+
+    def get_reference(self, key: str) -> dict | None:
+        return self.client.get_reference(key)
+
+    def set_state(self, key: str, body: dict | list) -> None:
+        self.client.set_state(key, body)
+
+    def get_state(self, key: str) -> dict | None:
+        return self.client.get_state(key)
+
+    # ---- RECALL: FTS5 search (the load-bearing read) ----------------------
+    def search(self, query: str, *, limit: int = 20, phrase: bool = False,
+               category: str | None = None) -> list[dict]:
+        """Search the store. Multi-word phrase queries should be quoted for
+        phrase mode (client default is AND-of-tokens)."""
+        if category is None:
+            return self.client.search(query, limit=limit)
+        return self.client.search_entities(query, limit=limit, category=category)
+
+    def recall_lessons(self, queries: list[str], *, limit: int = 20) -> list[str]:
+        """Combine several searches, dedupe, and return the distilled lessons
+        found (dicts with a 'lesson' key, else their text body)."""
+        seen: set[str] = set()
+        lessons: list[str] = []
+        for q in queries:
+            for hit in self.search(q, limit=limit):
+                body = hit.get("body")
+                text = self._lesson_text(body)
+                if text and text not in seen:
+                    seen.add(text)
+                    lessons.append(text)
+        return lessons
+
+    @staticmethod
+    def _lesson_text(body: Any) -> str | None:
+        if isinstance(body, dict):
+            return body.get("lesson")
+        if isinstance(body, str):
+            return body
+        return None
+
+    # ---- Learner (self-learning / skill proposals) ------------------------
+    @property
+    def learner(self) -> Learner:
+        if self._learner is None:
+            self._learner = Learner(self.client.storage)  # pass Storage, NOT client
+        return self._learner
+
+    def learn(self, *, since: str | None = None) -> dict:
+        report = self.learner.run(since=since)
+        return {
+            "created": getattr(report, "created", 0),
+            "report": report,
+        }
+
+    def list_proposals(self, *, status: str = "pending", limit: int = 50) -> list:
+        return self.learner.list_proposals(status=status, limit=limit)
+
+    def accept_proposal(self, proposal_id: str, *, note: str | None = None) -> dict:
+        return self.learner.accept_proposal(proposal_id, note=note)
+
+    def reject_proposal(self, proposal_id: str, *, note: str | None = None) -> dict:
+        return self.learner.reject_proposal(proposal_id, note=note)

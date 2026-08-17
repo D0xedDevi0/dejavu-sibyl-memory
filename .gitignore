@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenv
+.venv/
+
+# Sibyl local stores
+data/
+*.db
+*.db-journal
+*.db-wal
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets
+.secrets/
+*.key
