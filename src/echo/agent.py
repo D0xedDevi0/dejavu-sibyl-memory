@@ -102,6 +102,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--wipe", action="store_true",
                     help="delete store first (simulate no memory)")
     ap.add_argument("--crisis", action="store_true", help="use a crisis frame")
+    ap.add_argument("--learn", action="store_true",
+                    help="after recall, run the Learner and accept the top skill proposal")
     ap.add_argument("--json", action="store_true", help="emit JSON only")
     args = ap.parse_args(argv)
 
@@ -129,6 +131,21 @@ def main(argv: list[str] | None = None) -> int:
     # Turn the recalled decision into a Base onchain action.
     receipt = execute(book, cfg)
 
+    # Optional self-learning beat: scan the journal, propose skills, accept the
+    # top one. This is the "echo/compounding" moment of the demo.
+    accepted = None
+    if args.learn:
+        m3 = Memory(db)
+        report = m3.learn()
+        proposals = m3.list_proposals(status="pending")
+        if proposals:
+            top = proposals[0]
+            accepted = m3.accept_proposal(
+                top.id, note="echo: accepting top self-discovered skill")
+        else:
+            report = None
+        m3.close()
+
     result = {
         "db": db,
         "frame": crisis,
@@ -136,9 +153,10 @@ def main(argv: list[str] | None = None) -> int:
         "rationale": book.rationale,
         "loaded": not args.wipe,
         "onchain": receipt.as_dict(),
+        "learned_skill": accepted,
     }
     if args.json:
-        print(json.dumps(result, indent=2))
+        print(json.dumps(result, indent=2, default=str))
         return 0
 
     print(f"[SESSION B] frame vix={crisis['vix']} cs={crisis['credit_stress']}")
@@ -150,6 +168,12 @@ def main(argv: list[str] | None = None) -> int:
     if receipt.tx_hash:
         print(f"[ONCHAIN] tx {receipt.tx_hash}")
         print(f"[ONCHAIN] explorer {receipt.explorer_url}")
+    if args.learn:
+        if accepted:
+            print(f"[LEARN] accepted skill {accepted.get('doc_key')} "
+                  f"(proposal {accepted.get('proposal_id')[:8]}...)")
+        else:
+            print("[LEARN] no skill proposals generated this run")
     return 0
 
 

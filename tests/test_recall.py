@@ -38,14 +38,30 @@ def test_search_finds_lesson_across_fresh_handle():
 
 
 def test_learn_and_accept_proposal():
-    """The Learner proposes a skill from the journal; we can accept it."""
+    """The Learner proposes skills from the journal; we can accept one.
+
+    This is the self-learning / compounding proof: the agent scans its own
+    journal and accepts a skill (doc_key `skill/<slug>`) it generated.
+    """
     db = _db()
     m = Memory(db)
-    session_a(m, {"vix": 52.0, "credit_stress": 2.2})
+    # Seed several sessions so the Learner has patterns to detect.
+    for _ in range(4):
+        session_a(m, {"vix": 52.0, "credit_stress": 2.2})
 
-    m.learn()
-    proposals = m.list_proposals()
-    # Proposal generation may be empty on an empty journal history; if any
-    # proposals exist we can at least list them. This asserts the pipeline runs.
-    assert isinstance(proposals, list)
+    report = m.learn()
+    proposals = m.list_proposals(status="pending")
+    assert report["report"].proposals_made > 0, "Learner must make proposals"
+    assert len(proposals) > 0, "pending proposals must exist"
+
+    p = proposals[0]
+    # Proposals carry structured fields a real skill can be built from.
+    assert getattr(p, "proposed_slug", None)
+    assert getattr(p, "proposed_body", None)
+    assert getattr(p, "pattern_kind", None)
+
+    res = m.accept_proposal(p.id, note="echo test: accept discovered skill")
+    assert res["accepted"] is True
+    assert res["doc_key"].startswith("skill/"), \
+        f"accepted skill should be a skill doc, got {res['doc_key']}"
     m.close()
