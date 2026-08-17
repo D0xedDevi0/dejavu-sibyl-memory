@@ -16,6 +16,18 @@ from PIL import Image, ImageDraw, ImageFont
 
 # --------------------------------------------------------------------------
 # Real output captured from the echo loop (verified live).
+ABLATION = [
+    "ABLATION BENCHMARK  (200 sampled frames, seed 1337)",
+    "",
+    "mean crisis return, NO MEMORY:   -9.90%",
+    "mean crisis return, WITH MEMORY: -2.83%",
+    "",
+    "loss averted by remembering:     7.07pp",
+    "trials where memory changed the decision: 75.0%",
+    "",
+    "> One anecdote. Now a measured claim.",
+    "> Forgetting is a bug. Remembering is the strategy.",
+]
 # --------------------------------------------------------------------------
 MEM_LEFT = [
     "SESSION A  --  fresh store",
@@ -176,21 +188,26 @@ def main():
     p2 = os.path.join(outdir, "wiped.png");  img_wiped.save(p2)
     frames = [p1, p2]
 
+    # Ablation-closing frame (measured evidence).
+    img_abl = render_frame((ABLATION[:9], ABLATION[9:]), right_color=CYAN,
+                           tag="MEASURED")
+    pa = os.path.join(outdir, "ablation.png"); img_abl.save(pa)
+
     # Title frame (first 3s).
     img_title = render_frame(([TITLE], [SUB]), right_color=CYAN)
     pt = os.path.join(outdir, "title.png"); img_title.save(pt)
 
-    # Assemble: title 4s, loaded 8s, wiped 8s, loaded 8s, title 3s.
-    # 1920x1080 target (upscale 1600x900 -> keep 1600x900, fine for demo).
+    # Assemble: title 4s, loaded 8s, wiped 8s, loaded 8s, ablation 8s, title 3s.
     cmd = [
         "ffmpeg", "-y",
         "-loop", "1", "-t", "4", "-i", pt,
         "-loop", "1", "-t", "8", "-i", p1,
         "-loop", "1", "-t", "8", "-i", p2,
         "-loop", "1", "-t", "8", "-i", p1,
+        "-loop", "1", "-t", "8", "-i", pa,
         "-loop", "1", "-t", "3", "-i", pt,
         "-filter_complex",
-        "[0][1][2][3][4]concat=n=5:v=1:a=0,format=yuv420p",
+        "[0][1][2][3][4][5]concat=n=6:v=1:a=0,format=yuv420p",
         "-r", "30", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
         "-movflags", "+faststart",
         os.path.join(os.path.dirname(__file__), "demo_video.mp4"),
