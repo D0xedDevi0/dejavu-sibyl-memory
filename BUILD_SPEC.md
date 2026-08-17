@@ -209,7 +209,11 @@ prov.forget(category,name)
        0x5175ae5a... status 1 block 50108439. Rebuild: demo/build_demo_video.py]
 - [x] README per §8 [DONE: README.md — what/load-bearing file+line/stacks/memory/Prior Work/run]
 - [x] **Two public posts** tagging @sibylcap + @base + @virtuals
-      [DONE: post #1 draft at demo/post-01-signed-up.md; post #2 (demo) pending]
+      [DONE #1 (LIVE): @D0xedDevi0 2026-08-17 20:31 GMT
+       https://x.com/i/status/2089449978020421665 — "Signed up for the
+       @sibylcap Memory Hackathon... delete the memory -> it breaks. Sep 1.
+       @base @virtuals". Draft file superseded.]
+      [PENDING #2: demo/drop reveal near submission — demo/post-02-the-drop.md]
 - [x] Prior Work declaration (MacroBench book = substrate, not the submission) [DONE in README]
 - [x] LICENSE (MIT) [DONE]
 
