@@ -9,6 +9,8 @@ import pytest
 
 from echo import virtuals
 
+_HAS_ACP = virtuals.acp_available()
+
 
 def test_agent_identity_constants():
     """The registered echo agent constants are present."""
@@ -17,11 +19,13 @@ def test_agent_identity_constants():
     assert virtuals.ECHO_SOLANA
 
 
+@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed (skip on CI)")
 def test_acp_bin_path_exists():
     """The acp CLI binary should exist at the known path."""
-    assert virtuals.acp_available(), "acp-cli not installed at /opt/data/acp-cli"
+    assert virtuals.acp_available()
 
 
+@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed (skip on CI)")
 def test_exercise_returns_registered_agent():
     """exercise() returns the echo agent with a live signer policy."""
     r = virtuals.exercise()
@@ -32,6 +36,7 @@ def test_exercise_returns_registered_agent():
     assert r.signer_policy in ("ACP_ONLY", "restricted", "unrestricted", "deny-all")
 
 
+@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed (skip on CI)")
 def test_run_sessions_with_virtuals():
     """The full loop surfaces the Virtuals receipt when enabled."""
     from echo.agent import run_sessions

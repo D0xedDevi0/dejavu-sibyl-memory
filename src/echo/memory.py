@@ -62,6 +62,11 @@ class Memory:
     def get_lesson(self, name: str) -> dict:
         return self.client.get_entity(LESSON_CATEGORY, name)
 
+    def delete_lesson(self, name: str) -> bool:
+        """Delete ONE lesson. The 'forgetting' analog: removes that lesson's
+        influence while leaving the rest of the store intact."""
+        return self.client.delete_entity(LESSON_CATEGORY, name)
+
     def list_lessons(self, *, status: str | None = None, limit: int = 100) -> list[dict]:
         return self.client.list_entities(LESSON_CATEGORY, status=status, limit=limit)
 

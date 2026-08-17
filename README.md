@@ -77,6 +77,18 @@ stressed), applying the same crisis P&L model to the book with vs. without memor
 
 Memory changed the decision in **75%** of trials. Reproduce: `pytest tests/test_ablation.py` or `python demo/ablation_benchmark.py` → `demo/ablation_figure.png`.
 
+## Deeper findings (advanced analysis)
+`demo/advanced_analysis.py` — four more honest, reproducible results:
+
+1. **Compounding / memory growth** — across 12 repeated crises, memory preserves `$0.90` of a `$1.00` starting stake vs `$0.29` without it (**~213% more capital**). `demo/growth_curve.png`.
+2. **Multi-lesson recall** — as distinct lessons accumulate, recall count rises and the agent stays saturated at the 0.05 de-risk floor (never drifts back to naive).
+3. **Selective deletion ("forgetting")** — delete *one* lesson and only that lesson's text leaves recall; the others remain and the decision stays de-risked. Full wipe is what loses.
+4. **Failure-mode guard** — a *wrong/compromised* lesson ("max long equity in crisis") **cannot** push the agent long: the MacroBench risk framework owns the allocation, not free-text prose. The guard is structural.
+
+Reproduce all: `pytest tests/test_advanced.py` or `python demo/advanced_analysis.py` → `demo/advanced_analysis.json`.
+
+![growth curve](demo/growth_curve.png)
+
 ![ablation figure](demo/ablation_figure.png)
 
 From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx block 50104833.
@@ -102,7 +114,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 22 tests incl. the deletion gate
+pip install -e ".[test]" && pytest            # 28 tests incl. deletion gate + ablation + advanced
 echo --crisis                                  # with memory  -> de-risk (equity 0.05)
 echo --crisis --wipe                           # store deleted -> naive  (equity 0.55)
 ECHO_DRY_RUN=0 echo --crisis                   # fire a REAL Base tx (captures hash)
