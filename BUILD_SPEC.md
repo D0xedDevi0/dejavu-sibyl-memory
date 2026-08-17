@@ -202,9 +202,11 @@ prov.forget(category,name)
 - [x] BOTH STACKS DONE: Base (x1.15) + Virtuals (x1.25 total multiplier achieved)
 
 ### M5 — Demo + README + posts (Day 8–9)
-- [ ] 2–5 min demo video, fresh-session recall beat front-and-center
-      (split-screen: session A learns → session B cold-starts and changes trade)
-      [DEMO SCRIPT in §6; video pending]
+- [x] 2–5 min demo video, fresh-session recall beat front-and-center
+      [DONE: demo/demo_video.mp4 (31s, 1600x900) — split-screen SESSION A-LEARN /
+       SESSION B-RECALL rendering the REAL loop output: naive 0.55 (red) vs
+       recalled de-risk 0.05 (green), wiped-store contrast, real Base tx
+       0x5175ae5a... status 1 block 50108439. Rebuild: demo/build_demo_video.py]
 - [x] README per §8 [DONE: README.md — what/load-bearing file+line/stacks/memory/Prior Work/run]
 - [x] **Two public posts** tagging @sibylcap + @base + @virtuals
       [DONE: post #1 draft at demo/post-01-signed-up.md; post #2 (demo) pending]
