@@ -58,7 +58,7 @@ frame, different decision — **because of memory**.
 | Stack | Where | What we do |
 |---|---|---|
 | **Base** | `src/echo/base_action.py` | A memory-driven decision executes a **real Base Mainnet wallet operation** (`eth_account` sign + `eth_sendRawTransaction`). Live verified tx below. |
-| **Virtuals Protocol** | *(set up during build window)* | ACP job coordinates the echo loop; exercised in the demo. |
+| **Virtuals Protocol** | `src/echo/virtuals.py`, `virtuals-echo-agent.md` | The loop is coordinated by a **registered, signer-enabled Virtuals ACP agent** named `echo` (EVM wallet `0xef25e214...47bb`, ACP_ONLY signer policy — it can transact onchain autonomously). Run with `echo --virtuals`.
 
 **Executed Base transaction (verified onchain, status 1):**
 [`0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a`](https://basescan.org/tx/0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a)
@@ -85,14 +85,17 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 18 tests incl. the deletion gate
+pip install -e ".[test]" && pytest            # 22 tests incl. the deletion gate
 echo --crisis                                  # with memory  -> de-risk (equity 0.05)
 echo --crisis --wipe                           # store deleted -> naive  (equity 0.55)
 ECHO_DRY_RUN=0 echo --crisis                   # fire a REAL Base tx (captures hash)
+echo --crisis --learn --virtuals               # full loop: recall + self-learn + ACP coordinate
 ```
 
 Deps: `sibyl-memory-client`, `sibyl-memory-cli`, `sibyl-memory-hermes` (local,
-headless, no account/network). Onchain: `eth_account`, `web3`.
+headless, no account/network). Onchain: `eth_account`, `web3`. Virtuals: the
+registered `echo` agent via the acp-cli (see `virtuals-echo-agent.md` for the
+`TS_KEYRING_BACKEND=file` requirement).
 
 ## License
 

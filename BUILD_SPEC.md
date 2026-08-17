@@ -190,11 +190,16 @@ prov.forget(category,name)
 - [ ] Virtuals ACP (see M4)
 
 ### M4 — Virtuals ACP (Day 7–8)
-- [ ] Register agent / run ACP job on Virtuals Protocol
-- [ ] Exercise it in the loop (coordination) in the demo
-- [ ] NOTE: this is the ONE stack not yet touched. First task in the window is
-      reconnaissance on Virtuals ACP setup. Both-stack x1.25 is the target;
-      Base alone x1.15 is already bankable.
+- [x] Register agent / run ACP job on Virtuals Protocol
+      [DONE: `echo` agent registered on ACP — Agent ID 01a01184..., EVM wallet
+       0xef25e214..., Solana wallet, email echo_h9ge@agents.world, builder
+       bc_6z9u9grp, role HYBRID. Creds + setup in virtuals-echo-agent.md]
+- [x] Exercise it in the loop (coordination) in the demo
+      [DONE: src/echo/virtuals.py wires the agent identity into run_sessions/CLI
+       (`--virtuals`); signer active with ACP_ONLY policy = transacting agent;
+       tests test_virtuals.py (4) green]
+- [x] Signer approved (P-256, restricted/ACP_ONLY) — agent can transact onchain
+- [x] BOTH STACKS DONE: Base (x1.15) + Virtuals (x1.25 total multiplier achieved)
 
 ### M5 — Demo + README + posts (Day 8–9)
 - [ ] 2–5 min demo video, fresh-session recall beat front-and-center
@@ -300,8 +305,8 @@ def decide(frame, memory) -> book:
 4. **[DONE 2026-08-17]** Base onchain leg wired + **REAL tx fired & confirmed onchain** (`0x9c0aa524...`, block 50104833, status 1). 18 tests green.
 5. **[DONE 2026-08-17]** Submission `README.md` (§8 all sections) + MIT `LICENSE`.
 6. **[DONE 2026-08-17]** Learner self-learning loop verified + tuned: Learner makes structured proposals from the journal; `echo --learn` accepts the top skill (`doc_key skill/<slug>`). This is the compounding/self-learning proof.
-7. **[NEXT]** Demo video (split-screen fresh-session recall beat) — record during build window.
-8. **[WINDOW]** Virtuals ACP recon (first task of build window; Base x1.15 is the bankable floor).
+7. **[DONE 2026-08-17]** Virtuals ACP: registered `echo` agent + approved P-256 signer (ACP_ONLY). Wired into loop via `--virtuals`. **Both stacks (Base+Virtuals) = x1.25 achieved.** Creds in `virtuals-echo-agent.md`.
+8. **[NEXT]** Demo video (split-screen fresh-session recall beat) — record during build window.
 9. **[WINDOW]** Post #2 (demo), mark build page ready, submit ≤ Sep 10 23:59 UTC.
 
 ---
