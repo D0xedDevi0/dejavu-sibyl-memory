@@ -23,6 +23,7 @@ from .base_action import execute
 from .config import DEFAULT_DB, Config
 from .memory import Memory
 from .policy import Book, decide_differently
+from .virtuals import exercise as virtuals_exercise
 
 log = logging.getLogger(__name__)
 
@@ -63,7 +64,8 @@ def session_b(memory: Memory, frame: dict, *, phrases: list[str] | None = None) 
 def run_sessions(*, crisis_frame: dict | None = None,
                  base_frame: dict | None = None,
                  db_path: str | None = None,
-                 config: Config | None = None) -> dict:
+                 config: Config | None = None,
+                 virtuals: bool = False) -> dict:
     """Full echo loop across two logical sessions on one store.
 
     Returns a structured dict the demo/tests can assert on.
@@ -86,6 +88,9 @@ def run_sessions(*, crisis_frame: dict | None = None,
     # The recalled decision becomes an onchain action on Base.
     receipt = execute(recalled_book, config)
 
+    # Virtuals ACP coordination: the echo agent identity drives the loop.
+    v = virtuals_exercise() if virtuals else None
+
     return {
         "db": db,
         "crisis_frame": crisis,
@@ -93,6 +98,7 @@ def run_sessions(*, crisis_frame: dict | None = None,
         "learned_book": learned_book.to_dict(),
         "recalled_book": recalled_book.to_dict(),
         "onchain": receipt.as_dict(),
+        "virtuals": v.as_dict() if v else None,
     }
 
 
@@ -104,6 +110,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--crisis", action="store_true", help="use a crisis frame")
     ap.add_argument("--learn", action="store_true",
                     help="after recall, run the Learner and accept the top skill proposal")
+    ap.add_argument("--virtuals", action="store_true",
+                    help="coordinate the loop through the registered Virtuals echo agent")
     ap.add_argument("--json", action="store_true", help="emit JSON only")
     args = ap.parse_args(argv)
 
@@ -146,6 +154,9 @@ def main(argv: list[str] | None = None) -> int:
             report = None
         m3.close()
 
+    # Virtuals ACP coordination layer (registered echo agent identity).
+    v = virtuals_exercise() if args.virtuals else None
+
     result = {
         "db": db,
         "frame": crisis,
@@ -154,6 +165,7 @@ def main(argv: list[str] | None = None) -> int:
         "loaded": not args.wipe,
         "onchain": receipt.as_dict(),
         "learned_skill": accepted,
+        "virtuals": v.as_dict() if v else None,
     }
     if args.json:
         print(json.dumps(result, indent=2, default=str))
@@ -174,6 +186,9 @@ def main(argv: list[str] | None = None) -> int:
                   f"(proposal {accepted.get('proposal_id')[:8]}...)")
         else:
             print("[LEARN] no skill proposals generated this run")
+    if args.virtuals and v:
+        print(f"[VIRTUALS] echo agent {v.agent_id[:8]}... wallet {v.wallet[:10]}... "
+              f"signer={v.signer_policy}")
     return 0
 
 
