@@ -174,7 +174,9 @@ prov.forget(category,name)
 - [ ] `agent.py`: `run_session(frame)` → write → (fresh proc) → recall → decide
       [PARTIAL: run_sessions() + `echo` CLI work; wire MacroBench frame]
 - [ ] Learner integration: journal patterns → skill proposals the agent accepts
-      [PARTIAL: Memory.learner + learn()/accept_proposal() exposed; test confirms pipeline]
+      [DONE: Memory.learner + learn()/accept_proposal() exposed; Learner makes
+       structured SkillProposals (pattern_kind/confidence/evidence); `echo --learn`
+       accepts the top skill (doc_key `skill/<slug>`); test proves the loop]
 - [x] `test_recall.py` + `test_policy.py` green [DONE: 14 total pass]
 
 ### M3 — Base onchain leg (Day 6–7)
@@ -297,7 +299,7 @@ def decide(frame, memory) -> book:
 3. **[DONE 2026-08-17]** Wire the **MacroBench regime book** into `policy.decide_differently`.
 4. **[DONE 2026-08-17]** Base onchain leg wired + **REAL tx fired & confirmed onchain** (`0x9c0aa524...`, block 50104833, status 1). 18 tests green.
 5. **[DONE 2026-08-17]** Submission `README.md` (§8 all sections) + MIT `LICENSE`.
-6. **[NEXT]** Learner self-learning loop tuning (pipeline wired; journal → proposals → accept).
+6. **[DONE 2026-08-17]** Learner self-learning loop verified + tuned: Learner makes structured proposals from the journal; `echo --learn` accepts the top skill (`doc_key skill/<slug>`). This is the compounding/self-learning proof.
 7. **[NEXT]** Demo video (split-screen fresh-session recall beat) — record during build window.
 8. **[WINDOW]** Virtuals ACP recon (first task of build window; Base x1.15 is the bankable floor).
 9. **[WINDOW]** Post #2 (demo), mark build page ready, submit ≤ Sep 10 23:59 UTC.
