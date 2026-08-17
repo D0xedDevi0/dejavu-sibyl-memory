@@ -6,6 +6,7 @@ tests and the demo can inject overrides.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -29,7 +30,7 @@ class Config:
     wallet_key: Path = AGENT_WALLET_KEY
     x402_escrow: str = X402_ESCROW
     fee_recipient: str = FEE_RECIPIENT
-    dry_run: bool = True  # do not broadcast until M3 wires real tx
+    dry_run: bool = field(default_factory=lambda: os.environ.get("ECHO_DRY_RUN", "1") != "0")  # 0 -> broadcast real tx
     search_phrases: tuple[str, ...] = field(
         default_factory=lambda: (
             "credit stress crisis lesson",

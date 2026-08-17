@@ -27,10 +27,15 @@ from typing import Any
 from eth_account import Account
 from eth_account.datastructures import SignedTransaction
 
-from .config import Config
+from .config import BASE_EXPLORER, Config
 
 _RPC_HEADERS = {"Content-Type": "application/json", "User-Agent": "curl/8"}
 DUST = 1_000  # wei; a symbolic, near-free amount (transaction, not value, is the point)
+
+
+def _is_valid_address(a: str) -> bool:
+    return (isinstance(a, str) and len(a) == 42 and a.startswith("0x")
+            and all(c in "0123456789abcdefABCDEF" for c in a[2:]))
 
 
 @dataclass
@@ -69,10 +74,11 @@ def _load_account(config: Config) -> Account:
 
 
 def _broadcast(url: str, signed: SignedTransaction) -> str:
+    raw_hex = "0x" + signed.raw_transaction.hex()
     req = urllib.request.Request(
         url, data=json.dumps({"jsonrpc": "2.0", "id": 1,
                               "method": "eth_sendRawTransaction",
-                              "params": [signed.raw_transaction.hex()]}).encode(),
+                              "params": [raw_hex]}).encode(),
         headers=_RPC_HEADERS,
     )
     with urllib.request.urlopen(req, timeout=20) as resp:
@@ -101,7 +107,7 @@ def execute(book, config: Config) -> OnchainReceipt:
     acct = _load_account(config)
     # feeRecipient may be a short/placeholder form; only use it if valid.
     to = acct.address  # self-transfer is the safe, always-valid default
-    if action == "de_risk" and Account.is_address(config.fee_recipient):
+    if action == "de_risk" and _is_valid_address(config.fee_recipient):
         to = config.fee_recipient
     chain_id = int(_rpc(config.rpc_url, "eth_chainId", []), 16)
     nonce = int(_rpc(config.rpc_url, "eth_getTransactionCount", [acct.address, "latest"]), 16)
@@ -118,7 +124,7 @@ def execute(book, config: Config) -> OnchainReceipt:
     }
     signed = acct.sign_transaction(tx)
     tx_hash = _broadcast(config.rpc_url, signed)
-    explorer = config.BASE_EXPLORER.rstrip("/") + "/" + tx_hash
+    explorer = BASE_EXPLORER.rstrip("/") + "/" + tx_hash
 
     details.update({
         "from": acct.address, "to": to, "value_wei": DUST,
