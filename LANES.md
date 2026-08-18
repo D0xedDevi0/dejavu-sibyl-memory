@@ -1,6 +1,6 @@
 # NEURAL_MESH × Sibyl Memory — LANES (novel, unexplored build directions)
 
-**Goal:** don't build the obvious single-agent "memory-echo" demo everyone will
+**Goal:** don't build the obvious single-agent "memory-dejavu" demo everyone will
 submit. Create lanes that *haven't been done* — each grounded in verified Sibyl
 capability and our real onchain/agent stack. Winner = one that clears the
 load-bearing gate AND hits the innovation band (25 pts) harder than the field.
@@ -58,7 +58,7 @@ ACCEPTS them — so it literally rewrites its own behavior across sessions.
   full accept-loop. Pairs naturally with LANE 1 (fleet members evolve skills).
 
 ## LANE 5 — "RECALL-DRIVEN REGIME AGENT" (the honest version of what we have)
-Single-agent memory-echo trading (our MacroBench book) — the SAFE, well-
+Single-agent memory-dejavu trading (our MacroBench book) — the SAFE, well-
 understood lane. Good, but most likely crowded. Keep as fallback/floor.
 
 ---

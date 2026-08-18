@@ -1,7 +1,7 @@
 """Policy-layer tests: decide_differently behaves correctly at the boundary."""
 
-from echo.memory import Memory
-from echo.policy import decide_differently, is_stressed, naive_book
+from dejavu.memory import Memory
+from dejavu.policy import decide_differently, is_stressed, naive_book
 
 
 def test_calm_market_no_memory_naive():
@@ -42,7 +42,7 @@ def test_is_stressed_boundary():
 
 
 # ---- MacroBench regime substrate (ranked #2, handle D0xedDevi0) ----------
-from echo.policy import RISK_OFF, deploy_from_risk, macrobench_sleeves, risk_score
+from dejavu.policy import RISK_OFF, deploy_from_risk, macrobench_sleeves, risk_score
 
 
 def test_risk_score_rises_with_stress():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Advanced memory analyses for the echo submission.
+"""Advanced memory analyses for the dejavu submission.
 
 Extends the single-anecdote ablation into four honest, reproducible findings:
 
@@ -36,8 +36,8 @@ import tempfile
 
 from PIL import Image, ImageDraw, ImageFont
 
-from echo.memory import Memory
-from echo.policy import decide_differently, is_stressed
+from dejavu.memory import Memory
+from dejavu.policy import decide_differently, is_stressed
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 FONTB = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"

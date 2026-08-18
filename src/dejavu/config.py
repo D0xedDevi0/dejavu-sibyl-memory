@@ -1,4 +1,4 @@
-"""Paths, defaults, and onchain config for the echo loop.
+"""Paths, defaults, and onchain config for the dejavu loop.
 
 Central place for anything the agent needs at runtime. Kept import-light so
 tests and the demo can inject overrides.
@@ -30,7 +30,7 @@ class Config:
     wallet_key: Path = AGENT_WALLET_KEY
     x402_escrow: str = X402_ESCROW
     fee_recipient: str = FEE_RECIPIENT
-    dry_run: bool = field(default_factory=lambda: os.environ.get("ECHO_DRY_RUN", "1") != "0")  # 0 -> broadcast real tx
+    dry_run: bool = field(default_factory=lambda: os.environ.get("DEJAVU_DRY_RUN", "1") != "0")  # 0 -> broadcast real tx
     search_phrases: tuple[str, ...] = field(
         default_factory=lambda: (
             "credit stress crisis lesson",

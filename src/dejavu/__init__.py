@@ -1,4 +1,4 @@
-"""NEURAL_MESH x Sibyl Memory — the memory-echo loop (`echo`).
+"""NEURAL_MESH x Sibyl Memory — the memory-dejavu loop (`dejavu`).
 
 An autonomous agent whose onchain (Base) decisions are *driven by* its own
 persistent memory. Core thesis: "Forgetting is a bug. Remembering is the

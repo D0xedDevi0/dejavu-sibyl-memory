@@ -8,10 +8,10 @@ import os
 
 import pytest
 
-from echo.agent import run_sessions, session_b
-from echo.base_action import _load_account, execute
-from echo.config import Config
-from echo.memory import Memory
+from dejavu.agent import run_sessions, session_b
+from dejavu.base_action import _load_account, execute
+from dejavu.config import Config
+from dejavu.memory import Memory
 
 
 def _tmp_config(**kw) -> Config:

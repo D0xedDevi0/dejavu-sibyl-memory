@@ -9,7 +9,7 @@
 
 ## Option A — Thread (recommended)
 
-> **echo is live. 🧠💙**
+> **dejavu is live. 🧠💙**
 >
 > A self-improving agent whose onchain (@base) decisions are driven by its own persistent memory.
 >
@@ -30,7 +30,7 @@
 
 ## Option B — Single post (short)
 
-> **echo is live. 🧠💙**
+> **dejavu is live. 🧠💙**
 >
 > An agent whose onchain (@base) decisions are *driven by* its own memory — built for the @sibylcap hackathon.
 >

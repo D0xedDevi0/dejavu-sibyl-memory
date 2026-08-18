@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the echo demo video — D0xedDev × Sibyl fused, measured, cinematic.
+"""Build the dejavu demo video — D0xedDev × Sibyl fused, measured, cinematic.
 
 Renders terminal-style frames (PIL) in the fused identity:
   · NEURAL_MESH blueprint navy + pixel-grid + cyan accents (#001240 / #0052FF / #00d4ff)
@@ -7,7 +7,7 @@ Renders terminal-style frames (PIL) in the fused identity:
   · Real measured evidence (verified Base txs, ablation, six lanes, LoCoMo LLM judge)
 
 Scenes:
-  1  TITLE       — echo: the agent that remembers
+  1  TITLE       — dejavu: the agent that remembers
   2  LEARN       — Session A naive → -18%, writes lesson to memory
   3  RECALL      — Session B WITH memory → de-risk, REAL Base tx (status 1)
   4  WIPED       — Session B store wiped → naive → -18% again (the deletion gate)
@@ -99,7 +99,7 @@ LEARN = prompt([
     "write_lesson('crisis-derisking')  -> memory",
     "write_event(journal)",
     "",
-    "echo: 'when stressed, de-risk to cash.'",
+    "dejavu: 'when stressed, de-risk to cash.'",
 ])
 RECALL = prompt([
     "SESSION B  --  cold start (zero conversation ctx)",
@@ -174,7 +174,7 @@ def render_frame(lines, *, title, right_title="", accent=CYAN, tag=None, prompt_
     fsm = load_font(FONTB, 22)
 
     # header
-    d.text((44, 34), "echo  --  the agent that remembers", font=ft, fill=CYAN)
+    d.text((44, 34), "dejavu  --  the agent that remembers", font=ft, fill=CYAN)
     d.text((44, 96), "NEURAL_MESH x Sibyl Memory  |  forget => lose · remember => survive",
            font=fs, fill=GRAY)
     if tag:
@@ -211,7 +211,7 @@ def render_frame(lines, *, title, right_title="", accent=CYAN, tag=None, prompt_
 
     # footer (verified evidence)
     d.text((44, H - 36),
-           "hackathon demo · src/echo · real Base txs verified on mainnet · all numbers measured",
+           "hackathon demo · src/dejavu · real Base txs verified on mainnet · all numbers measured",
            font=fs, fill=DIM)
     return img
 
@@ -221,7 +221,7 @@ def main():
     os.makedirs(outdir, exist_ok=True)
 
     scenes = {
-        "title":   render_frame(LEARN,  title="echo -- the agent that remembers", right_title="",
+        "title":   render_frame(LEARN,  title="dejavu -- the agent that remembers", right_title="",
                                 accent=CYAN),
         "learn":   render_frame(LEARN,  title="SESSION A  ·  learn (naive -> -18%)",
                                 accent=RED,  tag="FRESH STORE"),
@@ -238,7 +238,7 @@ def main():
         "close":   render_frame(["> Forgetting is a bug.",
                                  "> Remembering is the strategy.",
                                  "",
-                                 "echo · NEURAL_MESH · Sibyl Memory",
+                                 "dejavu · NEURAL_MESH · Sibyl Memory",
                                  "MIT · github.com/BasedNUKEM/NEURAL_MESH",
                                  "build in public · @D0xedDevi0"],
                                 title="remember => survive",

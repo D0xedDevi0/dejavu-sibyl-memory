@@ -3,8 +3,8 @@
 import os
 import tempfile
 
-from echo.agent import LESSON_NAME, LESSON_TEXT, session_a
-from echo.memory import Memory
+from dejavu.agent import LESSON_NAME, LESSON_TEXT, session_a
+from dejavu.memory import Memory
 
 
 def _db():
@@ -60,7 +60,7 @@ def test_learn_and_accept_proposal():
     assert getattr(p, "proposed_body", None)
     assert getattr(p, "pattern_kind", None)
 
-    res = m.accept_proposal(p.id, note="echo test: accept discovered skill")
+    res = m.accept_proposal(p.id, note="dejavu test: accept discovered skill")
     assert res["accepted"] is True
     assert res["doc_key"].startswith("skill/"), \
         f"accepted skill should be a skill doc, got {res['doc_key']}"
