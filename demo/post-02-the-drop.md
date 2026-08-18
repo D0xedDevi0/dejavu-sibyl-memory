@@ -9,7 +9,7 @@
 
 ## Option A — Thread (recommended)
 
-> **dejavu is live. 🧠💙**
+> **dejavu. I've seen this crisis before — so I de-risk. 🧠💙**
 >
 > A self-improving agent whose onchain (@base) decisions are driven by its own persistent memory.
 >
