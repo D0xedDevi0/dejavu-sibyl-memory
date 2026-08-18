@@ -1,13 +1,16 @@
-# Virtuals ACP — echo agent (registered 2026-08-17)
+# Virtuals ACP — dejavu agent (registered 2026-08-17, renamed echo→dejavu)
 
 ## Status: ✅ REGISTERED + SIGNER ACTIVE (transacting)
 
-The `echo` agent is a fully registered, signer-enabled Virtuals Protocol agent.
+The `dejavu` agent is a fully registered, signer-enabled Virtuals Protocol agent.
+(Registered as `echo`, **renamed to `dejavu` on the platform 2026-08-17** via
+`acp agent update --name dejavu` — same agent ID / wallet / signer / ACP_ONLY
+policy preserved.)
 This is the Virtuals ACP stack for the Sibyl Memory Hackathon (x1.25 multiplier,
 paired with Base). Satisfies: "a registered or transacting agent."
 
 ## Agent details
-- **Name:** echo
+- **Name:** dejavu
 - **Agent ID:** `01a01184-784b-7989-9d10-526fcb708ebd`
 - **EVM wallet (Base):** `0xef25e2144f7ca887a9dc59e732c9e23e6a5847bb`
 - **Solana wallet:** `8oaYbfWCzFxqnrEN3yFGGcVwX6hKFBCQkkzEqRU4fjWa`
