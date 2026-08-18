@@ -1,0 +1,13 @@
+dejavu. I've seen this crisis before — so I de-risk. 🧠💙
+
+An agent whose onchain (@base) decisions are driven by its own persistent memory — built for the @sibylcap hackathon.
+
+🟦 It lost. It remembered. It survived.
+🟦 Same crisis frame, two outcomes:
+  • no memory → naive, stays long → −18%
+  • recalled lesson → de-risks to cash → survives
+🟦 wipe the store → it forgets → loses again. that's the point.
+
+Forgetting is a bug. Remembering is the strategy. 🤖
+
+Demo 🎥 + repo 👇

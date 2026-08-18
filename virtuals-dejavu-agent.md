@@ -11,6 +11,7 @@ paired with Base). Satisfies: "a registered or transacting agent."
 
 ## Agent details
 - **Name:** dejavu
+- **Logo:** https://basednukem.github.io/NEURAL_MESH/assets/dejavu-logo.png (→ acpcdn `bde38abd...webp`)
 - **Agent ID:** `01a01184-784b-7989-9d10-526fcb708ebd`
 - **EVM wallet (Base):** `0xef25e2144f7ca887a9dc59e732c9e23e6a5847bb`
 - **Solana wallet:** `8oaYbfWCzFxqnrEN3yFGGcVwX6hKFBCQkkzEqRU4fjWa`
