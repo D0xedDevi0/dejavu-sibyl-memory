@@ -18,7 +18,7 @@
 > 🟦 **prospective memory** — "follow up Tuesday" isn't a fact, it's an INTENTION. it surfaces *before* it's due. snooze it, rank it, forget it.
 > 🟦 **working-memory budget** — context isn't a retrieval problem, it's a BUDGET problem. fixed token cap, priority eviction. dropped ≠ deleted — it stays in cold memory.
 >
-> and they run on our live mesh (694 nodes, Rust resonance, x402 paid recall, poisoning-proof).
+> and they run on our live mesh (Rust resonance, x402 paid recall, poisoning-proof).
 >
 > 🟦 unverified claim → trust capped at 0.2. verified → 0.95. memory you can PROVE.
 >
