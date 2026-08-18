@@ -1,4 +1,4 @@
-"""Sibyl Memory wrapper for the echo loop.
+"""Sibyl Memory wrapper for the dejavu loop.
 
 Thin, typed facade over `sibyl_memory_client.MemoryClient` covering all five
 storage tiers (HOT state / WARM entities / COLD journal / REF reference / ARCH

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ablation benchmark for the echo loop.
+"""Ablation benchmark for the dejavu loop.
 
 The pitch rests on ONE anecdote today. This turns it into a *measured claim*:
 run the REAL `decide_differently` + Sibyl Memory across many randomly sampled
@@ -25,8 +25,8 @@ import tempfile
 
 from PIL import Image, ImageDraw, ImageFont
 
-from echo.memory import Memory
-from echo.policy import decide_differently, is_stressed
+from dejavu.memory import Memory
+from dejavu.policy import decide_differently, is_stressed
 
 N_TRIALS = 200
 SEED = 1337
@@ -118,7 +118,7 @@ def _render_figure(r, path: str):
     fm = ImageFont.truetype(FONT, 26)
     fs = ImageFont.truetype(FONT, 24)
 
-    d.text((40, 30), "echo ablation benchmark", font=ft, fill=(0, 200, 255))
+    d.text((40, 30), "dejavu ablation benchmark", font=ft, fill=(0, 200, 255))
     d.text((40, 76), f"mean crisis return  ·  {r['trials']} frames  ·  seed 1337",
            font=fs, fill=(150, 158, 176))
 

@@ -1,10 +1,10 @@
-"""NEURAL_MESH backend for the echo loop — Lane E (unify the two tracks).
+"""NEURAL_MESH backend for the dejavu loop — Lane E (unify the two tracks).
 
-Implements the SAME `Memory` interface the echo agent uses with Sibyl
+Implements the SAME `Memory` interface the dejavu agent uses with Sibyl
 (`write_lesson` / `recall_lessons` / `delete_lesson` / `delete_store`), but
 backed by the real NEURAL_MESH agentic-memory mesh.
 
-Why this matters: the hackathon entry proves a *memory-driven* echo agent with
+Why this matters: the hackathon entry proves a *memory-driven* dejavu agent with
 the deletion gate (recalled crisis lesson changes allocation; wipe it and the
 agent reverts to naive). That proof should not depend on one memory engine.
 This backend lets the SAME demo run on NEURAL_MESH — the production
@@ -12,7 +12,7 @@ self-organizing / self-forgetting mesh — so the deletion-gate thesis is shown
 on two independent implementations. One story, two tracks.
 
 Usage (identical to the Sibyl Memory):
-    from echo.mesh_backend import MeshMemory as Memory
+    from dejavu.mesh_backend import MeshMemory as Memory
     mem = Memory(":memory:")
     mem.write_lesson("crisis-1", "de-risk to <=5% equity when VIX spikes", frame=...)
     lessons = mem.recall_lessons(["crisis VIX equity de-risk"])
@@ -41,7 +41,7 @@ LESSON_CATEGORY = "lesson"
 
 
 class MeshMemory:
-    """NEURAL_MESH-backed store exposing the echo `Memory` interface."""
+    """NEURAL_MESH-backed store exposing the dejavu `Memory` interface."""
 
     def __init__(self, db_path: str | Path = ":memory:", *, tenant_id: str | None = None):
         # db_path kept for interface parity; NEURAL_MESH uses its own SQLite.
@@ -76,7 +76,7 @@ class MeshMemory:
         if outcome is not None:
             meta["outcome"] = outcome
         node = self._mesh.add(lesson, type=MemoryType.SEMANTIC, lane="cold",
-                              provenance="echo-crisis", trust=0.95, meta=meta)
+                              provenance="dejavu-crisis", trust=0.95, meta=meta)
         self._node_ids[name] = node.id
         return {"name": name, "node_id": node.id, "status": status}
 
@@ -137,7 +137,7 @@ class MeshMemory:
                     extra=None) -> str:
         self._mesh.add(f"event eval={evaluated} act={acted}",
                        type=MemoryType.EPISODIC, lane="hot",
-                       provenance="echo-loop")
+                       provenance="dejavu-loop")
         return "mesh-event"
 
     def read_events(self, *, limit: int = 50, since=None, until=None) -> list[dict]:

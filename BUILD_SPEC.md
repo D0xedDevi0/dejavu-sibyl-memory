@@ -19,7 +19,7 @@ persistent memory — and it acts onchain (Base) because of what it remembers.**
 
 - "Forgetting is a bug" → **"Remembering is the strategy."**
 - Demo hook: *"Session A it lost. Session B it remembered. That's the whole product."*
-- Codename: **`echo`** (the memory-echo loop)
+- Codename: **`dejavu`** (the memory-dejavu loop)
 
 ### Scoring (target: win top-5, aim #1)
 `Builder Score = (Judge Score + PMF bonus) × Stack multiplier`
@@ -27,7 +27,7 @@ persistent memory — and it acts onchain (Base) because of what it remembers.**
 | Band | Points | How we win |
 |---|---|---|
 | Memory load-bearing | 40 | **Core decision function fails without Sibyl Memory.** Delete store → naive → losing trade. [VERIFIED in prototype] |
-| Innovation | 25 | Memory-echo loop: agent writes its own outcomes back and compounds (self-learning). Memory→decision→onchain closed loop. |
+| Innovation | 25 | Memory-dejavu loop: agent writes its own outcomes back and compounds (self-learning). Memory→decision→onchain closed loop. |
 | Technical | 20 | Clean, runnable twice, SQLite-backed Sibyl store, real Base tx in demo, no smoke & mirrors. |
 | Pitch | 15 | 2–5 min demo with unmistakable fresh-session recall beat. |
 | PMF bonus | +10 | D0xedDev is a live production agent hub — real usage, real audience, deployment history. |
@@ -35,7 +35,7 @@ persistent memory — and it acts onchain (Base) because of what it remembers.**
 
 ---
 
-## 1. Architecture — the memory-echo loop
+## 1. Architecture — the memory-dejavu loop
 
 ```
                  ┌──────────────────────────────────────────┐
@@ -50,7 +50,7 @@ persistent memory — and it acts onchain (Base) because of what it remembers.**
                         │                     ▼  READ/RECALL on cold start
                    WRITE outcome           changes the decision
                         │                     │
-                        └────── echo: outcome written back, compounds ──┘
+                        └────── dejavu: outcome written back, compounds ──┘
                                 │
                                 ▼
                     ⛓️ BASE ONCHAIN ACTION (x402 payment / wallet op)
@@ -62,7 +62,7 @@ persistent memory — and it acts onchain (Base) because of what it remembers.**
 2. **recall** — fresh session starts w/ no chat history; query Sibyl first
 3. **decide_differently** — recalled lesson changes policy (the load-bearing fn)
 4. **act_onchain** — decision becomes a real Base transaction (x402 / wallet op)
-5. **echo** — outcome written back; memory compounds
+5. **dejavu** — outcome written back; memory compounds
 
 ### Deletion test (the judge's check)
 - **With memory:** recalls "credit_stress>0.7 → de-risk" → goes to cash/rates. Correct.
@@ -137,7 +137,7 @@ prov.forget(category,name)
 ├── registration.md       # creds + build link (done)
 ├── proto/
 │   └── echo_loop.py      # [DONE] load-bearing prototype (works)
-├── src/echo/             # THE REAL BUILD
+├── src/dejavu/             # THE REAL BUILD
 │   ├── __init__.py
 │   ├── memory.py         # Sibyl wrapper (write/recall/search)
 │   ├── policy.py         # decide_differently (load-bearing decision fn)
@@ -159,23 +159,23 @@ prov.forget(category,name)
 
 ### M1 — Foundation (Day 1–2)
 - [x] Repo scaffold [DONE: venv + proto]
-- [x] `pyproject.toml`, package layout `src/echo/` [DONE, commit 0c9d01b]
+- [x] `pyproject.toml`, package layout `src/dejavu/` [DONE, commit 0c9d01b]
 - [x] `memory.py` wrapper: `MemoryClient.local` + all 5-tier ops, typed [DONE]
 - [x] `base_action.py` onchain stub (dry-run, M3 wires real tx) [DONE]
 - [x] Pytest setup; `test_loadbearing.py` (the deletion gate) green from day 1 [DONE: 12 tests pass]
 - [x] Git repo initialized, `.gitignore` excludes `.venv/`/`data/`/`*.db` [DONE]
 
-### M2 — The memory-echo agent (Day 3–5)
+### M2 — The memory-dejavu agent (Day 3–5)
 - [x] `policy.py`: reuse the **MacroBench regime book** as substrate
       (ranked #2, handle `D0xedDevi0`) — recalled lesson flips allocation
       [DONE: risk_score/RISK_ON/RISK_OFF/macrobench_sleeves ported from
        /opt/data/uvlabs-arena/agent.py; decide_differently returns the real
        defensive book on recall; tests pin the substrate]
 - [ ] `agent.py`: `run_session(frame)` → write → (fresh proc) → recall → decide
-      [PARTIAL: run_sessions() + `echo` CLI work; wire MacroBench frame]
+      [PARTIAL: run_sessions() + `dejavu` CLI work; wire MacroBench frame]
 - [ ] Learner integration: journal patterns → skill proposals the agent accepts
       [DONE: Memory.learner + learn()/accept_proposal() exposed; Learner makes
-       structured SkillProposals (pattern_kind/confidence/evidence); `echo --learn`
+       structured SkillProposals (pattern_kind/confidence/evidence); `dejavu --learn`
        accepts the top skill (doc_key `skill/<slug>`); test proves the loop]
 - [x] `test_recall.py` + `test_policy.py` green [DONE: 14 total pass]
 
@@ -186,16 +186,16 @@ prov.forget(category,name)
       - x402 Escrow `0x055280...` · feeRecipient `0xf8f96d` [MEMORY; NOTE: feeRecipient is a short/placeholder form, not a valid address — execute() falls back to self-transfer]
 - [x] memory-driven decision → real Base tx (wallet-op route wired: eth_account signs + eth_sendRawTransaction; dry_run default); tx hash captured for demo [DONE, code+tests; live broadcast not yet fired]
 - [x] confirm exact x402 payment route (quoteOnlyFees feeRecipient pattern) [DONE: wallet-op chosen as the robust demo proof; x402/EIP-3009 needs a funded USDC wallet — see §10]
-- [ ] FIRE a real Base tx and capture the hash (during demo, or on request) [PENDING: needs ECHO_DRY_RUN=0]
+- [ ] FIRE a real Base tx and capture the hash (during demo, or on request) [PENDING: needs DEJAVU_DRY_RUN=0]
 - [ ] Virtuals ACP (see M4)
 
 ### M4 — Virtuals ACP (Day 7–8)
 - [x] Register agent / run ACP job on Virtuals Protocol
-      [DONE: `echo` agent registered on ACP — Agent ID 01a01184..., EVM wallet
+      [DONE: `dejavu` agent registered on ACP — Agent ID 01a01184..., EVM wallet
        0xef25e214..., Solana wallet, email echo_h9ge@agents.world, builder
-       bc_6z9u9grp, role HYBRID. Creds + setup in virtuals-echo-agent.md]
+       bc_6z9u9grp, role HYBRID. Creds + setup in virtuals-dejavu-agent.md]
 - [x] Exercise it in the loop (coordination) in the demo
-      [DONE: src/echo/virtuals.py wires the agent identity into run_sessions/CLI
+      [DONE: src/dejavu/virtuals.py wires the agent identity into run_sessions/CLI
        (`--virtuals`); signer active with ACP_ONLY policy = transacting agent;
        tests test_virtuals.py (4) green]
 - [x] Signer approved (P-256, restricted/ACP_ONLY) — agent can transact onchain
@@ -253,7 +253,7 @@ def decide(frame, memory) -> book:
    de-risks → survives. Show the search hit returning the lesson.
 5. **Onchain (2:30–3:30):** memory-driven decision executes a REAL Base tx
    (x402 / wallet op) — show tx hash + explorer. *"It didn't just remember. It acted."*
-6. **Echo/compounding (3:30–4:30):** show the Learner proposing a skill from the
+6. **Dejavu/compounding (3:30–4:30):** show the Learner proposing a skill from the
    journal. *"Session A it lost. Session B it remembered. That's the whole product."*
 7. **PMF (4:30–5:00):** "This is the memory backbone of D0xedDev, a live
    autonomous agent hub on Base that's been running since [date]."
@@ -305,13 +305,13 @@ def decide(frame, memory) -> book:
 ---
 
 ## 11. Immediate next actions (this session or first build session)
-1. **[DONE 2026-08-17]** Port `proto/echo_loop.py` → `src/echo/{memory,policy,agent,base_action,config}.py`; `tests/`; git init.
+1. **[DONE 2026-08-17]** Port `proto/echo_loop.py` → `src/dejavu/{memory,policy,agent,base_action,config}.py`; `tests/`; git init.
 2. **[DONE 2026-08-17]** Build-in-public post #1 drafted at `demo/post-01-signed-up.md` (review, then post via xurl).
 3. **[DONE 2026-08-17]** Wire the **MacroBench regime book** into `policy.decide_differently`.
 4. **[DONE 2026-08-17]** Base onchain leg wired + **REAL tx fired & confirmed onchain** (`0x9c0aa524...`, block 50104833, status 1). 18 tests green.
 5. **[DONE 2026-08-17]** Submission `README.md` (§8 all sections) + MIT `LICENSE`.
-6. **[DONE 2026-08-17]** Learner self-learning loop verified + tuned: Learner makes structured proposals from the journal; `echo --learn` accepts the top skill (`doc_key skill/<slug>`). This is the compounding/self-learning proof.
-7. **[DONE 2026-08-17]** Virtuals ACP: registered `echo` agent + approved P-256 signer (ACP_ONLY). Wired into loop via `--virtuals`. **Both stacks (Base+Virtuals) = x1.25 achieved.** Creds in `virtuals-echo-agent.md`.
+6. **[DONE 2026-08-17]** Learner self-learning loop verified + tuned: Learner makes structured proposals from the journal; `dejavu --learn` accepts the top skill (`doc_key skill/<slug>`). This is the compounding/self-learning proof.
+7. **[DONE 2026-08-17]** Virtuals ACP: registered `dejavu` agent + approved P-256 signer (ACP_ONLY). Wired into loop via `--virtuals`. **Both stacks (Base+Virtuals) = x1.25 achieved.** Creds in `virtuals-dejavu-agent.md`.
 8. **[NEXT]** Demo video (split-screen fresh-session recall beat) — record during build window.
 9. **[WINDOW]** Post #2 (demo), mark build page ready, submit ≤ Sep 10 23:59 UTC.
 

@@ -10,8 +10,8 @@ Run:  pytest tests/test_loadbearing.py -v   (or the full suite)
 import os
 import tempfile
 
-from echo.agent import LESSON_NAME, session_a, session_b
-from echo.memory import Memory
+from dejavu.agent import LESSON_NAME, session_a, session_b
+from dejavu.memory import Memory
 
 
 def _fresh_db():

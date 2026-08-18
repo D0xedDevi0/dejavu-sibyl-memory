@@ -9,9 +9,9 @@
 
 ## Option A — Thread (recommended, tells the whole story)
 
-> We're building a memory-echo agent for the @sibylcap hackathon. 🟦
+> We're building a memory-dejavu agent for the @sibylcap hackathon. 🟦
 >
-> Codename: **echo**.
+> Codename: **dejavu**.
 >
 > 🟦 An agent whose decisions are *driven by* its own persistent memory
 > 🟦 It acts onchain (@base) because of what it remembers
@@ -28,7 +28,7 @@
 
 > Forgetting is a bug. Remembering is the strategy. 🤖💙
 >
-> We're building **echo** — a self-improving agent for the @sibylcap hackathon whose onchain (@base) decisions are driven by its own persistent memory.
+> We're building **dejavu** — a self-improving agent for the @sibylcap hackathon whose onchain (@base) decisions are driven by its own persistent memory.
 >
 > 🟦 Session A it loses. Session B it remembers. That's the whole product.
 > 🟦 Acting onchain because it remembers. @virtuals coordinating the loop.

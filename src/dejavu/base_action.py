@@ -1,4 +1,4 @@
-"""Onchain leg for the echo loop (Base Mainnet).
+"""Onchain leg for the dejavu loop (Base Mainnet).
 
 The memory-driven decision (a Book) becomes a REAL Base transaction. Two modes
 used in the demo:
@@ -9,7 +9,7 @@ used in the demo:
   * `hold`     (no stress / naive)         -> a dust self-transfer (keep-alive).
 
 `execute()` defaults to dry-run for safety. Set `dry_run=False` (env
-`ECHO_DRY_RUN=0`, or `Config(dry_run=False)`) to broadcast a real tx.
+`DEJAVU_DRY_RUN=0`, or `Config(dry_run=False)`) to broadcast a real tx.
 
 Verified live (2026-08-17):
   * RPC mainnet.base.org  -> chainId 0x2105 (8453)

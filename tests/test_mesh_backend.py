@@ -1,6 +1,6 @@
 """Lane E — the deletion gate runs identically on the NEURAL_MESH backend.
 
-This is the unifying proof: the same memory-echo crisis demo that the hackathon
+This is the unifying proof: the same memory-dejavu crisis demo that the hackathon
 entry proves on Sibyl also runs on NEURAL_MESH (the production self-organizing
 / self-forgetting agentic-memory mesh). Same interface, same decision, same
 deletion-gate asymmetry:
@@ -13,8 +13,8 @@ Run:  pytest tests/test_mesh_backend.py -v
 import os
 import tempfile
 
-from echo.agent import LESSON_NAME, session_a, session_b
-from echo.mesh_backend import MeshMemory
+from dejavu.agent import LESSON_NAME, session_a, session_b
+from dejavu.mesh_backend import MeshMemory
 
 
 def _crisis_frame():
@@ -92,7 +92,7 @@ def test_mesh_backend_supports_selective_forgetting():
 
 
 def test_mesh_backend_imports_and_constructs():
-    """The bridge imports cleanly and exposes the echo Memory surface."""
+    """The bridge imports cleanly and exposes the dejavu Memory surface."""
     mem = MeshMemory(":memory:")
     for attr in ("write_lesson", "recall_lessons", "delete_lesson",
                  "delete_store", "write_event", "search"):

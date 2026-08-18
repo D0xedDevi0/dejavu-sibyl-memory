@@ -14,7 +14,7 @@
 | Rubric band | How we score it |
 |---|---|
 | **Memory load-bearing (40)** | The agent's core function — deciding what to do with real money — *fails without Sibyl Memory*. Delete the layer → agent reverts to a naive, memory-less policy and makes the wrong onchain decision. Recall is competitive, not decorative. |
-| **Innovation (25)** | A **memory-echo loop**: the agent not only *recalls* prior state but *writes its own outcomes back*, so it compounds across sessions — it literally gets smarter the more it runs. Memory-to-decision-to-onchain-action is a closed loop nobody else in the field is shipping. |
+| **Innovation (25)** | A **memory-dejavu loop**: the agent not only *recalls* prior state but *writes its own outcomes back*, so it compounds across sessions — it literally gets smarter the more it runs. Memory-to-decision-to-onchain-action is a closed loop nobody else in the field is shipping. |
 | **Technical execution (20)** | Clean, runnable twice, survives a curious judge. Real SQLite-backed Sibyl store (five-tier schema), real Base transaction in the demo, no smoke and mirrors. |
 | **Pitch (15)** | 2–5 min demo with an unmistakable **fresh-session recall beat** (split-screen: session A learns → session B cold-starts, recalls, and changes its trade). |
 
@@ -28,7 +28,7 @@
 
 ## The product / architecture
 
-### The loop ("memory-echo")
+### The loop ("memory-dejavu")
 ```
                     ┌─────────────────────────────────────┐
    SESSION A        │   SIBYL MEMORY  (SQLite + FTS5)      │
@@ -47,7 +47,7 @@
 2. **Recall (fresh session):** next session starts with **no conversation history**. The agent queries Sibyl Memory first. This is the load-bearing moment.
 3. **Decide differently:** the recalled lesson changes the agent's policy → it allocates/trades differently than a memory-less agent would.
 4. **Act onchain (Base):** the decision becomes a **real onchain action** (x402 payment / wallet op / contract interaction), shown live in the demo.
-5. **Echo:** the outcome is written back, compounding the memory.
+5. **Dejavu:** the outcome is written back, compounding the memory.
 
 ### Why it's load-bearing (the deletion test)
 - **With memory:** agent recalls "last time credit stress spiked I stayed long and lost 20%" → this time it goes to cash / hedges. Correct behavior.
@@ -66,7 +66,7 @@ We run on **Hermes Agent**, which has a **native `sibyl-memory-hermes` adapter**
 - Hermes adapter (`sibyl-memory-hermes`) wired — confirm `SibylAdapter.prefetch()` injects recalled memory into the agent's context on session start.
 - Base wallet + x402 escrow connected (already have `agent-wallet.key`, `feeRecipient 0xf8f96d`).
 
-**Day 3–5 — The memory-echo agent**
+**Day 3–5 — The memory-dejavu agent**
 - Write layer: agent persists (context, decision, outcome, lesson) as WARM entity + COLD journal.
 - Recall layer: on fresh session, query Sibyl, inject top recalls into the agent's decision context.
 - Policy layer: recalled lesson → different allocation/trade. This is the load-bearing decision function.
@@ -99,5 +99,5 @@ We already built a **regime-adaptive macro allocation book** (ranked #2 on UV La
 
 ## Concept name (working)
 - **NEURAL_MESH · "The Agent That Remembers What It Did With Money"**
-- Codename: **`echo`** (the memory-echo loop)
+- Codename: **`dejavu`** (the memory-dejavu loop)
 - Demo title hook: *"Session A it lost. Session B it remembered. That's the whole product."*

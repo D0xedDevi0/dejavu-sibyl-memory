@@ -6,7 +6,7 @@ This is the two-act structure that produces the demo's money shot:
     Session B — a fresh process with zero chat history cold-starts, QUERIES
                  Sibyl first, recalls the lesson, and DECIDES DIFFERENTLY.
 
-`run_session` can be invoked in-process (tests) or via the `echo` CLI, which
+`run_session` can be invoked in-process (tests) or via the `dejavu` CLI, which
 simulates the cold-start by opening a brand-new Memory handle.
 """
 
@@ -66,7 +66,7 @@ def run_sessions(*, crisis_frame: dict | None = None,
                  db_path: str | None = None,
                  config: Config | None = None,
                  virtuals: bool = False) -> dict:
-    """Full echo loop across two logical sessions on one store.
+    """Full dejavu loop across two logical sessions on one store.
 
     Returns a structured dict the demo/tests can assert on.
     """
@@ -88,7 +88,7 @@ def run_sessions(*, crisis_frame: dict | None = None,
     # The recalled decision becomes an onchain action on Base.
     receipt = execute(recalled_book, config)
 
-    # Virtuals ACP coordination: the echo agent identity drives the loop.
+    # Virtuals ACP coordination: the dejavu agent identity drives the loop.
     v = virtuals_exercise() if virtuals else None
 
     return {
@@ -103,7 +103,7 @@ def run_sessions(*, crisis_frame: dict | None = None,
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="echo", description="memory-echo loop")
+    ap = argparse.ArgumentParser(prog="dejavu", description="memory-dejavu loop")
     ap.add_argument("--db", default=None, help="path to memory.db")
     ap.add_argument("--wipe", action="store_true",
                     help="delete store first (simulate no memory)")
@@ -111,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--learn", action="store_true",
                     help="after recall, run the Learner and accept the top skill proposal")
     ap.add_argument("--virtuals", action="store_true",
-                    help="coordinate the loop through the registered Virtuals echo agent")
+                    help="coordinate the loop through the registered Virtuals dejavu agent")
     ap.add_argument("--json", action="store_true", help="emit JSON only")
     args = ap.parse_args(argv)
 
@@ -140,7 +140,7 @@ def main(argv: list[str] | None = None) -> int:
     receipt = execute(book, cfg)
 
     # Optional self-learning beat: scan the journal, propose skills, accept the
-    # top one. This is the "echo/compounding" moment of the demo.
+    # top one. This is the "dejavu/compounding" moment of the demo.
     accepted = None
     if args.learn:
         m3 = Memory(db)
@@ -149,12 +149,12 @@ def main(argv: list[str] | None = None) -> int:
         if proposals:
             top = proposals[0]
             accepted = m3.accept_proposal(
-                top.id, note="echo: accepting top self-discovered skill")
+                top.id, note="dejavu: accepting top self-discovered skill")
         else:
             report = None
         m3.close()
 
-    # Virtuals ACP coordination layer (registered echo agent identity).
+    # Virtuals ACP coordination layer (registered dejavu agent identity).
     v = virtuals_exercise() if args.virtuals else None
 
     result = {
@@ -187,7 +187,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print("[LEARN] no skill proposals generated this run")
     if args.virtuals and v:
-        print(f"[VIRTUALS] echo agent {v.agent_id[:8]}... wallet {v.wallet[:10]}... "
+        print(f"[VIRTUALS] dejavu agent {v.agent_id[:8]}... wallet {v.wallet[:10]}... "
               f"signer={v.signer_policy}")
     return 0
 

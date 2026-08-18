@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "echo-memory"
+name = "dejavu-memory"
 version = "0.1.0"
-description = "NEURAL_MESH x Sibyl Memory — memory-echo loop. An agent whose onchain decisions are driven by its own persistent memory."
+description = "NEURAL_MESH x Sibyl Memory — memory-dejavu loop. An agent whose onchain decisions are driven by its own persistent memory."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -22,7 +22,7 @@ test = ["pytest>=8", "pillow>=10"]
 # NOTE: demo/build_demo_video.py also needs ffmpeg (present on ubuntu-latest CI).
 
 [project.scripts]
-echo = "echo.agent:main"
+dejavu = "dejavu.agent:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
