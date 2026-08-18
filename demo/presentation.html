@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>echo — the agent that remembers · NEURAL_MESH × Sibyl</title>
+<style>
+  :root{
+    --bg:#001240; --bg2:#000c28; --panel:#001e48; --grid:#001a5a;
+    --cyan:#00d4ff; --blue:#0052FF; --green:#00ff88; --magenta:#ff00aa;
+    --red:#ff453a; --amber:#ffbe3c; --white:#ebf0fa; --gray:#8899cc; --dim:#5a6c96;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:#00040e;}
+  .deck{width:1600px; height:900px; position:relative; overflow:hidden;
+        background:radial-gradient(1200px 700px at 70% 20%, var(--panel), var(--bg) 70%), var(--bg);
+        font-family:"DejaVu Sans Mono",monospace; color:var(--white);}
+  /* pixel grid */
+  .deck::before{content:""; position:absolute; inset:0; opacity:.5; pointer-events:none;
+     background-image:
+       linear-gradient(var(--grid) 1px, transparent 1px),
+       linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+     background-size:9px 9px;}
+  .slide{position:absolute; inset:0; padding:64px 72px; opacity:0; transition:opacity .4s;
+         display:flex; flex-direction:column;}
+  .slide.on{opacity:1;}
+  .top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;}
+  .brand{font-size:20px; color:var(--blue); letter-spacing:3px; font-weight:700;}
+  .brand small{display:block; font-size:14px; color:var(--dim); letter-spacing:1px; font-weight:400;}
+  .badge{background:var(--cyan); color:var(--bg); font-weight:700; font-size:18px;
+         padding:8px 18px; border-radius:4px; letter-spacing:2px;}
+  .badge.green{background:var(--green);} .badge.magenta{background:var(--magenta);}
+  .badge.red{background:var(--red);}
+  h1{font-size:72px; font-weight:700; color:var(--cyan); letter-spacing:2px; margin:14px 0 6px;}
+  h1 .mono{color:var(--white);}
+  .sub{font-size:22px; color:var(--gray); margin-bottom:34px;}
+  .kicker{font-size:18px; color:var(--amber); letter-spacing:3px; text-transform:uppercase; margin-top:10px;}
+  .panel{border:2px solid var(--blue); border-radius:14px; background:rgba(0,30,72,.6);
+         padding:34px 40px; font-size:24px; line-height:1.9; flex:1; position:relative;}
+  .panel .ptitle{font-size:26px; font-weight:700; color:var(--cyan); margin-bottom:12px; letter-spacing:1px;}
+  .ok{color:var(--green);} .bad{color:var(--red);} .cy{color:var(--cyan);}
+  .mg{color:var(--magenta);} .am{color:var(--amber);} .dim{color:var(--gray);}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:24px; flex:1;}
+  .big{font-size:56px; font-weight:700;}
+  .stat{display:flex; flex-direction:column;}
+  .stat b{font-size:66px; color:var(--green); font-weight:700;}
+  .stat span{font-size:18px; color:var(--gray); margin-top:4px;}
+  .lanes{display:grid; grid-template-columns:1fr 1fr; gap:14px 34px; font-size:22px; line-height:1.7;}
+  .footer{color:var(--dim); font-size:15px; margin-top:18px; letter-spacing:1px;}
+  .arrow{color:var(--cyan); font-weight:700;}
+  .tx{font-size:16px; color:var(--green); word-break:break-all; margin-top:8px;}
+  ul{list-style:none;} li{margin:6px 0; padding-left:26px; position:relative;}
+  li::before{content:"🟦"; position:absolute; left:0; top:0;}
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide on">
+    <div class="top">
+      <div class="brand">NEURAL_MESH <small>× SIBYL MEMORY · HACKATHON</small></div>
+      <div class="badge">MIT</div>
+    </div>
+    <h1>echo <span class="mono">— the agent that remembers</span></h1>
+    <div class="kicker">Forgetting is a bug · Remembering is the strategy</div>
+    <div class="sub" style="margin-top:26px">A memory-driven agent whose onchain (Base) decisions are <span class="ok">changed</span> by what it remembers across fresh sessions.</div>
+    <div class="panel">
+      <div class="ptitle">the pitch</div>
+      🟦 <span class="cy">Session A</span> learns a painful lesson → writes it to persistent memory.<br>
+      🟦 <span class="cy">Session B</span> cold-starts with zero context, recalls it, and <span class="ok">de-risks</span>.<br>
+      🟦 Delete the memory → it <span class="bad">forgets → loses again</span>. That's the gate.<br>
+      🟦 Runs on <span class="mg">NEURAL_MESH</span> (six lanes) × <span class="cy">Sibyl Memory</span> (the substrate) × <span class="ok">Base + Virtuals</span>.
+    </div>
+    <div class="footer">echo · NEURAL_MESH · Sibyl Memory · @D0xedDevi0 · MIT</div>
+  </section>
+
+  <!-- 2 THE GATE -->
+  <section class="slide">
+    <div class="top"><div class="brand">THE PROOF</div><div class="badge green">LOAD-BEARING</div></div>
+    <h1 style="font-size:52px">Memory is load-bearing. <span class="mono">Not decorative.</span></h1>
+    <div class="sub">Same crisis frame, two outcomes — the decision depends on the memory layer.</div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="ptitle">WITH MEMORY → recall</div>
+        <span class="cy">sibyl@hackathon:~$</span> search('credit stress crisis')<br>
+        <span class="arrow">→</span> 1 lesson FOUND<br>
+        <span class="cy">sibyl@hackathon:~$</span> decide_differently(frame)<br>
+        <span class="ok">de_risk_book()</span> <span class="dim">← flips</span><br>
+        equity <span class="ok">0.05</span> · cash 0.59<br>
+        <span class="ok">REAL Base tx · status 1</span>
+        <div class="tx">0x5175ae5a…793dd · block 50108439</div>
+      </div>
+      <div class="panel">
+        <div class="ptitle">MEMORY WIPED → naive</div>
+        <span class="cy">sibyl@hackathon:~$</span> search(...)<br>
+        <span class="bad">→ NO LESSONS</span> <span class="dim">(store deleted)</span><br>
+        <span class="cy">sibyl@hackathon:~$</span> decide_differently(frame, None)<br>
+        <span class="bad">naive_book()</span> <span class="dim">← fails open</span><br>
+        equity <span class="bad">0.55</span> · stays LONG<br>
+        <span class="bad">−18% drawdown again</span>
+      </div>
+    </div>
+    <div class="footer">Judges' gate: delete the memory layer → the core function breaks. ✓</div>
+  </section>
+
+  <!-- 3 MEASURED -->
+  <section class="slide">
+    <div class="top"><div class="brand">MEASURED, NOT MARKETED</div><div class="badge">SEED 1337</div></div>
+    <h1 style="font-size:52px">One anecdote → a <span class="mono">measured claim</span></h1>
+    <div class="sub">200 randomly-sampled frames · 150 stressed · same decision function both ways.</div>
+    <div class="grid2">
+      <div class="stat"><b>+7.07pp</b><span>mean loss averted by remembering</span></div>
+      <div class="stat"><b>75%</b><span>trials where memory changed the decision</span></div>
+      <div class="stat"><b>−2.83%</b><span>mean crisis return WITH memory</span></div>
+      <div class="stat"><b>−9.90%</b><span>mean crisis return NO memory</span></div>
+    </div>
+    <div class="panel" style="flex:0; margin-top:20px;">
+      <div class="ptitle">compounding, 12 crisis episodes</div>
+      <span class="ok">$0.90</span> with memory &nbsp;·&nbsp; <span class="bad">$0.29</span> without → remembering compounds.
+    </div>
+    <div class="footer">reproduce: demo/ablation_benchmark.py · tests/test_ablation.py</div>
+  </section>
+
+  <!-- 4 SIX LANES -->
+  <section class="slide">
+    <div class="top"><div class="brand">NEURAL_MESH · THE BRAIN</div><div class="badge magenta">REAL CODE</div></div>
+    <h1 style="font-size:52px">Six lanes the agentic-memory world <span class="mono">hasn't productized</span></h1>
+    <div class="sub">The crown jewel behind the entry — self-organizing, self-forgetting memory.</div>
+    <div class="lanes">
+      <span><span class="mg">A</span> provenance-weighted · unverified 0.20 → verified 0.95</span>
+      <span><span class="mg">B</span> forgetting-as-feature · supersede → zero stale truth</span>
+      <span><span class="mg">C</span> pay-to-remember (x402) · unpaid recall blocked</span>
+      <span><span class="mg">D</span> memory → LoRA data · distilled fine-tune examples</span>
+      <span><span class="mg">E</span> prospective memory · intentions surface before due</span>
+      <span><span class="mg">F</span> working-memory budget · token cap + priority eviction</span>
+    </div>
+    <div class="panel" style="flex:0; margin-top:22px;">
+      <span class="ok">150 tests green</span> · Rust resonance · x402 paid recall · poisoning-proof ·
+      <span class="cy">deletion gate runs on the mesh too</span> (one story, two engines).
+    </div>
+    <div class="footer">github.com/BasedNUKEM/NEURAL_MESH · live brain api.d0xeddev.com/brain</div>
+  </section>
+
+  <!-- 5 LOCOMO -->
+  <section class="slide">
+    <div class="top"><div class="brand">REAL LLM JUDGE</div><div class="badge green">UNBLOCKED</div></div>
+    <h1 style="font-size:52px">LoCoMo end-to-end · <span class="mono">generative judge</span></h1>
+    <div class="sub">The #1 roadmap item, executed — via the Hermes/Nous model path (no external LLM credits).</div>
+    <div class="panel">
+      <div class="ptitle">n=100 · top_k=5 · hybrid · deepseek-v4-flash</div>
+      ctxR@5 <span class="ok">0.120</span> &nbsp;·&nbsp; EM@5 <span class="dim">0.000</span> &nbsp;·&nbsp; F1@5 <span class="dim">0.041</span> &nbsp;·&nbsp; MRR <span class="cy">0.068</span><br><br>
+      <span class="am">Honest:</span> F1 is low — the judge sees a 5×800-char window vs long multi-fact golds.<br>
+      What it proves: the pipeline <span class="ok">runs and measures</span>, reproducibly, with real output —<br>
+      the next lever is a wider context window, a reader-side fix, not mesh retrieval.
+    </div>
+    <div class="footer">reproduce: bench/locomo_llm_judge.py</div>
+  </section>
+
+  <!-- 6 STACK -->
+  <section class="slide">
+    <div class="top"><div class="brand">PARTNER STACKS</div><div class="badge">x1.25 CAP</div></div>
+    <h1 style="font-size:52px">Two verified stacks doing <span class="mono">real work</span></h1>
+    <div class="grid2">
+      <div class="panel">
+        <div class="ptitle">Base · onchain rails</div>
+        🟦 Real <span class="ok">status-1 mainnet txs</span> driven by the memory decision<br>
+        🟦 Signed locally · broadcast via eth_sendRawTransaction<br>
+        🟦 Dry-run default · explicit broadcast only
+        <div class="tx">0x9c0aa524…b0a · 0x5175ae5a…93dd</div>
+      </div>
+      <div class="panel">
+        <div class="ptitle">Virtuals · ACP agent</div>
+        🟦 <span class="mg">echo</span> registered as a Virtuals ACP agent (EVM wallet)<br>
+        🟦 Restricted <span class="cy">ACP_ONLY</span> signer policy<br>
+        🟦 Coordinates the loop without unrestricted spend
+      </div>
+    </div>
+    <div class="footer">Sibyl Memory = required substrate (not a bonus stack) · both partner stacks verified real</div>
+  </section>
+
+  <!-- 7 CLOSE -->
+  <section class="slide">
+    <div class="top"><div class="brand">THANKS</div><div class="badge">MIT</div></div>
+    <h1 style="font-size:64px; margin-top:120px;">Forgetting is a bug.<br><span class="mono">Remembering is the strategy.</span></h1>
+    <div class="sub" style="margin-top:34px">echo · NEURAL_MESH · Sibyl Memory · Base · Virtuals</div>
+    <div class="panel" style="flex:0; margin-top:26px; font-size:20px; line-height:2;">
+      github.com/BasedNUKEM/NEURAL_MESH &nbsp;·&nbsp; api.d0xeddev.com/brain &nbsp;·&nbsp; @D0xedDevi0<br>
+      <span class="dim">all numbers measured · demo: demo/demo_video.mp4 · 150 tests</span>
+    </div>
+    <div class="footer">Build Sep 1–10 · Sibyl Memory Hackathon · hack.sibyllabs.org</div>
+  </section>
+
+</div>
+<script>
+  // simple slide navigation (arrow keys) for live presentation
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  function go(n){slides[i].classList.remove('on'); i=(i+n+slides.length)%slides.length; slides[i].classList.add('on');}
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ') go(1);
+    if(e.key==='ArrowLeft') go(-1);
+  });
+</script>
+</body>
+</html>
