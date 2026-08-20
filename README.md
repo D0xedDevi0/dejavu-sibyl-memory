@@ -28,6 +28,15 @@ SESSION A ──learn──► SIBYL MEMORY (SQLite + FTS5) ──recall──�
                                             ⛓ BASE ONCHAIN ACTION (wallet op)
 ```
 
+## Demo video
+
+The submission demo — **`demo/demo_video_v2.mp4`** — is a narrated 3.6-min walkthrough
+(1600x900, voice-over + ambient bed) following the exact money-shot arc: the problem →
+Session A learns → the deletion gate → Session B remembers and fires a **real Base tx** →
+measured evidence (ablation + compounding charts) → the self-learning dejavu loop → PMF
+close. Fresh-session recall beat is front-and-center. Rebuild: `python demo/build_video_v2.py`
+(PIL terminal frames → Ken Burns motion → TTS narration via OpenAI → mix/mux).
+
 ## Where Sibyl Memory is load-bearing (exact file/line)
 
 Sibyl Memory is **not** decorative — the core decision function *fails without it*.
