@@ -203,21 +203,33 @@ prov.forget(category,name)
 
 ### M5 — Demo + README + posts (Day 8–9)
 - [x] 2–5 min demo video, fresh-session recall beat front-and-center
-      [DONE: demo/demo_video.mp4 (31s, 1600x900) — split-screen SESSION A-LEARN /
-       SESSION B-RECALL rendering the REAL loop output: naive 0.55 (red) vs
-       recalled de-risk 0.05 (green), wiped-store contrast, real Base tx
-       0x5175ae5a... status 1 block 50108439. Rebuild: demo/build_demo_video.py]
+      [DONE: demo/demo_video_v2.mp4 — NARRATED 3.6min (217.6s, 1600x900), 9 scenes
+       synced to OpenAI voice-over + ambient bed, Ken Burns motion + fades, real
+       Base tx hash + measured ablation/growth charts on screen. Rebuild:
+       demo/build_video_v2.py (PIL frames -> zoompan -> concat -> TTS narration
+       via text_to_speech -> mix+mux). NOTE: demo_video.mp4 is the earlier 66s
+       silent cut; v2 is the submission artifact.]
 - [x] README per §8 [DONE: README.md — what/load-bearing file+line/stacks/memory/Prior Work/run]
 - [x] **Two public posts** tagging @sibylcap + @base + @virtuals
       [DONE #1 (LIVE): @D0xedDevi0 2026-08-17 20:31 GMT
        https://x.com/i/status/2089449978020421665 — "Signed up for the
        @sibylcap Memory Hackathon... delete the memory -> it breaks. Sep 1.
        @base @virtuals". Draft file superseded.]
-      [PENDING #2: demo/drop reveal near submission — demo/post-02-the-drop.md]
+      [DONE #2 (LIVE): @D0xedDevi0 2026-08-18 — the DROP THREAD
+       https://x.com/D0xedDevi0/status/2089530925692379553 — "dejavu. I've seen
+       this crisis before — so I de-risk." + 5-node thread (the gate, measured
+       ablation, six lanes, build-in-public, Virtuals agent). @sibylcap replied
+       "extend the horizon and the growth becomes exponential."]
+      [DONE #3 (LIVE): @D0xedDevi0 2026-08-20 — POLISHED DEMO REPLY to the drop
+       thread https://x.com/D0xedDevi0/status/2090434125131907365 — new
+       narrated 3.6min demo_video_v2 attached, tags @sibylcap + @base +
+       @virtuals_io. All required posts now satisfied for submission.]
 - [x] Prior Work declaration (MacroBench book = substrate, not the submission) [DONE in README]
 - [x] LICENSE (MIT) [DONE]
 
 ### M6 — Buffer + submit (Day 10)
+- [x] Demo video final (narrated demo_video_v2.mp4) — done 2026-08-20
+- [x] Two public posts — done (3 posts live, all tags) — done 2026-08-20
 - [ ] Polish, re-run all tests, mark build page ready
 - [ ] Submit ≤ Sep 10 23:59 UTC (must be public repo MIT/Apache-2.0)
 
