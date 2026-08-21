@@ -1,7 +1,7 @@
 # Build-in-public Post #2 — "The drop" (demo + build log)
 
 **Status:** DRAFT — review then post (near submission, after demo video is final).
-**Tags:** @sibylcap + @base + @virtuals
+**Tags:** @sibylcap + @base + @virtuals_io
 **Account:** @D0xedDevi0 (use `HOME=/opt/data xurl`; OAuth2 ≤ 250 UTF-16 chars — split into a thread).
 **Voice:** Devio — high energy, thesis-style, 🟦 bullets. Honest hype, not shill.
 
@@ -20,7 +20,7 @@
 > 🟦 Wipe the store → it forgets → loses again. *That's the point.*
 >
 > Built for the @sibylcap hackathon on our MacroBench regime substrate.
-> 🟦 Stack: @base (real onchain tx) + @virtuals (ACP agent coordinating the loop)
+> 🟦 Stack: @base (real onchain tx) + @virtuals_io (ACP agent coordinating the loop)
 >
 > Forgetting is a bug. Remembering is the strategy. 🤖
 >
@@ -38,7 +38,7 @@
 > 🟦 Recalled lesson → de-risk → **survives**
 > 🟦 Wipe the store → forgets → loses again.
 >
-> Stack: @base (real tx) + @virtuals (ACP agent). Substrate: our MacroBench book.
+> Stack: @base (real tx) + @virtuals_io (ACP agent). Substrate: our MacroBench book.
 > Forgetting is a bug. Remembering is the strategy. 🎥[video]
 
 ---

@@ -1,7 +1,7 @@
 # Build-in-public Post #1 — "We signed up" announcement
 
 **Status:** DRAFT — review then post. (Date confirmed for early build window / on sign-up.)
-**Tags:** @sibylcap + @base + @virtuals
+**Tags:** @sibylcap + @base + @virtuals_io
 **Account:** @D0xedDevi0 (use `HOME=/opt/data xurl`; OAuth2 ≤ 250 UTF-16 chars — this is longer than one tweet, so split into a thread or trim).
 **Voice:** Devio — high energy, thesis-style, 🟦 bullets. Not a token shill → hype but honest.
 
@@ -19,7 +19,7 @@
 >
 > Forgetting is a bug. Remembering is the strategy. 🤖💙
 >
-> Substrate: our MacroBench regime book (ranked #2). Stack: @base + @virtuals.
+> Substrate: our MacroBench regime book (ranked #2). Stack: @base + @virtuals_io.
 > Let's cook. 🔥
 
 ---
@@ -31,7 +31,7 @@
 > We're building **dejavu** — a self-improving agent for the @sibylcap hackathon whose onchain (@base) decisions are driven by its own persistent memory.
 >
 > 🟦 Session A it loses. Session B it remembers. That's the whole product.
-> 🟦 Acting onchain because it remembers. @virtuals coordinating the loop.
+> 🟦 Acting onchain because it remembers. @virtuals_io coordinating the loop.
 >
 > Let's cook. 🔥
 

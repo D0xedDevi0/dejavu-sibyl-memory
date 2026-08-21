@@ -210,7 +210,7 @@ prov.forget(category,name)
        via text_to_speech -> mix+mux). NOTE: demo_video.mp4 is the earlier 66s
        silent cut; v2 is the submission artifact.]
 - [x] README per §8 [DONE: README.md — what/load-bearing file+line/stacks/memory/Prior Work/run]
-- [x] **Two public posts** tagging @sibylcap + @base + @virtuals
+- [x] **Two public posts** tagging @sibylcap + @base + @virtuals_io
       [DONE #1 (LIVE): @D0xedDevi0 2026-08-17 20:31 GMT
        https://x.com/i/status/2089449978020421665 — "Signed up for the
        @sibylcap Memory Hackathon... delete the memory -> it breaks. Sep 1.
@@ -302,7 +302,7 @@ def decide(frame, memory) -> book:
 - [ ] Public repo, MIT or Apache-2.0 license
 - [ ] 2–5 min demo video with fresh-session recall beat
 - [ ] README complete (all §8 sections)
-- [ ] Two public posts (tag @sibylcap + @base + @virtuals), links in submission
+- [ ] Two public posts (tag @sibylcap + @base + @virtuals_io), links in submission
 - [ ] Build page marked ready on hack.sibyllabs.org (slug neural-mesh-eea5)
 - [ ] Prior Work declared (MacroBench book + D0xedDev are substrate/evidence)
 
@@ -334,6 +334,6 @@ def decide(frame, memory) -> book:
 
 ## 12. Build-in-public post #1 (signed-up announcement) — DRAFTED SEPARATELY
 See the companion X post in this conversation; bank it now to satisfy the
-2-post requirement early. Tag @sibylcap + @base + @virtuals. Devio voice:
+2-post requirement early. Tag @sibylcap + @base + @virtuals_io. Devio voice:
 🟦 bullets, high energy, thesis-style, NFA/DYOR not needed here (not a token
 shill — it's a dev announcement, keep it hype but honest).

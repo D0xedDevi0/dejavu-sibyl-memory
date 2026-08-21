@@ -1,7 +1,7 @@
 # Build-in-public Post #4 — "Why memory can't let the agent blow up" (the safety angle)
 
 **Status:** DRAFT — review then post (can go anytime; it's the NEURAL_MESH / dejavu build-in-public thread).
-**Tags:** @sibylcap @base @virtuals #agenticmemory #safety
+**Tags:** @sibylcap @base @virtuals_io #agenticmemory #safety
 **Account:** @D0xedDevi0 (use `HOME=/opt/data xurl`; OAuth2 ≤ 250 UTF-16 chars — split into a thread).
 **Voice:** Devio — high energy, thesis-style, 🟦 bullets. Honest hype, not shill.
 **Attach:** `demo/demo_video_v2.mp4` (or the safety scene) — or `demo/advanced_analysis.json` numbers.
