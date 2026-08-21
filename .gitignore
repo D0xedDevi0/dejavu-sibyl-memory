@@ -37,3 +37,4 @@ demo/*.wav
 demo/demo_video.mp4
 _ci_check.py
 _ci_watch.py
+_ci_annotations.py
