@@ -3,7 +3,7 @@
 from playwright.sync_api import sync_playwright
 
 URL = ("https://hack.sibyllabs.org/team/enter?slug=neural-mesh-eea5"
-       "&token=d103701110ba9d532e01ba0e3e403936a3272cbe80ebc499")
+       "&token=PASTE_BUILD_TOKEN")
 exe = "/opt/data/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome"
 
 with sync_playwright() as p:

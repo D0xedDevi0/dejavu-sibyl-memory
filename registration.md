@@ -2,7 +2,7 @@
 
 - Team name: NEURAL_MESH
 - Build page slug: neural-mesh-eea5
-- Build link: https://hack.sibyllabs.org/team/enter?slug=neural-mesh-eea5&token=d103701110ba9d532e01ba0e3e403936a3272cbe80ebc499
+- Build link: https://hack.sibyllabs.org/team/enter?slug=neural-mesh-eea5&token=PASTE_BUILD_TOKEN
 - Contact email: basednukem@gmail.com
 - Team size: 1
 - Partner stacks declared: Base, Virtuals Protocol  (x1.25 multiplier target)

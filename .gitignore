@@ -23,3 +23,11 @@ htmlcov/
 # Secrets
 .secrets/
 *.key
+
+# Demo build intermediates (keep final video only)
+demo/_segments_v2/
+demo/_frames_v2/
+demo/_frames/
+demo/_check/
+demo/*.wav
+demo/demo_video.mp4

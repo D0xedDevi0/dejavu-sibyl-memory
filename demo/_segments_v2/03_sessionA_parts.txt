@@ -1,3 +1,0 @@
-file '/opt/data/sibyl-hackathon/demo/_segments_v2/03_sessionA_lead.wav'
-file '/opt/data/sibyl-hackathon/demo/_segments_v2/03_sessionA_narr.wav'
-file '/opt/data/sibyl-hackathon/demo/_segments_v2/03_sessionA_tail.wav'

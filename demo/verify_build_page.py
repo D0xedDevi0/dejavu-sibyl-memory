@@ -2,7 +2,7 @@
 """Re-open the build page to confirm the save persisted (values + milestones)."""
 from playwright.sync_api import sync_playwright
 
-TOKEN = "d103701110ba9d532e01ba0e3e403936a3272cbe80ebc499"
+TOKEN = "PASTE_BUILD_TOKEN"
 URL = f"https://hack.sibyllabs.org/team/enter?slug=neural-mesh-eea5&token={TOKEN}"
 exe = "/opt/data/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome"
 
