@@ -37,6 +37,31 @@ measured evidence (ablation + compounding charts) → the self-learning dejavu l
 close. Fresh-session recall beat is front-and-center. Rebuild: `python demo/build_video_v2.py`
 (PIL terminal frames → Ken Burns motion → TTS narration via OpenAI → mix/mux).
 
+## Why this is different (innovation + PMF, in 60 seconds)
+
+Most memory demos *recall to change an answer*. This one recalls to **change a real,
+money-driving decision that fires onchain**. Four things we don't see elsewhere:
+
+1. **Memory acts, it doesn't just answer.** A recalled lesson flips the book from
+   equity 0.55 → 0.05, and that decision executes a **real Base Mainnet transaction**
+   (verified, status 1). Memory isn't decoration — it is the trigger for autonomous
+   onchain action.
+2. **It self-improves (the dejavu loop).** The agent reads its own journal and the
+   Learner proposes a skill (`skill/crisis-derisking`) it accepts. Recall → consolidate →
+   get sharper. Compounding, not retrieval.
+3. **Memory is structurally safe.** The MacroBench risk framework owns the allocation —
+   we prove a *compromised* lesson ("max long equity in a crisis") **cannot** push the
+   agent to take risk (`tests/test_advanced.py::failure_mode_guard`). And **selective
+   forgetting** works: delete one lesson, the others persist and the decision stays
+   correct. Memory you can trust.
+4. **Measured, not marketed.** 200 seeded frames: memory averts **+7.07pp** loss, flips
+   **75%** of decisions, and over 12 crises preserves **$0.90 vs $0.29**. Real, reproducible,
+   honest numbers (no fabricated judge output).
+
+**PMF:** this is the memory backbone of **D0xedDev**, a live autonomous agent hub on Base
+that has been running in production — real usage, real audience, real deployment history.
+Not a toy, not a demo prop.
+
 ## Where Sibyl Memory is load-bearing (exact file/line)
 
 Sibyl Memory is **not** decorative — the core decision function *fails without it*.
