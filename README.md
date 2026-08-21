@@ -169,7 +169,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 28 tests incl. deletion gate + ablation + advanced
+pip install -e ".[test]" && pytest            # 34 tests (28 core + 6 optional NEURAL_MESH-backend)
 dejavu --crisis                                  # with memory  -> de-risk (equity 0.05)
 dejavu --crisis --wipe                           # store deleted -> naive  (equity 0.55)
 DEJAVU_DRY_RUN=0 dejavu --crisis                   # fire a REAL Base tx (captures hash)

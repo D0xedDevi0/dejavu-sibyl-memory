@@ -3,27 +3,22 @@ import json, os, subprocess
 creds = open("/opt/data/.git-credentials").read().strip()
 tok = creds.split(":")[-1].replace("@github.com", "")
 
-def gh(path):
-    r = subprocess.run(
-        ["curl", "-s", "-H", f"Authorization: token {tok}",
-         f"https://api.github.com{path}"],
-        capture_output=True, text=True)
-    return json.loads(r.stdout)
+def gh(method, path, data=None, extra_headers=None):
+    cmd = ["curl", "-s", "-X", method, "-H", f"Authorization: token {tok}",
+           f"https://api.github.com{path}"]
+    if extra_headers:
+        for h in extra_headers:
+            cmd += ["-H", h]
+    if data:
+        cmd += ["-d", json.dumps(data)]
+    r = subprocess.run(cmd, capture_output=True)
+    return r.stdout, r.stderr
 
-# the failing CI run
-run_id = "32475735757"
-jobs = gh(f"/repos/BasedNUKEM/dejavu-sibyl-memory/actions/runs/{run_id}/jobs")
-for j in jobs["jobs"]:
-    print("JOB", j["name"], j["conclusion"])
-    for s in j["steps"]:
-        print("  STEP:", s["name"], "->", s["conclusion"])
-    # get log for failed job
-    log = subprocess.run(
-        ["curl", "-sL", "-H", f"Authorization: token {tok}",
-         f"https://api.github.com/repos/BasedNUKEM/dejavu-sibyl-memory/actions/jobs/{j['id']}/logs"],
-        capture_output=True, text=True)
-    # print tail of log
-    lines = log.stdout.splitlines()
-    print("  === LOG TAIL (40 lines) ===")
-    for line in lines[-40:]:
-        print("   ", line[:200])
+# try the logs endpoint with explicit Accept and see the raw body
+run_id = "32479764191"
+body, err = gh("GET",
+    f"/repos/BasedNUKEM/dejavu-sibyl-memory/actions/runs/{run_id}/logs",
+    extra_headers=["Accept: application/vnd.github+json"])
+print("RAW bytes:", len(body))
+print("RAW head:", body[:300])
+print("STDERR:", err[:200])
