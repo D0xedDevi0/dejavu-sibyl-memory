@@ -1,6 +1,6 @@
 # Build-in-public Post #4 — "Why memory can't let the agent blow up" (the safety angle)
 
-**Status:** DRAFT — review then post (can go anytime; it's the NEURAL_MESH / dejavu build-in-public thread).
+**Status:** LIVE — fired 2026-08-21. Thread main `2090738137148604803` (https://x.com/D0xedDevi0/status/2090738137148604803) + 3 replies live. Close node (repo+tags) rate-limited → auto-retries via silent cron `734285f7f15e` (fire_post4_node4_watch.sh) until it posts.
 **Tags:** @sibylcap @base @virtuals_io #agenticmemory #safety
 **Account:** @D0xedDevi0 (use `HOME=/opt/data xurl`; OAuth2 ≤ 250 UTF-16 chars — split into a thread).
 **Voice:** Devio — high energy, thesis-style, 🟦 bullets. Honest hype, not shill.
