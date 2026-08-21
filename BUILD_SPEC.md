@@ -226,6 +226,9 @@ prov.forget(category,name)
        @virtuals_io. All required posts now satisfied for submission.]
 - [x] Prior Work declaration (MacroBench book = substrate, not the submission) [DONE in README]
 - [x] LICENSE (MIT) [DONE]
+- [x] `docs/judge.md` one-page judge cheat-sheet (claim → file/line, test, tx hash, video ts) [DONE 2026-08-21]
+- [x] LongMemEval resonance in README + `docs/longmemeval.md` (same suite Sibyl ranks on) [DONE 2026-08-21]
+- [x] Build-in-public post #4 (safety angle) drafted `demo/post-04-safety.md` [DONE 2026-08-21]
 
 ### M6 — Buffer + submit (Day 10)
 - [x] Demo video final (narrated demo_video_v2.mp4) — done 2026-08-20

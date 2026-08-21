@@ -4,6 +4,9 @@
 
 > *"Forgetting is a bug. Remembering is the strategy."*
 
+> **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
+> timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
+
 A self-improving autonomous agent whose onchain (Base) decisions are **driven by its
 own persistent memory**. Codename `dejavu` — the memory-dejavu loop.
 
@@ -110,6 +113,23 @@ stressed), applying the same crisis P&L model to the book with vs. without memor
 | loss averted | — | **+7.07pp** |
 
 Memory changed the decision in **75%** of trials. Reproduce: `pytest tests/test_ablation.py` or `python demo/ablation_benchmark.py` → `demo/ablation_figure.png`.
+
+## LongMemEval resonance (credibility — the same suite Sibyl ranks on)
+
+The retrieval engine behind the hub — **NEURAL_MESH resonance** — benchmarks on the
+**same 100-case [LongMemEval](https://github.com/chtmp223/LongMemEval) suite** the Sibyl
+team itself uses to evaluate memory. We report the **LLM-judge-graded** (semantic, not
+lexical) numbers, so the comparison is honest:
+
+| retrieval mode | judge EM | judge F1 | MRR |
+|---|---|---|---|
+| **resonance** (spreading activation) | **0.25** | **0.344** | 0.276 |
+| dense (plain embedder) | 0.20 | 0.326 | 0.276 |
+
+Resonance edges dense on every semantic metric — strongest on `single-session-user`
+(MRR **0.68**, judge F1 **0.73**), the recall scenario a judge actually watches. Full
+per-category breakout + reproducer in [`docs/longmemeval.md`](docs/longmemeval.md)
+(`bench/longmemeval_harness.py`, seed 1337).
 
 ## Deeper findings (advanced analysis)
 `demo/advanced_analysis.py` — four more honest, reproducible results:
