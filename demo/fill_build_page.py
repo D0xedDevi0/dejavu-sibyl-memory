@@ -15,15 +15,17 @@ POSTS = ("https://x.com/D0xedDevi0/status/2089449978020421665\n"
          "https://x.com/D0xedDevi0/status/2089530925692379553\n"
          "https://x.com/D0xedDevi0/status/2090434125131907365")
 DELETION = ("Without memory the agent forgets every past outcome: a cold-start session "
-            "reverts to the naive book and stays overweight equity through the next crisis, "
-            "taking the same ~-18% drawdown over and over. It becomes a stateless agent that "
-            "can't learn, can't compound, and can't act on what it remembers.")
-WALK = ("Persist: after a losing crisis the agent distills a lesson and writes it (WARM "
-        "entity) plus the outcome to the COLD journal in its Sibyl SQLite store.\n"
-        "Recall (fresh session): a cold-start process with zero chat history queries Sibyl "
-        "FTS5, finds that lesson, and reallocates before deciding.\n"
-        "Changes the decision by: flipping from naive (equity 0.55, -18%) to de-risk "
-        "(equity 0.05, survives) — which then fires a real Base transaction. Wipe the store and it breaks.")
+            "reverts to the naive book, stays overweight equity through the next crisis and "
+            "takes the same ~-18% drawdown — it can't learn, compound, or decide differently. "
+            "This is the memory backbone of D0xedDev, a live autonomous agent hub on Base, "
+            "so the failure is real and production-facing.")
+WALK = ("Persist: after a losing crisis the agent distills a lesson (WARM entity) + appends "
+        "the outcome to the COLD journal in its Sibyl SQLite store.\n"
+        "Recall (fresh session): a cold-start process with zero chat history FTS5-searches "
+        "Sibyl, finds that lesson and reallocates before deciding.\n"
+        "Decision it changes: naive (equity 0.55, -18%) → de-risk (equity 0.05) which fires "
+        "a real @base transaction — and the risk framework is structurally safe even against "
+        "a compromised lesson. Wipe the store and it breaks.")
 PRIMS = ["recall", "entities", "semantic search", "temporal / time-travel",
          "reflection", "consolidation"]   # honest: what dejavu actually uses
 
