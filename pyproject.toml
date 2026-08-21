@@ -15,11 +15,16 @@ dependencies = [
     "sibyl-memory-client==0.6.1",
     "sibyl-memory-cli==0.3.22",
     "sibyl-memory-hermes==0.3.15",
+    # onchain actions (base_action.py imports eth_account at module load;
+    # it is NOT optional — the load-bearing agent path depends on it)
+    "eth-account==0.13.7",
 ]
 
 [project.optional-dependencies]
 test = ["pytest>=8", "pillow>=10"]
 # NOTE: demo/build_demo_video.py also needs ffmpeg (present on ubuntu-latest CI).
+# NOTE: tests/test_mesh_backend.py runs ONLY where the sibling NEURAL_MESH repo
+# (github.com/BasedNUKEM/NEURAL_MESH) is importable; it skips cleanly on CI.
 
 [project.scripts]
 dejavu = "dejavu.agent:main"

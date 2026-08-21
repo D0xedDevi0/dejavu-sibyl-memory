@@ -13,8 +13,18 @@ Run:  pytest tests/test_mesh_backend.py -v
 import os
 import tempfile
 
+import pytest
+
 from dejavu.agent import LESSON_NAME, session_a, session_b
-from dejavu.mesh_backend import MeshMemory
+from dejavu import mesh_backend
+
+# This backend is OPTIONAL (needs the sibling NEURAL_MESH repo). On a clean
+# checkout / CI without it, skip these tests rather than fail the whole suite.
+pytestmark = pytest.mark.skipif(
+    not getattr(mesh_backend, "_NEURAL_MESH_AVAILABLE", False),
+    reason="optional NEURAL_MESH backend not importable",
+)
+MeshMemory = mesh_backend.MeshMemory
 
 
 def _crisis_frame():

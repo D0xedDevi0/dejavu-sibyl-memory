@@ -24,6 +24,10 @@ htmlcov/
 .secrets/
 *.key
 
+# Internal ops tooling (X posting, build-page playwright scripts, token-bearers)
+_scripts/
+demo/_update_repo_url_tmp.py
+
 # Demo build intermediates (keep final video only)
 demo/_segments_v2/
 demo/_frames_v2/
