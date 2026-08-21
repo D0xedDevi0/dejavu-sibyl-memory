@@ -245,7 +245,7 @@ def scene_title():
     d.text((120,430),"the agent that remembers",font=F(44,True),fill=WHITE)
     d.text((120,510),"NEURAL_MESH  x  Sibyl Memory",font=F(28),fill=GRAY)
     d.text((120,560),"> an agent whose on-chain decisions are driven by its own memory.",font=F(26),fill=AMBER)
-    d.text((120,660),"Built for the Sibyl Memory Hackathon  ·  @base  @virtuals",font=F(22),fill=DIM)
+    d.text((120,660),"Built for the Sibyl Memory Hackathon  ·  @base  @virtuals_io",font=F(22),fill=DIM)
     footer(d,"Forgetting is a bug. Remembering is the strategy.")
     return img
 
