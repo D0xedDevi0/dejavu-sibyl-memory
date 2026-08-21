@@ -1,3 +1,0 @@
-file '/opt/data/sibyl-hackathon/demo/_segments_v2/08_pmf_lead.wav'
-file '/opt/data/sibyl-hackathon/demo/_segments_v2/08_pmf_narr.wav'
-file '/opt/data/sibyl-hackathon/demo/_segments_v2/08_pmf_tail.wav'
