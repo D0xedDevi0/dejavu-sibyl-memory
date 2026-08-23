@@ -239,7 +239,7 @@ def main():
                                  "> Remembering is the strategy.",
                                  "",
                                  "dejavu · NEURAL_MESH · Sibyl Memory",
-                                 "MIT · github.com/BasedNUKEM/NEURAL_MESH",
+                                 "MIT · github.com/D0xedDevi0/NEURAL_MESH",
                                  "build in public · @D0xedDevi0"],
                                 title="remember => survive",
                                 accent=CYAN, tag="MIT"),

@@ -35,7 +35,7 @@
 >
 > memory you can trust is the only memory that scales.
 > that's dejavu. MIT. built in the open. 🟦
-> github.com/BasedNUKEM/NEURAL_MESH
+> github.com/D0xedDevi0/NEURAL_MESH
 
 ---
 
@@ -53,7 +53,7 @@
 > 🟦 200 frames → +7.07pp averted · 75% flipped · $0.90 vs $0.29 over 12 crises
 >
 > memory you can trust is the only memory that scales. MIT. 🟦
-> github.com/BasedNUKEM/NEURAL_MESH
+> github.com/D0xedDevi0/NEURAL_MESH
 
 ---
 

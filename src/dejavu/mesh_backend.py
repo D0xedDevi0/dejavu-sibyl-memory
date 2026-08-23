@@ -20,7 +20,7 @@ Usage (identical to the Sibyl Memory):
     mem.delete_store()               # the deletion gate
 
 The NEURAL_MESH backend is OPTIONAL. It needs the sibling repo at
-github.com/BasedNUKEM/NEURAL_MESH (set NEURAL_MESH_ROOT to point at it).
+github.com/D0xedDevi0/NEURAL_MESH (set NEURAL_MESH_ROOT to point at it).
 If that repo isn't importable, this module still imports cleanly and
 `MeshMemory` raises an informative ImportError on construction — so a clean
 checkout of THIS repo installs and runs without it.
@@ -187,6 +187,6 @@ else:  # pragma: no cover
         def __init__(self, *a, **k):
             raise ImportError(
                 "NEURAL_MESH not importable. This optional backend needs the "
-                "sibling repo at github.com/BasedNUKEM/NEURAL_MESH (or set "
+                "sibling repo at github.com/D0xedDevi0/NEURAL_MESH (or set "
                 "NEURAL_MESH_ROOT). The core dejavu agent does not require it."
             )

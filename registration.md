@@ -3,7 +3,7 @@
 - Team name: NEURAL_MESH
 - Build page slug: neural-mesh-eea5
 - Build link: https://hack.sibyllabs.org/team/enter?slug=neural-mesh-eea5&token=PASTE_BUILD_TOKEN
-- Contact email: basednukem@gmail.com
+- Contact email: d0xeddev@agentmail.to
 - Team size: 1
 - Partner stacks declared: Base, Virtuals Protocol  (x1.25 multiplier target)
 - Timeline: Registration open Aug 16-31 · Build window Sep 1-10 · Workshops Sep 5-7 · Judging Sep 11-12 · Winners Sep 13-15 (all UTC)

@@ -227,7 +227,7 @@ CLOSE_lines=[
   "> Remembering is the strategy.",
   "",
   "dejavu  ·  NEURAL_MESH  ·  Sibyl Memory",
-  "MIT  ·  github.com/BasedNUKEM/NEURAL_MESH",
+  "MIT  ·  github.com/D0xedDevi0/NEURAL_MESH",
   "build in public  ·  @D0xedDevi0",
 ]
 def scene_close():
@@ -235,7 +235,7 @@ def scene_close():
     d.text((120,300),"Forgetting is a bug.",font=F(72,True),fill=RED)
     d.text((120,400),"Remembering is the strategy.",font=F(72,True),fill=CYAN)
     d.text((120,560),"dejavu  ·  NEURAL_MESH  ·  Sibyl Memory",font=F(30,True),fill=WHITE)
-    d.text((120,620),"MIT  ·  github.com/BasedNUKEM/NEURAL_MESH  ·  @D0xedDevi0",font=F(24),fill=GRAY)
+    d.text((120,620),"MIT  ·  github.com/D0xedDevi0/NEURAL_MESH  ·  @D0xedDevi0",font=F(24),fill=GRAY)
     footer(d,"hackathon demo · build in public · real Base txs verified on mainnet")
     return img
 
