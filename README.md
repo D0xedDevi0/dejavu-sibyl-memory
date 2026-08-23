@@ -1,7 +1,7 @@
 # dejavu — The Agent That Remembers What It Did With Money
 
 **NEURAL_MESH × Sibyl Memory** · Sibyl Memory Hackathon (hack.sibyllabs.org) ·
-[github.com/BasedNUKEM/dejavu-sibyl-memory](https://github.com/BasedNUKEM/dejavu-sibyl-memory)
+[github.com/D0xedDevi0/dejavu-sibyl-memory](https://github.com/D0xedDevi0/dejavu-sibyl-memory)
 
 > *"Forgetting is a bug. Remembering is the strategy."*
 

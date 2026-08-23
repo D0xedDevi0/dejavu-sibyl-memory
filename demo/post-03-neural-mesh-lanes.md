@@ -4,7 +4,7 @@
 **Tags:** #NEURAL_MESH #agenticmemory #LLM #agents
 **Account:** @D0xedDevi0 (use `HOME=/opt/data xurl`; OAuth2 ≤ 250 UTF-16 chars — split into a thread).
 **Voice:** Devio — high energy, thesis-style, 🟦 bullets. Honest hype, not shill.
-**Links:** github.com/BasedNUKEM/NEURAL_MESH · live brain api.d0xeddev.com/brain · basednukem.github.io/NEURAL_MESH/
+**Links:** github.com/D0xedDevi0/NEURAL_MESH · live brain api.d0xeddev.com/brain · d0xeddevi0.github.io/NEURAL_MESH/
 
 ---
 
@@ -24,7 +24,7 @@
 >
 > measured, not marketed → bench/five_lane_demo.py → real numbers.
 > MIT. built in the open. come help us make agent memory not suck. 🟦
-> github.com/BasedNUKEM/NEURAL_MESH
+> github.com/D0xedDevi0/NEURAL_MESH
 
 ---
 
@@ -38,7 +38,7 @@
 > 🟦 working-memory budget — token cap + non-destructive priority eviction
 >
 > plus provenance you can prove: unverified 0.2 → verified 0.95.
-> measured, not marketed. MIT. github.com/BasedNUKEM/NEURAL_MESH 🟦
+> measured, not marketed. MIT. github.com/D0xedDevi0/NEURAL_MESH 🟦
 
 ---
 
