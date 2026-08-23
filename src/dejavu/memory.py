@@ -119,6 +119,22 @@ class Memory:
             return self.client.search(query, limit=limit)
         return self.client.search_entities(query, limit=limit, category=category)
 
+    def verified_search(self, query: str, *, limit: int = 10) -> list[dict]:
+        """Two-stage retrieve-then-verify search (SDK multi_record).
+
+        IDF-style token weighting across the corpus + abstention: returns []
+        when the query is unsatisfiable instead of forcing a bad match —
+        the memory knows what it does NOT know.
+        """
+        from sibyl_memory_client.multi_record import multi_record_search
+        return multi_record_search(self.client, query, limit=limit)
+
+    def archive_entity(self, category: str, name: str,
+                       reason: str | None = None) -> dict:
+        """Move an entity to the ARCH tier (soft forgetting, auditable)."""
+        return self.client.archive_entity(category, name, reason)
+
+
     def recall_lessons(self, queries: list[str], *, limit: int = 20) -> list[str]:
         """Combine several searches, dedupe, and return the distilled lessons
         found (dicts with a 'lesson' key, else their text body)."""

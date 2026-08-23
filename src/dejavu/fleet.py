@@ -30,6 +30,7 @@ import json
 import logging
 import os
 import tempfile
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -47,6 +48,13 @@ VIEW = "view"                  # category for specialist views on the board
 DECISION = "decision"          # category for the allocator's published book
 
 ROLES = ("news", "risk", "alloc", "exec")
+
+# Retrieval-strength decay (Mem0 Memory Decay analog, Bjork retrieval vs
+# storage strength): fresh views rank up to FRESH_BOOST, untouched views
+# dampen toward STALE_FLOOR. Nothing is deleted — accessibility falls.
+FRESH_BOOST = 1.5
+STALE_FLOOR = 0.3
+DECAY_HALFLIFE_S = 6 * 3600  # demo-friendly halflife
 
 # Default specialist reads (overridable per run).
 DEFAULT_NEWS = {
@@ -70,11 +78,45 @@ def open_memory(db_path: str, role: str) -> Memory:
 # Specialist agents — each writes its read of the world to the shared board.
 # ---------------------------------------------------------------------------
 
+def write_view(memory: Memory, category: str, name: str, body: dict) -> dict:
+    """Write a view with SUPERSESSION (Mem0 four-op analog).
+
+    If an active view already exists at this key and contradicts the new one,
+    the old view is archived to the ARCH tier with a reason and the journal
+    records the supersession — contradictions never silently accumulate.
+    """
+    old = None
+    try:
+        old = memory.get_entity(category, name)
+    except Exception:
+        old = None
+    if old is not None and isinstance(old.get("body"), dict):
+        if old["body"] != body:
+            memory.archive_entity(
+                category, name, reason=f"superseded by conflicting update"
+            )
+            memory.write_event(
+                evaluated={"key": f"{category}/{name}", "old": old["body"]},
+                acted={"op": "SUPERSEDE", "new": body},
+            )
+    return memory.set_entity(category, name, body, status="active")
+
+
+def decay_weight(ts: float | None, now: float | None = None) -> float:
+    """Exponential retrieval-strength decay: FRESH_BOOST -> STALE_FLOOR."""
+    if ts is None:
+        return 1.0
+    now = now or time.time()
+    age = max(0.0, now - ts)
+    w = FRESH_BOOST * (0.5 ** (age / DECAY_HALFLIFE_S))
+    return max(STALE_FLOOR, w)
+
+
 def agent_news(memory: Memory, *, headline: str, sentiment: str,
                flags: list[str]) -> dict:
     body = {"role": "news", "headline": headline,
             "sentiment": sentiment, "flags": flags}
-    memory.set_entity(VIEW, "news/market", body, status="active")
+    write_view(memory, VIEW, "news/market", body)
     memory.write_event(
         evaluated={"headline": headline, "sentiment": sentiment},
         acted={"flag": "stress" if sentiment == "risk-off" else "calm"},
@@ -89,7 +131,7 @@ def agent_risk(memory: Memory, *, credit_stress: float, vix: float,
                level: str) -> dict:
     body = {"role": "risk", "credit_stress": credit_stress, "vix": vix,
             "level": level}
-    memory.set_entity(VIEW, "risk/stress", body, status="active")
+    write_view(memory, VIEW, "risk/stress", body)
     memory.write_event(
         evaluated={"credit_stress": credit_stress, "vix": vix},
         acted={"level": level},
@@ -100,8 +142,13 @@ def agent_risk(memory: Memory, *, credit_stress: float, vix: float,
     return body
 
 
-def read_board(memory: Memory | None) -> list[dict]:
+def read_board(memory: Memory | None, *, ranked: bool = True) -> list[dict]:
     """Read the WHOLE fleet board: every specialist view in the shared store.
+
+    With `ranked=True` (default) views are re-ranked by retrieval strength
+    (decay_weight over their last-write timestamp): fresh views surface,
+    stale views dampen toward STALE_FLOOR — but nothing is deleted. The
+    allocator therefore weighs a just-written risk view above an hour-old one.
 
     Returns [] when there is no memory (deleted store) or no views yet — which
     is exactly what makes the allocator regress to naive.
@@ -109,10 +156,60 @@ def read_board(memory: Memory | None) -> list[dict]:
     if memory is None:
         return []
     try:
-        return memory.list_entities(VIEW, status="active")
+        hits = memory.list_entities(VIEW, status="active")
     except Exception:
         # A broken/locked store must not crash the fleet: fail open to naive.
         return []
+    if not ranked:
+        return hits
+    now = time.time()
+    def _rank(hit: dict) -> float:
+        body = hit.get("body") or {}
+        ts = None
+        if isinstance(hit.get("updated_at"), (int, float)):
+            ts = float(hit["updated_at"])
+        elif isinstance(body.get("_ts"), (int, float)):
+            ts = float(body["_ts"])
+        return -decay_weight(ts, now)
+    return sorted(hits, key=_rank)
+
+
+def sleep_consolidate(db_path: str, *, episodes_note: str = "") -> dict:
+    """'Fleet sleep': offline consolidation between episodes.
+
+    Sleep-time-compute analog (Letta): dedupe identical active views, run the
+    SDK Linter for store health, and report ARCH-tier supersession counts.
+    Pure maintenance — never touches live decision logic.
+    """
+    m = open_memory(db_path, "sleep")
+    try:
+        seen: dict[str, str] = {}
+        deduped = 0
+        for hit in m.list_entities(status="active", limit=1000):
+            cat = str(hit.get("category") or "")
+            nm = str(hit.get("name") or "")
+            key = f"{cat}/{nm}"
+            sig = json.dumps(hit.get("body"), sort_keys=True)
+            if sig in seen:
+                m.delete_entity(cat, nm)
+                deduped += 1
+            else:
+                seen[sig] = key
+        from sibyl_memory_client.lint import lint as sdk_lint
+        try:
+            report = sdk_lint(m.client.storage, tenant_id=FLEET_TENANT)
+            findings = {"critical": len(report.critical),
+                        "warning": len(report.warnings),
+                        "info": len(report.info)}
+        except Exception:
+            findings = None
+        result = {"deduped": deduped, "lint_findings": findings,
+                  "note": episodes_note}
+        log.info("[sleep] consolidation: %s", result)
+        return result
+    finally:
+        m.close()
+
 
 
 def board_stress(board: list[dict]) -> bool:
@@ -211,6 +308,7 @@ class FleetReport:
     onchain: dict
     learned_skill: dict | None = None
     virtuals: dict | None = None
+    sleep: dict | None = None
     roles: list[str] = field(default_factory=lambda: list(ROLES))
 
     def as_dict(self) -> dict:
@@ -230,7 +328,7 @@ def run_fleet(*, db_path: str | None = None, frame: dict | None = None,
               news: dict | None = None, risk: dict | None = None,
               config: Config | None = None, wipe: bool = False,
               learn: bool = False, learn_episodes: int = 4,
-              virtuals: bool = False) -> FleetReport:
+              virtuals: bool = False, sleep: bool = True) -> FleetReport:
     """Run the whole fleet on one shared store.
 
     news + risk each open a FRESH handle, write their view, and close. The
@@ -290,6 +388,7 @@ def run_fleet(*, db_path: str | None = None, frame: dict | None = None,
         m.close()
 
     v = virtuals_exercise() if virtuals else None
+    slept = sleep_consolidate(db) if sleep else None
 
     return FleetReport(
         db=db,
@@ -299,6 +398,7 @@ def run_fleet(*, db_path: str | None = None, frame: dict | None = None,
         onchain=receipt.as_dict(),
         learned_skill=accepted,
         virtuals=v.as_dict() if v else None,
+        sleep=slept,
     )
 
 
@@ -340,6 +440,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[ONCHAIN] explorer {report.onchain['explorer_url']}")
     if report.learned_skill:
         print(f"[LEARN] accepted skill {report.learned_skill.get('doc_key')}")
+    if report.sleep:
+        lf = report.sleep["lint_findings"]
+        lf_s = "unavailable" if lf is None else (
+            f"critical={lf['critical']} warning={lf['warning']} info={lf['info']}")
+        print(f"[SLEEP] consolidation: deduped={report.sleep['deduped']} "
+              f"lint: {lf_s}")
     if report.virtuals:
         print(f"[VIRTUALS] dejavu agent {report.virtuals['agent_id'][:8]}...")
     return 0
