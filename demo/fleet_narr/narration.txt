@@ -1,0 +1,21 @@
+# THE FLEET demo video — narration manifest
+# One segment per scene. Voice: confident, cinematic narrator (D0xedDev demo voice).
+# Rebuild narration: feed each SEG text to text_to_speech, save as demo/fleet_narr/<file>.
+
+01_title   This is the Fleet. Not one agent that remembers. A team of specialists, coordinated by a single shared memory.
+
+02_problem A lone agent forgets. It makes the same naive call every session, and loses the same money. But what if memory wasn't private to one agent, but shared by a whole team?
+
+03_board   Three specialists. News reads the market. Risk reads the stress. Each writes its view to one shared Sibyl store. No agent talks to another. The memory is the only thing they share.
+
+04_alloc   Now the allocator cold-starts with zero context. It reads the entire board, sees two specialist views, and coordinates a de-risk into cash, rates, and hedges.
+
+05_gate    Now delete the store. The allocator cold-starts again, but the board is empty. No coordination signal. It fails open to naive, overweight equity, and loses. That is what forgetting a team costs.
+
+06_onchain The coordinated decision does not stay on the board. It executes a real Base transaction on-chain, verified status one.
+
+07_learn   And the fleet self-evolves. The learner mines the shared journal and proposes a skill the team accepts. Recall, consolidate, get sharper.
+
+08_measured Measured, not marketed. Across two hundred seeded frames, memory averts seven points of loss and changes three quarters of decisions.
+
+09_close   Forgetting is a bug. Remembering is the strategy. The Fleet. Neural Mesh, times, Sibyl Memory.
