@@ -16,10 +16,13 @@ from dejavu.fleet import (
     agent_news,
     agent_risk,
     board_stress,
+    decay_weight,
     fleet_alloc_decide,
     open_memory,
     read_board,
     run_fleet,
+    sleep_consolidate,
+    write_view,
 )
 from dejavu.memory import Memory
 
@@ -154,3 +157,39 @@ def test_fleet_learner_accepts_a_skill():
         "fleet --learn should accept a self-discovered skill"
     assert report.learned_skill.get("doc_key", "").startswith("skill/"), \
         f"accepted skill should be a skill doc, got {report.learned_skill}"
+
+
+# ---- memory-deepening upgrades (supersession / decay / sleep) -------------
+
+def test_write_view_supersedes_conflicting_update():
+    """Mem0 four-op analog: a conflicting rewrite archives the old view."""
+    db = _fresh_db()
+    m = open_memory(db, "news")
+    write_view(m, "view", "news/market", {"role": "news", "sentiment": "risk-off"})
+    write_view(m, "view", "news/market", {"role": "news", "sentiment": "risk-on"})
+    # The active view is the latest; the old one moved to ARCH.
+    active = m.get_entity("view", "news/market")
+    assert active["body"]["sentiment"] == "risk-on"
+    events = m.read_events()
+    supersessions = [e for e in events if (e.get("acted") or {}).get("op") == "SUPERSEDE"]
+    assert supersessions, "conflicting rewrite must journal a SUPERSEDE event"
+    m.close()
+
+
+def test_decay_weight_damps_stale_views():
+    """Retrieval-strength decay: fresh -> boosted, old -> floored, never zero."""
+    import time as _t
+    fresh = decay_weight(_t.time())
+    stale = decay_weight(_t.time() - 10 * 3600 * 24)  # 10 days old
+    assert fresh >= 1.0, f"fresh view should rank >=1.0, got {fresh}"
+    assert stale < fresh, f"stale view should rank below fresh, {stale} vs {fresh}"
+    assert stale >= 0.3, f"decay must floor at 0.3, got {stale}"
+
+
+def test_sleep_consolidate_reports_health():
+    """'Fleet sleep': consolidation pass returns a health report."""
+    db = _fresh_db()
+    _populate(db)
+    report = sleep_consolidate(db, episodes_note="test sleep")
+    assert report["deduped"] >= 0
+    assert report["note"] == "test sleep"
