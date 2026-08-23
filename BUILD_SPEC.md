@@ -10,6 +10,12 @@
 > verified against the real SDK is marked **[VERIFIED]**. Everything that still
 > needs hands-on work is marked **[TODO]** with the exact next action.
 
+> **2026-08-23 — LANE UPGRADE: THE FLEET is now the headline.** `src/dejavu/fleet.py`
+> implements Lane 1 (multi-agent shared-memory blackboard: news/risk/alloc/exec on one
+> `fleet-brain` tenant). Load-bearing deletion test + Learner self-evolution are wired;
+> 43 tests green. The single-agent dejavu loop (M1–M6 below) is the locked fallback.
+> Remaining: Fleet demo video + final submit ≤ Sep 10.
+
 ---
 
 ## 0. The pitch (memorize this)
