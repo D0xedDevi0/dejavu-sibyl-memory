@@ -193,3 +193,18 @@ def test_sleep_consolidate_reports_health():
     report = sleep_consolidate(db, episodes_note="test sleep")
     assert report["deduped"] >= 0
     assert report["note"] == "test sleep"
+
+
+def test_synthesis_disabled_by_default():
+    """LLM skill synthesis is opt-in (FLEET_SYNTH=1): library stays hermetic."""
+    import os
+    from dejavu import synthesis
+    saved = os.environ.pop("FLEET_SYNTH", None)
+    try:
+        assert synthesis.build_summarizer() is None
+        s = synthesis.build_summarizer(enabled=True)
+        # None when no endpoint is up; byok-* when the proxy is live.
+        assert s is None or getattr(s, "name", "").startswith("byok")
+    finally:
+        if saved is not None:
+            os.environ["FLEET_SYNTH"] = saved

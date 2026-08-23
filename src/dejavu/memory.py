@@ -164,7 +164,18 @@ class Memory:
             # Pass the SAME tenant the client writes under — the Learner defaults
             # to DEFAULT_TENANT, which would silently scan an empty journal for
             # any multi-tenant store (THE FLEET's `fleet-brain` included).
-            self._learner = Learner(self.client.storage, tenant_id=self.tenant_id)
+            summarizer = None
+            try:
+                from .synthesis import build_summarizer
+                summarizer = build_summarizer()
+            except Exception as e:  # pragma: no cover
+                log.warning("LLM synthesis unavailable (%s); deterministic", e)
+            kw: dict[str, Any] = {"tenant_id": self.tenant_id}
+            if summarizer is not None:
+                kw["summarizer"] = summarizer
+                log.info("Learner using LLM skill synthesis (%s)",
+                         getattr(summarizer, "name", "byok"))
+            self._learner = Learner(self.client.storage, **kw)
         return self._learner
 
     def learn(self, *, since: str | None = None) -> dict:

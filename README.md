@@ -219,6 +219,8 @@ pip install -e ".[test]" && pytest            # 43 tests (37 core + 6 optional N
 dejavu-fleet --crisis                           # coordinated board -> de-risk (equity 0.05)
 dejavu-fleet --crisis --wipe                    # deleted brain -> naive (equity 0.55)
 dejavu-fleet --crisis --learn                   # + self-evolve: accept a discovered skill
+                                                #   (LLM-synthesized when FLEET_SYNTH=1 and
+                                                #    an OpenAI-compatible endpoint is up)
 
 # single-agent dejavu (fallback)
 dejavu --crisis                                 # with memory  -> de-risk (equity 0.05)
