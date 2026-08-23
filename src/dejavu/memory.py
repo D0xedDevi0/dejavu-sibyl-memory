@@ -11,6 +11,7 @@ exact file/line pointers for judges.
 
 from __future__ import annotations
 
+import json
 import logging
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,16 @@ from sibyl_memory_client import DEFAULT_TENANT, Learner, MemoryClient
 log = logging.getLogger(__name__)
 
 LESSON_CATEGORY = "lesson"
+
+
+def json_loads_any(text: Any) -> Any:
+    """Tolerantly parse a JSON string body, else return it as-is."""
+    if not isinstance(text, str):
+        return text
+    try:
+        return json.loads(text)
+    except (ValueError, TypeError):
+        return text
 
 
 class Memory:
@@ -133,6 +144,27 @@ class Memory:
                        reason: str | None = None) -> dict:
         """Move an entity to the ARCH tier (soft forgetting, auditable)."""
         return self.client.archive_entity(category, name, reason)
+
+    def list_archived(self, category: str | None = None) -> list[dict]:
+        """Read the ARCH tier: superseded/soft-forgotten entities with their
+        archive timestamps. Powers temporal (as-of) board reconstruction."""
+        q = "SELECT category, name, body, archived_at, archive_reason FROM archived_entities WHERE tenant_id = ?"
+        args: list[Any] = [self.tenant_id]
+        if category is not None:
+            q += " AND category = ?"
+            args.append(category)
+        out: list[dict] = []
+        with self.client.storage.connection() as conn:
+            rows = conn.execute(q, args).fetchall()
+            for cat, name, body, archived_at, reason in rows:
+                out.append({
+                    "category": cat, "name": name,
+                    "body": json_loads_any(body),
+                    "archived_at": archived_at,
+                    "archive_reason": reason,
+                })
+        return out
+
 
 
     def recall_lessons(self, queries: list[str], *, limit: int = 20) -> list[str]:

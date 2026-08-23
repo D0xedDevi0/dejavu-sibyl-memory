@@ -15,9 +15,12 @@ from dejavu.fleet import (
     FLEET_TENANT,
     agent_news,
     agent_risk,
+    board_at,
     board_stress,
+    board_timeline,
     decay_weight,
     fleet_alloc_decide,
+    now_iso,
     open_memory,
     read_board,
     run_fleet,
@@ -208,3 +211,45 @@ def test_synthesis_disabled_by_default():
     finally:
         if saved is not None:
             os.environ["FLEET_SYNTH"] = saved
+
+
+def test_temporal_board_replays_history():
+    """As-of reconstruction: the board at t0 (crisis) differs from t1 (calm)."""
+    import time as _t
+    db = _fresh_db()
+
+    # t0: crisis board
+    _populate(db, crisis=True)
+    t0 = now_iso()
+    _t.sleep(0.01)
+
+    # t1: calm board supersedes it (archives the crisis views)
+    _populate(db, crisis=False)
+    t1 = now_iso()
+
+    early = board_at(db, t0)
+    late = board_at(db, t1)
+
+    def sentiment_of(b):
+        return {h["key"].split("/")[1]: h["body"].get("sentiment", h["body"].get("level"))
+                for h in b}
+
+    assert sentiment_of(early).get("news") == "risk-off", \
+        f"board at t0 should show risk-off, got {sentiment_of(early)}"
+    assert sentiment_of(late).get("news") == "risk-on", \
+        f"board at t1 should show risk-on, got {sentiment_of(late)}"
+    assert sentiment_of(early).get("risk") == "high"
+    assert sentiment_of(late).get("risk") == "low"
+
+
+def test_board_timeline_lists_all_versions():
+    """The version history includes both the archived crisis view and active calm."""
+    db = _fresh_db()
+    _populate(db, crisis=True)
+    _populate(db, crisis=False)
+    tl = board_timeline(db)
+    keys = [e["key"] for e in tl]
+    assert "view/news/market" in keys
+    # at least 2 versions of news (archived risk-off + active risk-on)
+    news_versions = [e for e in tl if e["key"] == "view/news/market"]
+    assert len(news_versions) >= 2, f"expected >=2 news versions, got {len(news_versions)}"

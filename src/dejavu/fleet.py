@@ -32,6 +32,7 @@ import os
 import tempfile
 import time
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from typing import Any
 
 from .base_action import execute
@@ -64,6 +65,14 @@ DEFAULT_NEWS = {
 }
 DEFAULT_RISK = {"credit_stress": 1.9, "vix": 48.0, "level": "high"}
 
+# Calm specialist reads (for the temporal replay demo: crisis -> calm board).
+CALM_NEWS = {
+    "headline": "markets calm, spreads contained",
+    "sentiment": "risk-on",
+    "flags": ["trend_up"],
+}
+CALM_RISK = {"credit_stress": 0.3, "vix": 18.0, "level": "low"}
+
 
 def open_memory(db_path: str, role: str) -> Memory:
     """A FRESH handle on the shared store for `role`.
@@ -78,26 +87,56 @@ def open_memory(db_path: str, role: str) -> Memory:
 # Specialist agents — each writes its read of the world to the shared board.
 # ---------------------------------------------------------------------------
 
-def write_view(memory: Memory, category: str, name: str, body: dict) -> dict:
-    """Write a view with SUPERSESSION (Mem0 four-op analog).
+def now_iso() -> str:
+    """SDK-compatible UTC timestamp (millisecond ISO-8601 with Z)."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
-    If an active view already exists at this key and contradicts the new one,
-    the old view is archived to the ARCH tier with a reason and the journal
-    records the supersession — contradictions never silently accumulate.
+
+def parse_iso(ts: str | None) -> float | None:
+    """Parse an ISO timestamp to epoch seconds (lenient). Returns None on junk."""
+    if not ts:
+        return None
+    try:
+        return datetime.fromisoformat(ts.replace("Z", "+00:00")).timestamp()
+    except (ValueError, TypeError):
+        return None
+
+
+def write_view(memory: Memory, category: str, name: str, body: dict) -> dict:
+    """Write a view with SUPERSESSION (Mem0 four-op analog) + valid intervals.
+
+    The new view is stamped ``valid_from=now``; if it contradicts the existing
+    active view, the old one is stamped ``valid_to=now`` and archived to ARCH
+    with its full temporal window preserved. This is the substrate for the
+    temporal (as-of) board: every version of the board is reconstructable.
     """
+    ts = now_iso()
+    body = dict(body)
+    body.setdefault("valid_from", ts)
+    body.setdefault("valid_to", None)
+
     old = None
     try:
         old = memory.get_entity(category, name)
     except Exception:
         old = None
     if old is not None and isinstance(old.get("body"), dict):
-        if old["body"] != body:
+        old_body = dict(old["body"])
+        if old_body.get("sentiment") != body.get("sentiment") or \
+           old_body.get("level") != body.get("level") or \
+           old_body.get("headline") != body.get("headline") or \
+           old_body.get("credit_stress") != body.get("credit_stress") or \
+           old_body.get("vix") != body.get("vix"):
+            old_body["valid_to"] = ts
+            # Archive preserves the closed interval; the ARCH row carries the
+            # stamped body so as-of reconstruction can find it later.
+            memory.set_entity(category, name, old_body, status="active")
             memory.archive_entity(
-                category, name, reason=f"superseded by conflicting update"
+                category, name, reason="superseded by conflicting update"
             )
             memory.write_event(
-                evaluated={"key": f"{category}/{name}", "old": old["body"]},
-                acted={"op": "SUPERSEDE", "new": body},
+                evaluated={"key": f"{category}/{name}", "old": old_body},
+                acted={"op": "SUPERSEDE", "new": body, "at": ts},
             )
     return memory.set_entity(category, name, body, status="active")
 
@@ -229,6 +268,63 @@ def board_stress(board: list[dict]) -> bool:
         if body.get("sentiment") == "risk-off":
             return True
     return False
+
+
+def board_at(db_path: str, ts: str) -> list[dict]:
+    """Reconstruct the fleet board AS OF a timestamp (temporal replay).
+
+    Merges active + archived views and, for each key, selects the version whose
+    ``[valid_from, valid_to)`` window contains ``ts``. Returns exactly the board
+    the allocator would have read at that moment — a Graphiti-lite valid-interval
+    replay over the shared store. An empty result means the store was empty (or
+    the board had no views) at that instant.
+    """
+    target = parse_iso(ts)
+    if target is None:
+        return []
+    m = open_memory(db_path, "replay")
+    try:
+        versions: dict[str, list[dict]] = {}
+        for hit in m.list_entities(VIEW, status="active"):
+            key = f"{hit.get('category')}/{hit.get('name')}"
+            versions.setdefault(key, []).append(hit.get("body") or {})
+        for arch in m.list_archived(VIEW):
+            key = f"{arch.get('category')}/{arch.get('name')}"
+            versions.setdefault(key, []).append(arch.get("body") or {})
+        board: list[dict] = []
+        for key, vs in versions.items():
+            for body in vs:
+                vf = parse_iso(body.get("valid_from"))
+                vt = parse_iso(body.get("valid_to"))
+                if vf is not None and vf <= target and (vt is None or target < vt):
+                    board.append({"key": key, "body": body})
+                    break
+        return board
+    finally:
+        m.close()
+
+
+def board_timeline(db_path: str) -> list[dict]:
+    """Every distinct version of the board in chronological order (for the
+    history-replay demo beat)."""
+    m = open_memory(db_path, "timeline")
+    try:
+        entries: list[dict] = []
+        for hit in m.list_entities(VIEW, status="active"):
+            body = hit.get("body") or {}
+            entries.append({"key": f"{hit.get('category')}/{hit.get('name')}",
+                            "body": body, "valid_from": body.get("valid_from"),
+                            "valid_to": body.get("valid_to")})
+        for arch in m.list_archived(VIEW):
+            body = arch.get("body") or {}
+            entries.append({"key": f"{arch.get('category')}/{arch.get('name')}",
+                            "body": body, "valid_from": body.get("valid_from"),
+                            "valid_to": body.get("valid_to")})
+        entries.sort(key=lambda e: e.get("valid_from") or "")
+        return entries
+    finally:
+        m.close()
+
 
 
 # ---------------------------------------------------------------------------
@@ -410,10 +506,14 @@ def main(argv: list[str] | None = None) -> int:
                     help="delete the store after specialists write (break the fleet)")
     ap.add_argument("--crisis", action="store_true",
                     help="use a stressed market frame")
+    ap.add_argument("--calm", action="store_true",
+                    help="specialists write calm (risk-on) views — for temporal replay")
     ap.add_argument("--learn", action="store_true",
                     help="mine the journal and accept the top skill proposal")
     ap.add_argument("--virtuals", action="store_true",
                     help="coordinate through the Virtuals dejavu agent")
+    ap.add_argument("--timeline", action="store_true",
+                    help="print the board's full version history (temporal replay)")
     ap.add_argument("--json", action="store_true", help="emit JSON only")
     args = ap.parse_args(argv)
 
@@ -424,9 +524,25 @@ def main(argv: list[str] | None = None) -> int:
     db = args.db or str(DEFAULT_DB).replace("memory.db", "fleet.db")
     frame = {"vix": 52.0, "credit_stress": 2.2} if args.crisis else \
             {"vix": 18.0, "credit_stress": 0.3}
+    news_kw = CALM_NEWS if args.calm else DEFAULT_NEWS
+    risk_kw = CALM_RISK if args.calm else DEFAULT_RISK
+    if args.calm:
+        frame = {"vix": 18.0, "credit_stress": 0.3}
+
+    if args.timeline:
+        entries = board_timeline(db)
+        if args.json:
+            print(json.dumps(entries, indent=2, default=str))
+        else:
+            for e in entries:
+                body = e["body"]
+                print(f"[{e['valid_from']} -> {e['valid_to'] or 'now'}] "
+                      f"{e['key']}  {json.dumps(body, default=str)}")
+        return 0
 
     report = run_fleet(db_path=db, frame=frame, wipe=args.wipe,
-                       learn=args.learn, virtuals=args.virtuals, config=cfg)
+                       learn=args.learn, virtuals=args.virtuals, config=cfg,
+                       news=news_kw, risk=risk_kw)
 
     if args.json:
         print(json.dumps(report.as_dict(), indent=2, default=str))
