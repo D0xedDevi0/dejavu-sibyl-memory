@@ -1,4 +1,4 @@
-# dejavu — The Agent That Remembers What It Did With Money
+# THE FLEET — the team that remembers (dejavu)
 
 **NEURAL_MESH × Sibyl Memory** · Sibyl Memory Hackathon (hack.sibyllabs.org) ·
 [github.com/D0xedDevi0/dejavu-sibyl-memory](https://github.com/D0xedDevi0/dejavu-sibyl-memory)
@@ -8,8 +8,47 @@
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
 
-A self-improving autonomous agent whose onchain (Base) decisions are **driven by its
-own persistent memory**. Codename `dejavu` — the memory-dejavu loop.
+**The headline is THE FLEET** — not one agent that remembers, a *team* of specialist
+agents (news, risk, allocator, executor) coordinated by **one shared Sibyl Memory
+store**. The single-agent memory-dejavu loop (`dejavu`) that inspired it is kept as
+the documented, test-covered fallback lane.
+
+---
+
+## THE FLEET (headline lane — multi-agent shared memory)
+
+Three specialist agents coordinate through ONE shared Sibyl store — **no direct
+agent-to-agent calls**. The shared memory *is* the coordination layer:
+
+```text
+ news ──writes──► ┌─────────────────────────────┐
+ risk ──writes──► │  SIBYL MEMORY (one store,   │ ◄── allocator cold-starts,
+                  │  tenant "fleet-brain",      │     reads the WHOLE board,
+                  │  namespace-by-name)         │     decides the book
+                  └─────────────────────────────┘
+                                     │
+                                     ▼
+              allocator decision ──► exec: REAL Base onchain action
+```
+
+- **`src/dejavu/fleet.py`** — `news`/`risk` write their read of the world to the board
+  (`view/news/market`, `view/risk/stress`); `alloc` cold-starts with zero context, reads
+  the whole board via `fleet_alloc_decide`, and publishes a book; `exec` fires it onchain.
+- **Load-bearing:** delete the shared store → the allocator reads an **empty board** →
+  it fails open to naive (overweight equity). The fleet's coordination collapses with the
+  memory. Same frame, opposite decision — *because of memory*.
+- **Self-evolving (Lane 4):** repeated cycles let the Learner mine the shared journal and
+  propose a skill the fleet accepts — its coordination knowledge compounds
+  (`dejavu-fleet --learn` → `skill/shape-...`).
+- **Run it:** `dejavu-fleet --crisis` (coordinated de-risk) vs `dejavu-fleet --crisis
+  --wipe` (deleted brain → naive). Executable proof: `pytest tests/test_fleet.py` (9 tests).
+
+---
+
+## The single-agent dejavu loop (fallback lane)
+
+The original memory-dejavu loop — one agent whose own past lessons flip its decision.
+Kept fully wired as the safe, always-submittable floor.
 
 ---
 
@@ -70,21 +109,26 @@ Not a toy, not a demo prop.
 
 Sibyl Memory is **not** decorative — the core decision function *fails without it*.
 
-- **`src/dejavu/policy.py:decide_differently`** — the load-bearing function. It calls
-  `memory.recall_lessons(...)` (→ `src/dejavu/memory.py:recall_lessons`, an FTS5
-  `search` on the store). If no lesson is recalled, it **fails open to
-  `naive_book()`** (overweight equity).
+**THE FLEET (headline):**
+- **`src/dejavu/fleet.py:fleet_alloc_decide`** — the fleet's load-bearing function. It
+  reads the shared board (`read_board` → `memory.list_entities("view")`). Empty board →
+  fails open to naive. `tests/test_fleet.py` is the executable deletion test
+  (`test_delete_store_fleet_regresses_to_naive`).
+
+**Single-agent dejavu (fallback):**
+- **`src/dejavu/policy.py:decide_differently`** — calls `memory.recall_lessons(...)`
+  (→ `src/dejavu/memory.py:recall_lessons`, an FTS5 `search` on the store). No lesson
+  recalled → fails open to `naive_book()` (overweight equity).
 - **`src/dejavu/memory.py:recall_lessons` / `write_lesson` / `search`** — the read/write
   that persist and retrieve the lesson across sessions.
 
-**The deletion test** (the judge's check, executable): `tests/test_loadbearing.py`.
-Delete the store → no recall → the agent reverts to naive and makes the losing call.
+**The deletion test** (the judge's check, executable): `tests/test_loadbearing.py` and
+`tests/test_fleet.py`. Delete the store → no recall / empty board → the agent reverts to
+naive and makes the losing call.
 
 ```
-$ pytest tests/test_loadbearing.py -v
-test_with_memory_recalls_and_de_risks ..... PASSED   # equity → 0.05
-test_without_memory_fails_open_to_naive ... PASSED   # equity → 0.55
-test_deleting_store_between_sessions_breaks_behavior PASSED
+$ pytest tests/test_loadbearing.py -v   # single-agent deletion gate
+$ pytest tests/test_fleet.py -v         # fleet deletion gate (empty board -> naive)
 ```
 
 Run it yourself in one command (see **Run** below): `dejavu --crisis` recalls and
@@ -169,11 +213,18 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 34 tests (28 core + 6 optional NEURAL_MESH-backend)
-dejavu --crisis                                  # with memory  -> de-risk (equity 0.05)
-dejavu --crisis --wipe                           # store deleted -> naive  (equity 0.55)
-DEJAVU_DRY_RUN=0 dejavu --crisis                   # fire a REAL Base tx (captures hash)
-dejavu --crisis --learn --virtuals               # full loop: recall + self-learn + ACP coordinate
+pip install -e ".[test]" && pytest            # 43 tests (37 core + 6 optional NEURAL_MESH-backend)
+
+# THE FLEET (headline)
+dejavu-fleet --crisis                           # coordinated board -> de-risk (equity 0.05)
+dejavu-fleet --crisis --wipe                    # deleted brain -> naive (equity 0.55)
+dejavu-fleet --crisis --learn                   # + self-evolve: accept a discovered skill
+
+# single-agent dejavu (fallback)
+dejavu --crisis                                 # with memory  -> de-risk (equity 0.05)
+dejavu --crisis --wipe                          # store deleted -> naive  (equity 0.55)
+DEJAVU_DRY_RUN=0 dejavu --crisis                # fire a REAL Base tx (captures hash)
+dejavu --crisis --learn --virtuals              # full loop: recall + self-learn + ACP coordinate
 ```
 
 Deps: `sibyl-memory-client`, `sibyl-memory-cli`, `sibyl-memory-hermes` (local,

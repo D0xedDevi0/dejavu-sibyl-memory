@@ -1,17 +1,42 @@
-# Judge's Cheat-Sheet — dejavu (NEURAL_MESH × Sibyl Memory)
+# Judge's Cheat-Sheet — THE FLEET (NEURAL_MESH × Sibyl Memory)
 
 > Everything in one page. Each claim → exact file/line, test, tx hash, or video
 > timestamp. Reproduce any of it in under two minutes.
 >
-> **Pitch:** a self-improving autonomous agent whose **onchain (Base) decisions are
-> driven by its own persistent Sibyl Memory**. Forgetting is a bug. Remembering is
-> the strategy.
+> **Pitch:** a *team* of specialist agents coordinated by **one shared Sibyl Memory
+> store** — delete the store and the team falls apart. The single-agent memory-dejavu
+> loop (`dejavu`) that inspired it is the documented fallback lane.
 
 ---
 
-## 1. The core claim (40-pt load-bearing gate)
+## 0. THE FLEET (headline lane — multi-agent shared memory)
 
-**Deleting Sibyl Memory changes the decision — and loses money.**
+**Three agents, one brain. Delete the brain and the team falls apart.**
+
+| Proof | Where | Verdict |
+|---|---|---|
+| Fleet decision fn (load-bearing) | `src/dejavu/fleet.py` → `fleet_alloc_decide()` — reads the shared board via `read_board()`; **empty board → fails open to naive** (equity 0.55) | read it |
+| Specialist agents | `src/dejavu/fleet.py` → `agent_news` / `agent_risk` write `view/news/market` + `view/risk/stress`; `alloc` cold-starts and reads the whole board | read it |
+| Executable deletion test | `tests/test_fleet.py` → `test_delete_store_fleet_regresses_to_naive` | run it |
+| One-command proof | `dejavu-fleet --crisis` → coordinated de-risk **0.05** · `dejavu-fleet --crisis --wipe` → naive **0.55** (same frame, memory only) | run it |
+| Self-evolves (Lane 4) | `dejavu-fleet --crisis --learn` → Learner mines the shared journal, accepts `skill/shape-...` | run it |
+
+```bash
+pip install -e ".[test]" && pytest tests/test_fleet.py -v
+# 9 PASSED  (board→de-risk, empty-board→naive, delete-store→breaks, learner accepts skill, …)
+```
+
+**Why it's load-bearing:** the allocator never calls the other agents — it only reads
+memory. Delete the store and there is no coordination signal, so it regresses to the
+naive losing book. Multi-agent coordination *through* memory is the innovation (most
+submissions are single-agent recall).
+
+---
+
+## 1. The single-agent dejavu loop (fallback lane)
+
+The original memory-dejavu loop — one agent whose past lessons flip its decision.
+Deleting Sibyl Memory changes the decision — and loses money.
 
 | Proof | Where | Verdict |
 |---|---|---|
@@ -87,8 +112,9 @@ history. Not a toy. **Demo beat:** video **3:04–3:28** (`08_pmf`).
 
 ## 30-second summary for the judge
 
-> It remembered, so it de-risked, and that decision **fired a real Base tx**.
-> Delete the store and it loses again — that's the 40-point proof. It compounds
-> (self-learns skills), it's structurally safe against compromised lessons, and
-> every number is measured and reproducible. This is the live memory backbone of
-> D0xedDev. MIT.
+> **THE FLEET**: three specialist agents — news, risk, allocator — coordinate through
+> one shared Sibyl store. The allocator never calls the others; it reads memory alone,
+> so deleting the store collapses the team back to a naive losing book — that's the
+> 40-point proof, upgraded to multi-agent. It self-evolves (Learner accepts skills),
+> fires real Base txs, and every number is measured. The single-agent `dejavu` loop is
+> the documented fallback. MIT.
