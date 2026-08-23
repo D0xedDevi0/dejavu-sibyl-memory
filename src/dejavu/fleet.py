@@ -417,6 +417,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", action="store_true", help="emit JSON only")
     args = ap.parse_args(argv)
 
+    # Live runs get LLM skill synthesis automatically (library/tests stay
+    # deterministic unless FLEET_SYNTH=1).
+    os.environ.setdefault("FLEET_SYNTH", "1")
     cfg = Config()
     db = args.db or str(DEFAULT_DB).replace("memory.db", "fleet.db")
     frame = {"vix": 52.0, "credit_stress": 2.2} if args.crisis else \
