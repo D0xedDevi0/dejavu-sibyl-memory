@@ -92,7 +92,8 @@ def naive_book() -> Book:
     )
 
 
-def de_risk_book(n_lessons: int, *, risk: float = 1.0) -> Book:
+def de_risk_book(n_lessons: int, *, risk: float = 1.0,
+                 rationale: str | None = None) -> Book:
     """Memory-driven response: the MacroBench defensive sleeve book, deployed
     at crisis exposure. High cash/rates/hedges, near-zero equity."""
     sleeves = macrobench_sleeves(risk)  # [COMMODS, CREDIT, EQUITY, FX, HEDGES, RATES]
@@ -106,10 +107,12 @@ def de_risk_book(n_lessons: int, *, risk: float = 1.0) -> Book:
     if equity > 0.05:
         cash += equity - 0.05
         equity = 0.05
+    if rationale is None:
+        rationale = (f"recalled {n_lessons} crisis lesson(s) -> MacroBench de-risk "
+                     f"into cash/rates/hedges (risk={risk:.2f})")
     return Book(
         equity=equity, credit=credit, rates=rates, hedges=hedges, cash=cash,
-        rationale=f"recalled {n_lessons} crisis lesson(s) -> MacroBench de-risk "
-                  f"into cash/rates/hedges (risk={risk:.2f})",
+        rationale=rationale,
     )
 
 

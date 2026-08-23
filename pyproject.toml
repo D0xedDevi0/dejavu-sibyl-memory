@@ -28,6 +28,7 @@ test = ["pytest>=8", "pillow>=10"]
 
 [project.scripts]
 dejavu = "dejavu.agent:main"
+dejavu-fleet = "dejavu.fleet:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
