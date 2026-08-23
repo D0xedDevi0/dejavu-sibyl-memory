@@ -8,6 +8,7 @@ Submodules:
     memory.py     — Sibyl wrapper (write / recall / search, all five tiers)
     policy.py     — decide_differently, the LOAD-BEARING decision function
     agent.py      — orchestration loop (session A learns -> session B cold-starts)
+    fleet.py      — THE FLEET (Lane 1): multi-agent shared-memory blackboard
     config.py     — paths, wallet, RPC
     base_action.py— onchain leg (x402 / wallet op) — wired in M3
 """

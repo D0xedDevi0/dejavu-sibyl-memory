@@ -15,7 +15,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from sibyl_memory_client import Learner, MemoryClient
+from sibyl_memory_client import DEFAULT_TENANT, Learner, MemoryClient
 
 log = logging.getLogger(__name__)
 
@@ -28,6 +28,7 @@ class Memory:
     def __init__(self, db_path: str | Path, *, tenant_id: str | None = None):
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self.tenant_id = tenant_id or DEFAULT_TENANT
         # `local()` returns a client whose `.storage` is a property (not a method).
         kw: dict[str, Any] = {}
         if tenant_id:
@@ -69,6 +70,21 @@ class Memory:
 
     def list_lessons(self, *, status: str | None = None, limit: int = 100) -> list[dict]:
         return self.client.list_entities(LESSON_CATEGORY, status=status, limit=limit)
+
+    # ---- generic entities (used by THE FLEET: any category/name) ----------
+    def set_entity(self, category: str, name: str, body: dict,
+                   *, status: str = "active") -> dict:
+        return self.client.set_entity(category, name, body, status=status)
+
+    def get_entity(self, category: str, name: str) -> dict:
+        return self.client.get_entity(category, name)
+
+    def list_entities(self, category: str | None = None, *,
+                      status: str | None = None, limit: int = 100) -> list[dict]:
+        return self.client.list_entities(category, status=status, limit=limit)
+
+    def delete_entity(self, category: str, name: str) -> bool:
+        return self.client.delete_entity(category, name)
 
     # ---- COLD: journal (append-only audit) --------------------------------
     def write_event(self, *, evaluated: Any = None, acted: Any = None,
@@ -129,7 +145,10 @@ class Memory:
     @property
     def learner(self) -> Learner:
         if self._learner is None:
-            self._learner = Learner(self.client.storage)  # pass Storage, NOT client
+            # Pass the SAME tenant the client writes under — the Learner defaults
+            # to DEFAULT_TENANT, which would silently scan an empty journal for
+            # any multi-tenant store (THE FLEET's `fleet-brain` included).
+            self._learner = Learner(self.client.storage, tenant_id=self.tenant_id)
         return self._learner
 
     def learn(self, *, since: str | None = None) -> dict:
