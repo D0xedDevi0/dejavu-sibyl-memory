@@ -83,7 +83,15 @@ naive → −18% again.
 
 **Demo beat:** video **2:07–2:38** (`06_measured`).
 
-## 5. Measured, not marketed
+## 5. Benchmark-alignment upgrades (Aug 28)
+
+| Upgrade | Proof | Where |
+|---|---|---|
+| Relational graph (typed edges in Sibyl's native `entity_relations`) | `graph_impact()` two-hop traversal test | `src/dejavu/graph_audit.py` · `tests/test_graph_audit.py::test_graph_impact_two_hops` |
+| Scale: 1,000+ record corpus, needle recall top-1 = 100%, 0.1 ms median | `seed_corpus` + `scale_recall_check` | `tests/test_graph_audit.py::test_seed_corpus_scale_and_recall` |
+| Tamper-evident journal seal — edit AND delete both break the chain | `seal_journal` / `verify_journal` | `tests/test_graph_audit.py::test_tamper_edit_breaks_chain`, `::test_tamper_delete_breaks_chain` |
+
+## 6. Measured, not marketed
 
 | Metric | No memory | With memory | Reproduce |
 |---|---|---|---|
