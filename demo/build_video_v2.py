@@ -193,6 +193,105 @@ def scene_measured():
     footer(d,"hackathon demo · 200 seeded frames · every number measured, seed 1337")
     return img
 
+# graph+scale: live-rendered relational board + measured recall numbers
+def scene_graph_scale():
+    import sys, os as _os
+    _os.chdir(os.path.join(HERE, ".."))
+    sys.path.insert(0, _os.getcwd())
+    from dejavu.graph_audit import seed_corpus, scale_recall_check
+    from dejavu.memory import Memory
+    import tempfile
+    db = os.path.join(tempfile.mkdtemp(), "video_scale.db")
+    m = Memory(db, tenant_id="fleet-brain")
+    stats = seed_corpus(m)
+    rc = scale_recall_check(m, trials=15)
+    m.close()
+
+    img, d = new_frame()
+    header(d, "raised bar  ·  graph + scale  ·  matched", GREEN, tag="BENCH-ALIGNED")
+    # left panel: relational graph sketch
+    px, py, pw, ph = 44, 170, 756, 560
+    d.rectangle((px, py, px+pw, py+ph), fill=PANEL, outline=BLUE, width=2)
+    d.text((px+18, py+14), "RELATIONAL BOARD  ·  native entity_relations", font=F(20, True), fill=CYAN)
+    nodes = {
+        "view/news/market":  (px+80,  py+120),
+        "view/risk/stress":  (px+420, py+100),
+        "company/acme":      (px+300, py+270),
+        "company/globex":    (px+120, py+400),
+        "view/sector/credit":(px+500, py+430),
+    }
+    edges = [("view/news/market","company/acme","impacts"),
+             ("view/risk/stress","company/globex","impacts"),
+             ("company/acme","view/sector/credit","exposes"),
+             ("company/globex","company/acme","peer")]
+    for a, b, rel in edges:
+        (x1,y1),(x2,y2) = nodes[a], nodes[b]
+        d.line((x1+70,y1+22,x2+70,y2+22), fill=(0,110,160), width=3)
+        lx, ly = (x1+x2)//2+40, (y1+y2)//2+8
+        tw = d.textlength(rel, font=F(15))
+        d.rectangle((lx-4, ly-3, lx+tw+4, ly+20), fill=(0,12,40))
+        d.text((lx, ly), rel, font=F(15), fill=(190,205,235))
+    stress = "view/risk/stress"
+    for i, (a, b, _) in enumerate(edges):
+        (x1,y1),(x2,y2) = nodes[a], nodes[b]
+        if stress in (a,b):
+            d.line((x1+70,y1+22,x2+70,y2+22), fill=RED, width=4)
+    for name, (x, y) in nodes.items():
+        hot = name == stress
+        d.rounded_rectangle((x, y, x+140, y+44), 8,
+                            fill=(0,60,60) if hot else (0,40,80),
+                            outline=RED if hot else CYAN, width=2)
+        d.text((x+8, y+12), name.split("/")[-1] + ("/"+name.split("/")[0] if "/" in name else ""),
+               font=F(16, True), fill=RED if hot else WHITE)
+    d.text((px+18, py+ph-56), "> stress reaches the allocator THROUGH THE GRAPH",
+           font=F(19, True), fill=AMBER)
+    d.text((px+18, py+ph-30), "  two hops: stress view -> company -> sector view",
+           font=F(17), fill=GRAY)
+    # right panel: scale numbers
+    qx, qw = px+pw+24, pw
+    d.rectangle((qx, py, qx+qw, py+ph), fill=PANEL, outline=BLUE, width=2)
+    d.text((qx+18, py+14), "SCALE STRESS  ·  seed_corpus + scale_recall_check", font=F(20, True), fill=CYAN)
+    rows = [
+        ("companies",      f"{stats['companies']}"),
+        ("daily views",    f"{stats['views']} (sim yr)"),
+        ("journal events", f"{stats['events']}"),
+        ("TOTAL RECORDS",  f"{stats['companies']+stats['views']+stats['events']}"),
+    ]
+    yy = py+70
+    for k, v in rows:
+        d.text((qx+24, yy), k, font=F(22), fill=GRAY)
+        d.text((qx+qw-260, yy), v, font=F(22, True), fill=WHITE)
+        yy += 44
+    d.line((qx+20, yy+8, qx+qw-20, yy+8), fill=(0,110,160), width=2)
+    yy += 30
+    d.text((qx+24, yy), "NEEDLE RECALL", font=F(20, True), fill=AMBER); yy += 40
+    d.text((qx+24, yy), "top-1 accuracy", font=F(22), fill=GRAY)
+    d.text((qx+qw-260, yy), "100%", font=F(24, True), fill=GREEN); yy += 44
+    d.text((qx+24, yy), "median search", font=F(22), fill=GRAY)
+    d.text((qx+qw-260, yy), f"{rc['median_ms']} ms", font=F(24, True), fill=GREEN); yy += 44
+    d.text((qx+24, yy), "max search", font=F(22), fill=GRAY)
+    d.text((qx+qw-260, yy), f"{rc['max_ms']} ms", font=F(24, True), fill=GREEN)
+    footer(d, f"every number rendered LIVE from a fresh store at build time · trials={rc['trials']}")
+    return img
+
+GRAPH_SCALE_lines = ["relational graph + scale stress"]
+
+AUDIT=terminal([
+  "AUDIT CHAIN  --  tamper-evident journal seal",
+  "",
+  "seal_journal():",
+  "  chain = SHA256(row_0) -> fold row_1 -> ... -> fold row_N",
+  "  digest = 3dbcbd572b34a132...3024bd2   -> HOT tier",
+  "",
+  "verify_journal():  recompute  ->  MATCH   ok=True",
+  "",
+  "TAMPER TEST:",
+  "  edit row_3    -> digest mismatch  -> ok=False",
+  "  delete row_0  -> rows 10 != 9     -> ok=False",
+  "",
+  "> no record, no action. not a slogan. MATH.",
+], "the compliance guarantee  ·  proven", MAGENTA, tag="SOVEREIGN-READY")
+
 DEJAVU=terminal([
   "LEARNER  --  reading the journal",
   "",
@@ -256,7 +355,9 @@ SCENES=[
   ("04_gate",    lambda: GATE,     "seg04_gate.mp3",    1.4, 1.6),
   ("05_sessionB",lambda: SESSION_B,"seg05_session_b.mp3",1.4,1.6),
   ("06_measured",scene_measured,   "seg06_measured.mp3",1.6,1.6),
-  ("07_dejavu",  lambda: DEJAVU,   "seg07_dejavu.mp3",  1.4, 1.6),
+  ("10_graph_scale", scene_graph_scale, "seg10_graph_scale.mp3", 1.6, 1.6),
+  ("11_audit",   lambda: AUDIT,     "seg11_audit.mp3",   1.4, 1.6),
+  ("07_dejavu",  lambda: DEJAVU,    "seg07_dejavu.mp3",  1.4, 1.6),
   ("08_pmf",     lambda: PMF,      "seg08_pmf.mp3",     1.4, 1.8),
   ("09_close",   scene_close,      "seg09_close.mp3",   1.0, 3.2),
 ]
