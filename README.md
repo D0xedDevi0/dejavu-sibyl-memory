@@ -379,9 +379,10 @@ dejavu --crisis --learn --virtuals              # full loop: recall + self-learn
 ```
 
 Deps: `sibyl-memory-client`, `sibyl-memory-cli`, `sibyl-memory-hermes` (local,
-headless, no account/network). Onchain: `eth_account` + raw JSON-RPC. Virtuals: the
-registered `dejavu` agent via the acp-cli (see `virtuals-dejavu-agent.md` for the
-`TS_KEYRING_BACKEND=file` requirement).
+headless, no account/network). Onchain: `eth_account` + raw JSON-RPC. A
+registered `dejavu` Virtuals ACP agent exists (see `virtuals-dejavu-agent.md`),
+but this submission claims only the Base partner multiplier because the final
+demo visibly exercises Base/x402 and does not visibly execute an ACP job.
 
 ## License
 

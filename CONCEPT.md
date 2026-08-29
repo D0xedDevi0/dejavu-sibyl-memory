@@ -87,7 +87,7 @@ We run on **Hermes Agent**, which has a **native `sibyl-memory-hermes` adapter**
 **Day 8–9 — Demo, README, posts**
 - 2–5 min demo video with the **fresh-session recall beat** front and center (split-screen: session A learns → session B cold-starts and changes its trade).
 - README: what it does, where memory is load-bearing, partner stacks + where, "how memory made this possible," Prior Work declaration.
-- **Two public posts** tagging @sibylcap + @base + @virtuals_io (demo video + ≥1 build log).
+- **Two public posts** tagging @sibylcap + the claimed partner, @base (demo video + ≥1 build log).
 
 **Day 10 — Buffer + polish + submit** (mark build page ready before Sep 10 23:59 UTC).
 
