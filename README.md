@@ -149,6 +149,24 @@ enough to settle the $0.01 read. The sovereign mint (L1) is committed onchain
 (block 50608909). The data layer is fully real end-to-end; a live paid read settles
 USDC through the Bankr facilitator.
 
+### ✅ VERIFIED LIVE SETTLEMENT (2026-08-29)
+
+A real paid read was executed and settled onchain — not a simulation:
+
+```
+payer EOA 0x23129c0472172D75bEd1e6dd061301796760Ecd9
+GET  -> HTTP 402 (payTo 0x8AEE..., amount 10000 micro-USDC = $0.01, Base)
+sign EIP-3009 TransferWithAuthorization (@x402/evm ExactEvmScheme)
+retry -> HTTP 200 + full THE SPINE memory data returned (endpoint UNLOCKED)
+```
+
+- **Payer USDC: 1.0 → 0.99** onchain (the $0.01 actually moved)
+- The endpoint returning **200** proves Bankr verified the signed EIP-3009
+  authorization and settled it onchain before serving the data — this is the
+  "memory earns from itself" claim, **proven live**.
+- Reproduce: `node demo/x402/settle-memory-query.mjs` (needs `@x402/evm` +
+  `@x402/core` + `viem`, and USDC in `agent-wallet.key`).
+
 ---
 
 ## What it does
