@@ -77,5 +77,5 @@ wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
 - [x] At least two qualifying public posts are live, tagging `@sibylcap` and the partner actually claimed (`@base`)
 - [x] Virtuals was removed from the claimed multiplier because it is not visibly exercised in the final demo
 - [ ] One public PMF/design-partner artifact is linked if bonus points are claimed
-- [ ] Build page `neural-mesh-eea5` is read back and verified before final submit
-- [ ] Mark ready before September 10, 23:59 UTC
+- [x] Build page `neural-mesh-eea5` was read back and verified after saving
+- [x] Marked ready for judging before September 10, 23:59 UTC
