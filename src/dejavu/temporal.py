@@ -126,8 +126,8 @@ def consolidate(mem: Memory, *, max_age_days: float, now: datetime | None = None
     the ARCH tier (soft-forget). Keeps the live store lean and auditable.
 
     Returns a report of what was archived (and would-be-archived in dry_run).
-    Does NOT touch the sovereign/identity layers — full-store wipe still
-    orphans the onchain asset; this is deliberate, scoped forgetting.
+    Preserves the sovereign full-store root because ARCH remains recoverable
+    content. Only a full-store wipe orphans the onchain asset.
     """
     now = now or datetime.now(timezone.utc)
     lessons = mem.list_lessons(status="active", limit=1000)

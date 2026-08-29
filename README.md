@@ -13,7 +13,7 @@
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
 
-**The headline is THE SPINE** — five layers, one system:
+**The headline is THE SPINE** — six layers, one system:
 
 > **The agent doesn't *have* memory. The memory IS the agent — and it owns
 > itself, earns from itself, and writes itself.**
@@ -36,7 +36,7 @@ wiped-store naive fallback — see the **Run** section.
 
 ---
 
-## THE FLEET (headline lane — multi-agent shared memory)
+## THE FLEET (L4 lane — multi-agent shared memory)
 
 > **Note:** THE FLEET is now layer **L4** of THE SPINE. It remains a fully-tested,
 > first-class lane and the original headline. The spine adds Sovereign (L1),
@@ -67,7 +67,7 @@ agent-to-agent calls**. The shared memory *is* the coordination layer:
   propose a skill the fleet accepts — its coordination knowledge compounds
   (`dejavu-fleet --learn` → `skill/shape-...`).
 - **Run it:** `dejavu-fleet --crisis` (coordinated de-risk) vs `dejavu-fleet --crisis
-  --wipe` (deleted brain → naive). Executable proof: `pytest tests/test_fleet.py` (9 tests).
+  --wipe` (deleted brain → naive). Executable proof: `pytest tests/test_fleet.py` (15 tests).
 
 ---
 
@@ -78,10 +78,10 @@ Kept fully wired as the safe, always-submittable floor.
 
 ---
 
-## THE SPINE — five layers, one system
+## THE SPINE — six layers, one system
 
-`dejavu-sovereign` runs the whole thing as **one continuous arc** — not five demos,
-one story. A judge runs one command and sees all five layers:
+`dejavu-sovereign` runs the whole thing as **one continuous arc** — not six demos,
+one story. A judge runs one command and sees all six layers:
 
 ```bash
 dejavu-sovereign --crisis        # full spine arc (dry-run by default)
@@ -104,7 +104,7 @@ store** and you don't just lose the decision — the committed onchain asset is
 orphan-destroyed and the agent becomes a *different being*. That's memory-load-bearing
 with money attached.
 
-`tests/test_sovereign.py` (11) + `tests/test_spine.py` (1) pin all of it.
+`tests/test_sovereign.py` + `tests/test_spine.py` pin all of it.
 
 ### The measured gate (spine ablation benchmark)
 
@@ -136,7 +136,7 @@ endpoint** on Bankr Cloud:
 | Price | **$0.01 USDC** (10000 micro-USDC, 6 decimals) |
 | Network | Base (`eip155:8453`), asset `0x833589fcd6...` (USDC) |
 | Pays to | `0x8AEE621035D93Deb3C0C1177fac252dC2dd501a0` (facilitator) |
-| Serves | onchain-committed memory root + 5-layer state + de-risk verdict |
+| Serves | onchain-committed proof snapshot + six-layer state + de-risk verdict |
 | Source | `demo/x402/memory-query.ts` |
 
 Verification: `curl -X GET https://x402.bankr.bot/0xf8f96d.../memory-query` returns
@@ -160,7 +160,7 @@ sign EIP-3009 TransferWithAuthorization (@x402/evm ExactEvmScheme)
 retry -> HTTP 200 + full THE SPINE memory data returned (endpoint UNLOCKED)
 ```
 
-- **Payer USDC: 1.0 → 0.99** onchain (the $0.01 actually moved)
+- **Verified settlement receipts:** [block 50609928](https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5) and [block 50609934](https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93), each transferring 0.01 USDC from the payer through the facilitator.
 - The endpoint returning **200** proves Bankr verified the signed EIP-3009
   authorization and settled it onchain before serving the data — this is the
   "memory earns from itself" claim, **proven live**.
@@ -190,12 +190,12 @@ SESSION A ──learn──► SIBYL MEMORY (SQLite + FTS5) ──recall──�
 
 ## Demo video
 
-The submission demo — **`demo/demo_video_v2.mp4`** — is a narrated 3.6-min walkthrough
+The current cinematic explainer — **`demo/demo_the_spine.mp4`** — is a narrated 2:41 walkthrough
 (1600x900, voice-over + ambient bed) following the exact money-shot arc: the problem →
 Session A learns → the deletion gate → Session B remembers and fires a **real Base tx** →
 measured evidence (ablation + compounding charts) → the self-learning dejavu loop → PMF
-close. Fresh-session recall beat is front-and-center. Rebuild: `python demo/build_video_v2.py`
-(PIL terminal frames → Ken Burns motion → TTS narration via OpenAI → mix/mux).
+close. Rebuild: `python demo/build_video_spine.py`
+(PIL terminal frames → restrained Ken Burns motion → Brian narration → mix/mux).
 
 ## Why this is different (innovation + PMF, in 60 seconds)
 
@@ -359,7 +359,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ```bash
 pip install -e ".[test]" && pytest            # 78 tests (72 core + 6 optional NEURAL_MESH-backend)
 
-# THE SPINE (headline — five layers, one arc)
+# THE SPINE (headline — six layers, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint -> same-being
                                                 #   -> dream a skill -> earn -> wipe -> orphan+naive
 DEJAVU_DRY_RUN=0 dejavu-sovereign               # broadcast the sovereign mint onchain
@@ -379,7 +379,7 @@ dejavu --crisis --learn --virtuals              # full loop: recall + self-learn
 ```
 
 Deps: `sibyl-memory-client`, `sibyl-memory-cli`, `sibyl-memory-hermes` (local,
-headless, no account/network). Onchain: `eth_account`, `web3`. Virtuals: the
+headless, no account/network). Onchain: `eth_account` + raw JSON-RPC. Virtuals: the
 registered `dejavu` agent via the acp-cli (see `virtuals-dejavu-agent.md` for the
 `TS_KEYRING_BACKEND=file` requirement).
 

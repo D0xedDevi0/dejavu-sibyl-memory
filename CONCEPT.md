@@ -12,7 +12,8 @@ the memory as a dynamic data layer is applicable."* We took it all the way. The
 shared store isn't a lookup table — it's a **live data layer that is the agent**: it
 mints its own fingerprint onchain (Sovereign), defines the agent's identity (Identity),
 authors new skills from its own journal (Dream), coordinates a team through one pool
-(Commons), and remembers the road not taken (Regret). Five layers, one spine.
+(Commons), remembers the road not taken (Regret), and manages belief over time
+(Temporal). Six layers, one spine.
 
 ---
 

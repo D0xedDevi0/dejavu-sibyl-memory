@@ -55,6 +55,15 @@ def test_root_flips_on_content_change(mem):
     assert before != after
 
 
+def test_archiving_preserves_sovereign_root(mem):
+    """Moving live content to recoverable ARCH must preserve the full-store root."""
+    mem.write_lesson("l1", "de-risk when credit stress spikes")
+    before = memory_root(mem)["root"]
+    mem.archive_entity("lesson", "l1", reason="staleness")
+    after = memory_root(mem)["root"]
+    assert before == after
+
+
 # ---------------------------------------------------------------------------
 # (2) identity = memory
 # ---------------------------------------------------------------------------
@@ -84,14 +93,17 @@ def test_wipe_store_changes_identity(mem):
 # (3) sovereign mint + economic deletion gate
 # ---------------------------------------------------------------------------
 
-def test_mint_dry_run_commits_root(mem):
+def test_mint_dry_run_commits_root(mem, tmp_path):
     mem.write_lesson("l1", "de-risk when credit stress spikes")
-    cfg = Config(dry_run=True)
+    missing_key = tmp_path / "missing-wallet.key"
+    cfg = Config(dry_run=True, wallet_key=missing_key)
     mint = sovereign_mint(mem, cfg)
     assert mint.dry_run is True
     assert mint.root == memory_root(mem)["root"]
     assert mint.identity_id == identity(mem)["id"]
+    assert mint.owner == "unbound-dry-run"
     assert mint.tx_hash is None
+    assert not missing_key.exists()
 
 
 def test_asset_orphaned_after_deletion(mem):

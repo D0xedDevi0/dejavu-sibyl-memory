@@ -10,16 +10,18 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-# Repo root = two levels up from this file (src/echo/config.py -> repo root).
+# Repo root = two levels up from this file (src/dejavu/config.py -> repo root).
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = REPO_ROOT / "data"
 DEFAULT_DB = DATA_DIR / "memory.db"
 
 # Base onchain leg (M3). Values from project memory / verified live.
 BASE_RPC = "https://mainnet.base.org"
-AGENT_WALLET_KEY = Path("/opt/data/.secrets/agent-wallet.key")
-X402_ESCROW = "0x0552800000000000000000000000000000000000"  # confirm exact in M3
-FEE_RECIPIENT = "0xf8f96d"  # both chains, quoteOnlyFees
+AGENT_WALLET_KEY = Path(os.environ.get(
+    "DEJAVU_WALLET_KEY", str(Path.home() / ".secrets" / "agent-wallet.key")
+))
+X402_ESCROW = "0x8AEE621035D93Deb3C0C1177fac252dC2dd501a0"
+FEE_RECIPIENT = "0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83"
 BASE_EXPLORER = "https://basescan.org/tx/"
 
 

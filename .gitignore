@@ -41,3 +41,6 @@ _ci_annotations.py
 demo/_frames_fleet/
 demo/_segments_fleet/
 demo/.post06_checkpoint.json
+demo/_frames_spine/
+demo/_segments_spine/
+demo/continuous_gate.gif
