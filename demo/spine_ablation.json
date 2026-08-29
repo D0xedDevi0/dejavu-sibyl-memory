@@ -1,0 +1,43 @@
+{
+  "crises": 12,
+  "seed": 1337,
+  "capital_with_memory": 0.8176,
+  "capital_without_memory": 0.4887,
+  "capital_preserved_multiple": 1.67,
+  "mean_return_memory_pct": -1.65,
+  "mean_return_no_memory_pct": -5.625,
+  "loss_averted_pp": 3.975,
+  "avg_equity_memory": 0.285,
+  "avg_equity_no_memory": 0.55,
+  "asset_survived_all_crises": true,
+  "identity_stable_all_crises": true,
+  "identity_churn_without_memory": 1,
+  "capital_curve_memory": [
+    0.967,
+    0.967,
+    0.9351,
+    0.9351,
+    0.9042,
+    0.9042,
+    0.8744,
+    0.8744,
+    0.8455,
+    0.8455,
+    0.8176,
+    0.8176
+  ],
+  "capital_curve_no_memory": [
+    0.8875,
+    0.8875,
+    0.7877,
+    0.7877,
+    0.699,
+    0.699,
+    0.6204,
+    0.6204,
+    0.5506,
+    0.5506,
+    0.4887,
+    0.4887
+  ]
+}

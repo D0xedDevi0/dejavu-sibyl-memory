@@ -104,6 +104,25 @@ with money attached.
 
 `tests/test_sovereign.py` (11) + `tests/test_spine.py` (1) pin all of it.
 
+### The measured gate (spine ablation benchmark)
+
+Not a claim — a number. `demo/spine_ablation.py` runs the REAL spine across 12
+crises (seed 1337), once WITH memory (persisted store), once WITHOUT (wiped/empty
+store), and applies the same crisis P&L model:
+
+| Metric | WITH memory | WITHOUT (wiped) |
+|---|---|---|
+| Capital after 12 crises | **0.82** | **0.49** |
+| Capital preserved | **1.67×** | — |
+| Mean crisis return | **−1.65%** | **−5.63%** |
+| Avg equity exposure | 0.285 | 0.55 |
+| Asset survived all crises | ✅ YES | n/a |
+| Identity stable across boxes | ✅ YES | **churns to new being** |
+| Loss averted | **+3.98pp** | — |
+
+Reproduce: `python demo/spine_ablation.py` → `demo/spine_ablation.json` +
+`demo/spine_gate_figure.png`. `tests/test_spine_ablation.py` pins the gate.
+
 ---
 
 ## What it does
@@ -251,7 +270,7 @@ From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx bloc
 Sibyl's recent posts flex **graph-structured relational memory**, **perfect recall
 at scale** (191k records / 365-day simulation, 350/350), and a coming
 **"Sovereign" 100% compliance guarantee**. This build now meets all three head-on
-(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 70 tests total):
+(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 72 tests total):
 
 - 🕸 **Relational board** — typed edges written into Sibyl's *native*
   `entity_relations` table (the client exposes no relation API, so we drive the
@@ -289,7 +308,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 70 tests (64 core + 6 optional NEURAL_MESH-backend)
+pip install -e ".[test]" && pytest            # 72 tests (66 core + 6 optional NEURAL_MESH-backend)
 
 # THE SPINE (headline — five layers, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint -> same-being
