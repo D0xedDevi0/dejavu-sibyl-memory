@@ -87,6 +87,7 @@ naive → −18% again.
 |---|---|
 | Live tx (status 1, memory-loaded de-risk) | `0x5175ae5a244b907753cacca9d529c87042ee11332c6e05cf4624d9016d4793dd` · [basescan](https://basescan.org/tx/0x5175ae5a244b907753cacca9d529c87042ee11332c6e05cf4624d9016d4793dd) · block 50108439 |
 | Live tx (wallet op) | `0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a` · block 50104833 |
+| **THE SPINE sovereign mint (LIVE, status 1)** | `0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7` · block 50608909 — memory root committed in `data` |
 | Code | `src/dejavu/base_action.py` — `eth_account` sign + `eth_sendRawTransaction` |
 | Reproduce | `DEJAVU_DRY_RUN=0 dejavu --crisis` (captures hash) |
 
