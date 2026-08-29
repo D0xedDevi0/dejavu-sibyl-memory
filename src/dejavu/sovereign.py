@@ -3,8 +3,8 @@
 This is the spine of the upgraded hackathon entry. It makes Sibyl's own framing
 ("the memory as a dynamic data layer") *literal and economic*:
 
-  (1) CONTENT-ADDRESSED ROOT — the entire store (WARM entities + COLD journal +
-      graph edges) folds into one deterministic SHA-256 root. Memory has a
+  (1) CONTENT-ADDRESSED ROOT — the entire store (WARM + ARCH entities, COLD
+      journal, and graph edges) folds into one deterministic SHA-256 root. Memory has a
       fingerprint; it can be compared, ported, and committed.
 
   (2) IDENTITY = MEMORY — an agent's identity hash is derived purely from its
@@ -60,10 +60,13 @@ def memory_root(memory: Memory, *, include_journal: bool = True) -> dict:
     digest. Deterministic for a given store (ordering is canonicalized), so two
     identical stores produce identical roots and any single-row change flips it.
     """
-    # WARM entities, canonical order by (category, name).
+    # WARM + ARCH entities, canonical order by (category, name). ARCH is a
+    # recoverable storage tier, not content destruction, so moving an entity
+    # between WARM and ARCH must preserve the sovereign full-store root.
     entities = memory.list_entities(limit=100000)
+    archived = memory.list_archived()
     ent_parts = []
-    for e in entities:
+    for e in [*entities, *archived]:
         ent_parts.append(f"{e.get('category')}|{e.get('name')}|"
                          f"{json.dumps(e.get('body'), sort_keys=True, default=str)}")
     ent_digest = _h("\n".join(sorted(ent_parts)))
@@ -101,6 +104,7 @@ def memory_root(memory: Memory, *, include_journal: bool = True) -> dict:
         "root": root,
         "tenant": tenant,
         "entities": len(entities),
+        "archived_entities": len(archived),
         "journal_rows": (len(events) if include_journal else 0),
         "edges": len(edge_parts),
     }
@@ -187,17 +191,18 @@ def sovereign_mint(memory: Memory, config: Config, *,
     """
     r = memory_root(memory)
     ident = identity(memory)
-    acct = base_action._load_account(config)
-    owner_addr = owner or acct.address
     data_hex = "0x" + bytes.fromhex(r["root"]).hex()  # 32-byte root in calldata
 
     if config.dry_run:
         return MintReceipt(
             dry_run=True, root=r["root"], identity_id=ident["id"],
-            owner=owner_addr, details={"chain_id_hint": "8453 (Base)",
-                                       "data_hex_len": len(data_hex)},
+            owner=owner or "unbound-dry-run",
+            details={"chain_id_hint": "8453 (Base)",
+                     "data_hex_len": len(data_hex)},
         )
 
+    acct = base_action._load_account(config)
+    owner_addr = owner or acct.address
     signed = _commit_tx(config, data_hex)
     tx_hash = base_action._broadcast(config.rpc_url, signed)
     return MintReceipt(

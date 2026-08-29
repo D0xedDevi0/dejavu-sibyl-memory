@@ -9,7 +9,7 @@ import os
 import pytest
 
 from dejavu.agent import run_sessions, session_b
-from dejavu.base_action import _load_account, execute
+from dejavu.base_action import _load_account, _transaction_target, execute
 from dejavu.config import Config
 from dejavu.memory import Memory
 
@@ -37,6 +37,13 @@ def test_execute_hold_action_for_naive():
     r = execute(_B(), _tmp_config())
     assert r.action == "hold"
     assert r.dry_run is True
+
+
+def test_de_risk_and_hold_have_distinct_transaction_targets():
+    sender = "0x23129c0472172D75bEd1e6dd061301796760Ecd9"
+    recipient = "0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83"
+    assert _transaction_target("de_risk", sender, recipient) == recipient
+    assert _transaction_target("hold", sender, recipient) == sender
 
 
 def test_run_sessions_includes_onchain_receipt():

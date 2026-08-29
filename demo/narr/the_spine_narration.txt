@@ -1,0 +1,28 @@
+# THE SPINE demo video — narration manifest (deep, confident narrator)
+# Voice: edge-tts en-US-BrianNeural, rate -4%, pitch -4Hz (the deep/confident D0xed voice).
+# Rebuild narration: python3 _gen_narr.py
+# One segment per scene, matching build_video_spine.py SCENES.
+
+01_open   The agent does not have memory. The memory IS the agent. It owns itself, earns from itself, and writes itself. This is THE SPINE.
+
+02_problem A lone agent forgets. Every session is a clean slate, so every loss is re-learned. Same naive call. Same eighteen percent drawdown. That is the cost of forgetting.
+
+03_sovereign The memory is a sovereign asset. Content-addressed, committed on-chain to Base. Wipe the store, and the memory is orphaned. The asset is gone.
+
+04_gate    Watch, live and unedited. A fresh process writes a lesson. A second fresh process recalls it, and de-risks. Then we delete the store — and a third process finds nothing.
+
+05_sessionB But with memory loaded, it recalls the lesson, flips the book, and executes a real Base transaction. Verified on-chain. Status one.
+
+06_identity Same box, same store, same being. Wipe the store, and the identity changes. The memory does not just inform who it is. It defines who it is.
+
+07_dream    And the memory writes itself. The learner mines the journal, spots the pattern, and proposes a skill the agent accepts. Recall, consolidate, get sharper.
+
+08_commons  The memory is a shared commons. A fleet of agents coordinates through one Sibyl store. No agent talks to another. The memory is the only thing they share.
+
+09_regret   And it remembers the road not taken. The mistakes it never made. The losses it avoided. Memory, even of what did not happen.
+
+10_temporal The memory is a time-bound layer. It knows when a belief was formed, reinforces what is useful, and archives the stale. Strategic forgetting, not amnesia.
+
+11_earns    And it earns. A paid read of this memory settles on-chain. Real USDC, real transaction. The memory is not a database. It is an economy.
+
+12_close    Forgetting is a bug. Remembering is the strategy. THE SPINE. NEURAL_MESH, times, Sibyl Memory.

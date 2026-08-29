@@ -38,6 +38,15 @@ def _is_valid_address(a: str) -> bool:
             and all(c in "0123456789abcdefABCDEF" for c in a[2:]))
 
 
+def _transaction_target(action: str, sender: str, fee_recipient: str) -> str:
+    """Return an onchain-distinct target for each policy branch."""
+    if action == "de_risk":
+        if not _is_valid_address(fee_recipient):
+            raise ValueError("de_risk requires a valid fee recipient address")
+        return fee_recipient
+    return sender
+
+
 @dataclass
 class OnchainReceipt:
     dry_run: bool
@@ -105,10 +114,7 @@ def execute(book, config: Config) -> OnchainReceipt:
 
     # ---- real broadcast --------------------------------------------------
     acct = _load_account(config)
-    # feeRecipient may be a short/placeholder form; only use it if valid.
-    to = acct.address  # self-transfer is the safe, always-valid default
-    if action == "de_risk" and _is_valid_address(config.fee_recipient):
-        to = config.fee_recipient
+    to = _transaction_target(action, acct.address, config.fee_recipient)
     chain_id = int(_rpc(config.rpc_url, "eth_chainId", []), 16)
     nonce = int(_rpc(config.rpc_url, "eth_getTransactionCount", [acct.address, "latest"]), 16)
     gas_price = int(_rpc(config.rpc_url, "eth_gasPrice", []), 16)

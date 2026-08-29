@@ -1,7 +1,7 @@
 // x402 paid memory-query endpoint — THE SPINE "memory earns" layer.
 // Self-contained handler (Bankr sandbox). On payment ($0.01 USDC, GET) it
-// returns a verifiable read of the sovereign memory: the onchain-committed
-// root, the 5-layer state, and the de-risk verdict. The response is tied to the
+// returns a verifiable proof snapshot of the sovereign memory: the onchain-
+// committed root, six-layer state, and measured de-risk verdict. The response is tied to the
 // real committed memory root (onchain tx, Base).
 //
 // Verify the data is real: the root below matches the sovereign mint committed
@@ -16,6 +16,7 @@ const ASSET_RESOLVES = true;
 export default async function handler(req: Request) {
   // Signed x402 request — payment already verified by Bankr facilitator.
   const memoryState = {
+    artifact_type: "onchain-verifiable proof snapshot",
     framework: "THE SPINE — memory as an ownable, self-authoring data layer",
     layers: {
       L1_sovereign: "memory root committed onchain (Base) — asset orphaned on wipe",
@@ -23,6 +24,7 @@ export default async function handler(req: Request) {
       L3_dream: "writes its own new skills while idle (Learner)",
       L4_commons: "team remembers through one shared pool",
       L5_regret: "remembers the road not taken",
+      L6_temporal: "time-bound recall + recoverable strategic archive",
     },
     committed_root: MEMORY_ROOT,
     onchain: {

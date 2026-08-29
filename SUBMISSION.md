@@ -1,62 +1,79 @@
-# Sibyl Memory Hackathon — SUBMISSION (draft, ready to file Sep 1–10)
+# Sibyl Memory Hackathon — SUBMISSION
 
-> Fill + submit during the build window. Everything below is final copy —
-> paste straight into the form / build page. Verified 2026-08-28 (bench-alignment upgrades + demo v3 included).
+> Canonical submission copy for the September 1–10 build window. Verify every
+> public link and timestamp again immediately before marking the build ready.
 
 ## Form fields
 
 - **Team name:** NEURAL_MESH
-- **Build page slug:** neural-mesh-eea5
+- **Build page slug:** `neural-mesh-eea5`
 - **Contact email:** d0xeddev@agentmail.to
-- **Repo (public, MIT):** https://github.com/D0xedDevi0/dejavu-sibyl-memory
-- **Demo video (submission artifact):** https://github.com/D0xedDevi0/dejavu-sibyl-memory/blob/main/demo/demo_video_v2.mp4
-  (4:42, narrated; fresh-session recall beat at ~0:45 — allocator cold-starts on an empty store; graph/scale ~2:30, audit chain ~3:05)
-- **Partner stacks:** Base · Virtuals Protocol (x1.25 multiplier)
+- **Repository (public, MIT):** https://github.com/D0xedDevi0/dejavu-sibyl-memory
+- **Demo video:** `demo/demo_the_spine.mp4` (canonical final cut after the required continuous-capture insert)
+- **Partner stack claimed now:** Base
+- **Virtuals:** implemented/registered integration is documented, but claim the multiplier only if a real ACP job is visibly exercised in the final demo
 - **Team size:** 1
 
-## Project tagline (one-liner)
+## Project tagline
 
-> THE FLEET — memory as a **dynamic data layer**: a team of specialist agents
-> coordinated by ONE shared Sibyl Memory store. Delete the memory and the team
-> falls apart.
+> THE SPINE turns Sibyl Memory into the agent's identity, decision layer,
+> coordination commons, evolving skill system, temporal record, sovereign asset,
+> and paid data product. Delete it and the agent materially fails.
 
-## Idea / description (form "idea" field)
+## Idea / description
 
-Not one agent that remembers — a TEAM that remembers. News and risk agents
-write their views of the world to a single shared Sibyl Memory store; the
-allocator agent cold-starts with zero context and reads only that board to
-coordinate a de-risk decision that fires as a real Base transaction. The
-load-bearing proof is executable: delete the shared store and the allocator
-reads an empty board, fails open to naive overweight equity, and loses the
-same money again (`pytest tests/test_fleet.py`). The fleet also self-evolves:
-a Learner mines its own shared journal and proposes skills the team accepts.
-78 tests green, real Base txs verified on mainnet, typed relational graph in Sibyl's native entity_relations, 1,385-record scale stress with 100% top-1 needle recall at 0.1 ms, a tamper-evident SHA-256 audit chain over the journal, PLUS the Sovereign/Identity/Dream/Regret/Temporal spine layers — every number measured
-(seed 1337). Single-agent `dejavu` loop included as documented fallback lane.
+Autonomous trading-agent operators lose compounding knowledge every time an
+agent cold-starts without durable state. THE SPINE makes Sibyl Memory
+load-bearing: Session A records a crisis lesson; a fresh Session B opens the
+same Sibyl store with zero conversation history, recalls the lesson, and cuts
+equity exposure from 0.55 to 0.05. Delete the store and the same frame falls
+back to the naive 0.55 book.
 
-## Rubric mapping (judge cheat-sheet: docs/judge.md)
+The same store forms a six-layer dynamic data system: L1 Sovereign commits its
+content root on Base; L2 Identity derives the agent identity from that root; L3
+Dream converts recurring journal patterns into skills; L4 Commons coordinates
+specialist agents through one shared pool; L5 Regret records avoided outcomes;
+and L6 Temporal tracks belief formation and strategically moves stale knowledge
+to a recoverable archive. A live x402 endpoint sells an onchain-verifiable
+proof snapshot for $0.01 USDC, with two successful Base settlement receipts.
 
-| Rubric | Our proof |
+Measured deletion gate (seed 1337): capital 0.82 with memory versus 0.49 after
+wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
+
+## Verifiable proof
+
+- **Sovereign root anchor:** https://basescan.org/tx/0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7
+- **x402 settlement 1 (0.01 USDC):** https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5
+- **x402 settlement 2 (0.01 USDC):** https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93
+- **Live HTTP 402 endpoint:** https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query
+- **Executable deletion gate:** `tests/test_loadbearing.py`, `tests/test_spine.py`, `tests/test_spine_ablation.py`
+
+## Rubric mapping
+
+| Rubric | Proof |
 |---|---|
-| Load-bearing 40 | `tests/test_fleet.py` deletion gate — empty board → naive 0.55 vs coordinated 0.05 |
-| Innovation 25 | multi-agent coordination *through* memory (no agent-to-agent calls) + Lane 4 self-evolution |
-| Technical 20 | 78 tests, typed facade over real SDK, tenant-correct Learner wiring, native entity_relations graph, 0.1 ms scale recall, tamper-evident audit chain, Sovereign/Regret/Temporal spine layers |
-| Pitch 15 | 4:42 narrated video (11 scenes incl. graph/scale + audit), judge cheat-sheet, reproducible builder checked in |
-| PMF bonus +10 | D0xedDev production hub on Base; Virtuals ACP agent registered |
+| Load-bearing 40 | Continuous fresh-session recall/deletion segment plus executable tests: memory → equity 0.05; wipe → 0.55 |
+| Innovation 25 | One Sibyl store is identity, sovereign asset, skill author, shared commons, regret record, temporal archive, and paid proof layer |
+| Technical 20 | Six-layer canonical arc, deterministic content root, Base receipts, x402 EIP-3009 settlements, reproducible seeded ablation, automated tests |
+| Pitch 15 | One THE SPINE narrative, canonical 2–5 minute video, judge proof table, source-linked receipts |
+| PMF bonus | Claim only with a public design-partner/pilot artifact tied to this product |
 
-## Pre-submit checklist (do these Sep 1–10)
+## Prior Work declaration
 
-- [ ] Re-run `pip install -e ".[test]" && pytest` → 78 passed
-- [ ] Re-run `.venv/bin/python -m dejavu-fleet --crisis --learn` → live proof output
-- [ ] Confirm repo public + MIT license visible
-- [ ] Upload/attach fleet_video.mp4 wherever the form wants media
-- [ ] Post 2 public posts tagging @sibylcap + @base + @virtuals_io
-      (3 already drafted in demo/post-0*.md — refresh dates before posting)
-- [ ] Verify build page shows updated links (D0xedDevi0 canonical)
+- **Prior substrate:** MacroBench policy logic and the existing D0xedDev/NEURAL_MESH agent infrastructure.
+- **Entry work:** Sibyl persistence/recall, deletion gate, shared-memory fleet, self-learning loop, Sovereign/Identity/Regret/Temporal layers, Base anchoring, x402 paid proof, benchmarks, tests, and submission media.
+- Commit history is intentionally preserved. Organizer clarification on pre-window prototyping should be attached if requested.
 
-## Registration re-run (if ever needed) — Playwright Python
+## Final pre-submit checklist
 
-Next.js server action; MUST wait for React hydration (wait_until="load" + ~2.5s)
-before filling+clicking, else "session expired." Chromium at
-/opt/data/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome via
-/opt/data/.venv-pw/bin/python. Fields: team, email, size, partnerStacks
-(Base / "Virtuals Protocol"), idea. Submit = form button[type=submit].
+- [ ] Organizer confirms treatment of work/prototypes created before September 1
+- [ ] Final demo contains one continuous unedited fresh-session recall segment with on-screen UTC timestamp and commit hash
+- [ ] `pip install -e ".[test]" && pytest` passes from a clean clone
+- [ ] GitHub Actions is green on the canonical D0xedDevi0 repository
+- [ ] Final demo URL opens without authentication and all judge timestamps match
+- [ ] Repository is public and MIT license is visible
+- [ ] At least two qualifying public posts are live during the official window, tagging `@sibylcap` and every partner actually claimed
+- [ ] Virtuals is either visibly exercised in the demo or removed from claimed partner multipliers
+- [ ] One public PMF/design-partner artifact is linked if bonus points are claimed
+- [ ] Build page `neural-mesh-eea5` is read back and verified before final submit
+- [ ] Mark ready before September 10, 23:59 UTC

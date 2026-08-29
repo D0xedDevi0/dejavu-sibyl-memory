@@ -1,4 +1,4 @@
-"""Tests for the fused Sovereign Memory spine (five layers, one arc)."""
+"""Tests for the fused Sovereign Memory spine (six layers, one arc)."""
 
 from __future__ import annotations
 
@@ -19,6 +19,10 @@ def test_spine_arc_full(tmp_path):
     assert out["query_ledger"]["earned_wei"] > 0
     # L5: regret urgency is nonzero after a regret was written
     assert out["regret_urgency"] > 0.0
+    # L6: temporal consolidation is exercised in the canonical arc
+    assert out["consolidated"] == 0
+    assert out["consolidation_retained"] >= 1
+    assert out["archive_recoverable"] == 0
     # policy: with memory -> de-risk floor
     assert out["book_with_memory_equity"] <= 0.05
     # wipe: asset orphaned, new identity, back to naive

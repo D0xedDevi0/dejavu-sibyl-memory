@@ -1,11 +1,11 @@
-"""THE SPINE — the fused five-layer Sovereign Memory system, run as one story.
+"""THE SPINE — the fused six-layer Sovereign Memory system, run as one story.
 
-This is the upgraded headline for the hackathon: not five features, one spine.
+This is the upgraded headline for the hackathon: not six features, one spine.
 
     The agent doesn't *have* memory. The memory IS the agent — and it owns
     itself, earns from itself, and writes itself.
 
-Five layers, one system:
+Six layers, one system:
     L1 Sovereign   — memory root is committed onchain (ownable asset).    [sovereign.py]
     L2 Identity    — the agent IS its memory (portable across boxes).     [sovereign.py]
     L3 Dream       — memory authors new skills while idle (Learner/DREAM).[memory.py]
@@ -42,7 +42,7 @@ def _w(s: str) -> None:
 
 
 def run_arc(db: str | Path = DEFAULT_DB, *, dry_run: bool = True) -> dict:
-    """Run the full five-layer arc and return a dict of every stage's proof."""
+    """Run the full six-layer arc and return a dict of every stage's proof."""
     db = Path(db)
     db.parent.mkdir(parents=True, exist_ok=True)
     cfg = Config(db_path=db, dry_run=dry_run)
