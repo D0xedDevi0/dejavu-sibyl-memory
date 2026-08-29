@@ -9,7 +9,9 @@
 - **Build page slug:** `neural-mesh-eea5`
 - **Contact email:** d0xeddev@agentmail.to
 - **Repository (public, MIT):** https://github.com/D0xedDevi0/dejavu-sibyl-memory
-- **Demo video:** `demo/demo_the_spine.mp4` (canonical final cut after the required continuous-capture insert)
+- **Demo video:** https://github.com/D0xedDevi0/dejavu-sibyl-memory/raw/refs/heads/main/demo/demo_the_spine.mp4 (2:39 canonical final cut)
+- **Demo-video post:** https://x.com/D0xedDevi0/status/2093773724596175008
+- **Build-log post:** https://x.com/D0xedDevi0/status/2093773782255342027
 - **Partner stack claimed now:** Base
 - **Virtuals:** implemented/registered integration is documented, but claim the multiplier only if a real ACP job is visibly exercised in the final demo
 - **Team size:** 1
@@ -67,13 +69,13 @@ wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
 ## Final pre-submit checklist
 
 - [ ] Organizer confirms treatment of work/prototypes created before September 1
-- [ ] Final demo contains one continuous unedited fresh-session recall segment with on-screen UTC timestamp and commit hash
-- [ ] `pip install -e ".[test]" && pytest` passes from a clean clone
-- [ ] GitHub Actions is green on the canonical D0xedDevi0 repository
-- [ ] Final demo URL opens without authentication and all judge timestamps match
-- [ ] Repository is public and MIT license is visible
-- [ ] At least two qualifying public posts are live during the official window, tagging `@sibylcap` and every partner actually claimed
-- [ ] Virtuals is either visibly exercised in the demo or removed from claimed partner multipliers
+- [x] Final demo contains one continuous unedited fresh-session recall segment with on-screen UTC timestamp and commit hash
+- [x] `pip install -e ".[test]" && pytest` passes from a clean clone
+- [x] GitHub Actions is green on the canonical D0xedDevi0 repository
+- [x] Final demo URL opens without authentication and all judge timestamps match
+- [x] Repository is public and MIT license is visible
+- [x] At least two qualifying public posts are live, tagging `@sibylcap` and the partner actually claimed (`@base`)
+- [x] Virtuals was removed from the claimed multiplier because it is not visibly exercised in the final demo
 - [ ] One public PMF/design-partner artifact is linked if bonus points are claimed
 - [ ] Build page `neural-mesh-eea5` is read back and verified before final submit
 - [ ] Mark ready before September 10, 23:59 UTC

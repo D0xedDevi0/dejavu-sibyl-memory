@@ -13,6 +13,10 @@
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
 
+**Final public proof:** [2:39 demo-video post](https://x.com/D0xedDevi0/status/2093773724596175008)
+· [measured build-log post](https://x.com/D0xedDevi0/status/2093773782255342027)
+· [canonical demo file](demo/demo_the_spine.mp4).
+
 **The headline is THE SPINE** — six layers, one system:
 
 > **The agent doesn't *have* memory. The memory IS the agent — and it owns
