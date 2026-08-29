@@ -1,9 +1,16 @@
-# THE FLEET — the team that remembers (dejavu)
+# THE FLEET — memory as a dynamic data layer (dejavu)
 
 **NEURAL_MESH × Sibyl Memory** · Sibyl Memory Hackathon (hack.sibyllabs.org) ·
 [github.com/D0xedDevi0/dejavu-sibyl-memory](https://github.com/D0xedDevi0/dejavu-sibyl-memory)
 
 > *"Forgetting is a bug. Remembering is the strategy."*
+
+> **The framing, in Sibyl's own words:** *"any application that utilizes the memory
+> as a dynamic data layer is applicable."* That is exactly what this is. The shared
+> Sibyl store is not a filing cabinet — it is a **live, typed, tamper-evident data
+> layer** that specialist agents write to and read from as their coordination
+> substrate. Delete it and the team stops coordinating. Memory isn't decoration;
+> it *is* the application.
 
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
