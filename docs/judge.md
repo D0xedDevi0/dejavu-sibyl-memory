@@ -128,10 +128,16 @@ naive → −18% again.
 | Decision changed | — | **75%** | `demo/ablation_results.json` |
 | Capital after 12 crises | $0.29 | **$0.90** | `demo/advanced_analysis.json` / `growth_curve.png` |
 
-**THE SPINE gate (measured economic deletion):** `demo/spine_ablation.py` (seed 1337):
+| **THE SPINE gate (measured economic deletion):** `demo/spine_ablation.py` (seed 1337):
 capital preserved **0.82 vs 0.49 (1.67×)** · mean return −1.65% vs −5.63% · asset
 survives + identity stable WITH memory; **identity churns to a new being on wipe**.
 `demo/spine_gate_figure.png` · `tests/test_spine_ablation.py`.
+
+**THE SPINE layers (all tested):** L1 Sovereign (onchain mint, live tx block
+50608909) · L2 Identity (same store = same being) · L3 Dream (Learner authors
+skills) · L4 Commons (shared pool) + paid x402 memory-query endpoint (live,
+HTTP 402) · L5 Regret (road not taken) · L6 Temporal (as-of recall + strategic
+forgetting to ARCH, recoverable). `tests/test_temporal.py` (6) pins L6.
 
 All seeds fixed (1337), honest numbers — no fabricated judge output.
 

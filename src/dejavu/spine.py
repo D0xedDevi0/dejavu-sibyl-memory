@@ -11,6 +11,7 @@ Five layers, one system:
     L3 Dream       — memory authors new skills while idle (Learner/DREAM).[memory.py]
     L4 Commons     — many agents coordinate through one shared pool.      [fleet.py]
     L5 Regret      — memory of the road not taken.                        [regret.py]
+    L6 Temporal    — memory knows WHEN + strategic forgetting to ARCH.    [temporal.py]
 
 `run_arc()` executes the whole thing as one continuous demo arc (session A learns
 -> counterfactual -> sovereign mint -> fresh box same being -> dream a skill ->
@@ -112,6 +113,20 @@ def run_arc(db: str | Path = DEFAULT_DB, *, dry_run: bool = True) -> dict:
     out["regret_urgency"] = regret_urgency(mem2, ["road not taken would have lost"])
     mem2.close()
 
+    # ---- L6: temporal memory + strategic forgetting (the dynamic layer) ---
+    # The agent remembers WHEN it knew things, forgets stale lessons ON PURPOSE
+    # (to ARCH, recoverable), and keeps the live store lean. This is deliberate,
+    # auditable forgetting — NOT the wipe (which is destructive).
+    from .temporal import consolidate, reconstruct_past, touch_lesson
+    try:
+        touch_lesson(mem, "crisis-1", note="reinforced in this arc")
+        consol = consolidate(mem, max_age_days=7)  # crisis-1 is fresh -> retained
+        out["consolidated"] = consol["archived"]
+        out["consolidation_retained"] = consol["retained"]
+        out["archive_recoverable"] = len(reconstruct_past(mem))
+    except Exception as e:  # pragma: no cover
+        out["consolidation_error"] = str(e)
+
     # ---- policy: with memory it de-risks ---------------------------------
     lessons = mem.recall_lessons(["credit stress crisis lesson"])
     book_with = de_risk_book(len(lessons), risk=1.0)
@@ -145,6 +160,9 @@ def _fmt(out: dict) -> str:
     L.append(f"   L4 query ledger: {out['query_ledger']['earned_wei']} wei from "
              f"{out['query_ledger']['paid_queries']} paid queries")
     L.append(f"   L5 regret urgency: {out['regret_urgency']}")
+    L.append(f"   L6 consolidate: {out.get('consolidated', [])} archived, "
+             f"{out.get('consolidation_retained', 0)} retained (fresh stays, "
+             f"stale->ARCH, recoverable={out.get('archive_recoverable', 0)})")
     L.append(f"   WITH memory -> equity {out['book_with_memory_equity']} (de-risk)")
     L.append("   >>> DELETE STORE <<<")
     L.append(f"   asset orphaned: {out['asset_orphaned_after_wipe']}")
