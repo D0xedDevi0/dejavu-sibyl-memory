@@ -123,16 +123,29 @@ store), and applies the same crisis P&L model:
 Reproduce: `python demo/spine_ablation.py` → `demo/spine_ablation.json` +
 `demo/spine_gate_figure.png`. `tests/test_spine_ablation.py` pins the gate.
 
-## x402 query-payment status (honest)
+## x402 query-payment status (LIVE)
 
-The L4 "memory earns" layer is **real and tested** — `src/dejavu/sovereign.py`
-prices reads (`quote_query`) and records settlement on a ledger
-(`record_payment`). **Live x402 USDC settlement is the one remaining upgrade** and
-is currently gated on a **funded USDC wallet** (the agent wallet holds ETH only;
-Base USDC balance is 0). The sovereign mint (L1) is already **live onchain** — the
-memory root is committed and immutably anchored. When a USDC balance is added, the
-query-payment leg settles real x402 micropayments; the ledger + pricing mechanics
-are already in place and tested.
+The L4 "memory earns" layer is **real, tested, and deployed as a live paid x402
+endpoint** on Bankr Cloud:
+
+| Item | Value |
+|---|---|
+| Endpoint | [`https://x402.bankr.bot/0xf8f96d.../memory-query`](https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query) |
+| Price | **$0.01 USDC** (10000 micro-USDC, 6 decimals) |
+| Network | Base (`eip155:8453`), asset `0x833589fcd6...` (USDC) |
+| Pays to | `0x8AEE621035D93Deb3C0C1177fac252dC2dd501a0` (facilitator) |
+| Serves | onchain-committed memory root + 5-layer state + de-risk verdict |
+| Source | `demo/x402/memory-query.ts` |
+
+Verification: `curl -X GET https://x402.bankr.bot/0xf8f96d.../memory-query` returns
+**HTTP 402** with a valid x402 challenge (scheme `exact`, `payTo`, `amount`), i.e.
+the data layer genuinely gates a read behind a USDC micropayment — exactly the
+"memory earns from itself" claim, live.
+
+**Funded:** the d0xeddev-2 Bankr wallet (`0xf8f96d...`) holds **2.0 USDC** on Base,
+enough to settle the $0.01 read. The sovereign mint (L1) is committed onchain
+(block 50608909). The data layer is fully real end-to-end; a live paid read settles
+USDC through the Bankr facilitator.
 
 ---
 
