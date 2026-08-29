@@ -123,6 +123,17 @@ store), and applies the same crisis P&L model:
 Reproduce: `python demo/spine_ablation.py` → `demo/spine_ablation.json` +
 `demo/spine_gate_figure.png`. `tests/test_spine_ablation.py` pins the gate.
 
+## x402 query-payment status (honest)
+
+The L4 "memory earns" layer is **real and tested** — `src/dejavu/sovereign.py`
+prices reads (`quote_query`) and records settlement on a ledger
+(`record_payment`). **Live x402 USDC settlement is the one remaining upgrade** and
+is currently gated on a **funded USDC wallet** (the agent wallet holds ETH only;
+Base USDC balance is 0). The sovereign mint (L1) is already **live onchain** — the
+memory root is committed and immutably anchored. When a USDC balance is added, the
+query-payment leg settles real x402 micropayments; the ledger + pricing mechanics
+are already in place and tested.
+
 ---
 
 ## What it does
@@ -218,6 +229,11 @@ frame, different decision — **because of memory**.
 **Executed Base transaction (verified onchain, status 1):**
 [`0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a`](https://basescan.org/tx/0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a)
 (and `0x5175ae5a244b907753cacca9d529c87042ee11332c6e05cf4624d9016d4793dd`, block 50108439 — the memory-loaded de-risk)
+
+**THE SPINE sovereign mint (LIVE, status 1, block 50608909):**
+[`0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7`](https://basescan.org/tx/0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7)
+— the memory root `0x34dbf2...` committed onchain in `data`. The memory is an
+ownable, immutably-anchored asset.
 
 ## Measured evidence (ablation benchmark)
 Not one anecdote — a *measured claim*. `demo/ablation_benchmark.py` runs the real
