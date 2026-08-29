@@ -127,6 +127,11 @@ naive → −18% again.
 | Decision changed | — | **75%** | `demo/ablation_results.json` |
 | Capital after 12 crises | $0.29 | **$0.90** | `demo/advanced_analysis.json` / `growth_curve.png` |
 
+**THE SPINE gate (measured economic deletion):** `demo/spine_ablation.py` (seed 1337):
+capital preserved **0.82 vs 0.49 (1.67×)** · mean return −1.65% vs −5.63% · asset
+survives + identity stable WITH memory; **identity churns to a new being on wipe**.
+`demo/spine_gate_figure.png` · `tests/test_spine_ablation.py`.
+
 All seeds fixed (1337), honest numbers — no fabricated judge output.
 
 ## 6. LongMemEval resonance (credibility — same suite Sibyl ranks on)
