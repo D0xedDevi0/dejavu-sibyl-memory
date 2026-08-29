@@ -1,0 +1,12 @@
+{
+  "created_id": "2093660053928804619",
+  "confirmed_live": true,
+  "verified_via": "xcli search 'to:sibyl_labs_ dynamic data layer from:D0xedDevi0' 200, author_id 1224848681637117952 (@D0xedDevi0)",
+  "text": "@sibyl_labs_ memory as a dynamic data layer — the whole build. agents write to ONE shared Sibyl store; allocator cold-starts, reads it like a DB, decides. delete the store -> empty board -> naive. the data layer IS the coordination. @sibylcap",
+  "posted_at_utc": "Sat Aug 29 11:20:29 +0000 2026",
+  "url": "https://x.com/D0xedDevi0/status/2093660053928804619",
+  "attempts": [
+    {"i": 1, "newid_phantom": "1902021591959207936", "note": "phantom id grabbed by regex; real id via search = 2093660053928804619"}
+  ],
+  "note": "First xcli reply attempt succeeded (duplicate 187 on re-run proved it landed). The regex in fire_post06.py grabbed a phantom rest_id; authoritative confirmation is the search hit above."
+}

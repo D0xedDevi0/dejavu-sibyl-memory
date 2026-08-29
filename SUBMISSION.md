@@ -30,7 +30,7 @@ load-bearing proof is executable: delete the shared store and the allocator
 reads an empty board, fails open to naive overweight equity, and loses the
 same money again (`pytest tests/test_fleet.py`). The fleet also self-evolves:
 a Learner mines its own shared journal and proposes skills the team accepts.
-58 tests green, real Base txs verified on mainnet, typed relational graph in Sibyl's native entity_relations, 1,385-record scale stress with 100% top-1 needle recall at 0.1 ms, and a tamper-evident SHA-256 audit chain over the journal — every number measured
+70 tests green, real Base txs verified on mainnet, typed relational graph in Sibyl's native entity_relations, 1,385-record scale stress with 100% top-1 needle recall at 0.1 ms, a tamper-evident SHA-256 audit chain over the journal, PLUS the Sovereign/Identity/Dream/Regret spine layers — every number measured
 (seed 1337). Single-agent `dejavu` loop included as documented fallback lane.
 
 ## Rubric mapping (judge cheat-sheet: docs/judge.md)
@@ -39,13 +39,13 @@ a Learner mines its own shared journal and proposes skills the team accepts.
 |---|---|
 | Load-bearing 40 | `tests/test_fleet.py` deletion gate — empty board → naive 0.55 vs coordinated 0.05 |
 | Innovation 25 | multi-agent coordination *through* memory (no agent-to-agent calls) + Lane 4 self-evolution |
-| Technical 20 | 58 tests, typed facade over real SDK, tenant-correct Learner wiring, native entity_relations graph, 0.1 ms scale recall, tamper-evident audit chain |
+| Technical 20 | 70 tests, typed facade over real SDK, tenant-correct Learner wiring, native entity_relations graph, 0.1 ms scale recall, tamper-evident audit chain, Sovereign/Regret spine layers |
 | Pitch 15 | 4:42 narrated video (11 scenes incl. graph/scale + audit), judge cheat-sheet, reproducible builder checked in |
 | PMF bonus +10 | D0xedDev production hub on Base; Virtuals ACP agent registered |
 
 ## Pre-submit checklist (do these Sep 1–10)
 
-- [ ] Re-run `pip install -e ".[test]" && pytest` → 58 passed
+- [ ] Re-run `pip install -e ".[test]" && pytest` → 70 passed
 - [ ] Re-run `.venv/bin/python -m dejavu-fleet --crisis --learn` → live proof output
 - [ ] Confirm repo public + MIT license visible
 - [ ] Upload/attach fleet_video.mp4 wherever the form wants media
