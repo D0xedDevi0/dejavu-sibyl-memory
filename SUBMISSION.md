@@ -9,15 +9,16 @@
 - **Build page slug:** neural-mesh-eea5
 - **Contact email:** d0xeddev@agentmail.to
 - **Repo (public, MIT):** https://github.com/D0xedDevi0/dejavu-sibyl-memory
-- **Demo video:** https://github.com/D0xedDevi0/dejavu-sibyl-memory/blob/main/demo/fleet_video.mp4
-  (2:03, narrated; fresh-session recall beat at ~0:45 — allocator cold-starts on an empty store)
+- **Demo video (submission artifact):** https://github.com/D0xedDevi0/dejavu-sibyl-memory/blob/main/demo/demo_video_v2.mp4
+  (4:42, narrated; fresh-session recall beat at ~0:45 — allocator cold-starts on an empty store; graph/scale ~2:30, audit chain ~3:05)
 - **Partner stacks:** Base · Virtuals Protocol (x1.25 multiplier)
 - **Team size:** 1
 
 ## Project tagline (one-liner)
 
-> THE FLEET — a team of specialist agents coordinated by ONE shared Sibyl
-> Memory store. Delete the memory and the team falls apart.
+> THE FLEET — memory as a **dynamic data layer**: a team of specialist agents
+> coordinated by ONE shared Sibyl Memory store. Delete the memory and the team
+> falls apart.
 
 ## Idea / description (form "idea" field)
 

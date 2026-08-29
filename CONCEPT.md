@@ -7,6 +7,11 @@
 
 > "Forgetting is a bug." → **"Remembering is the strategy."**
 
+**Reframed for Sibyl's own language (8/29 post):** *"any application that utilizes
+the memory as a dynamic data layer is applicable."* Our FLEET is precisely that — the
+shared Sibyl store is the **live data layer** the agent team reads and writes as its
+coordination substrate. Memory isn't a lookup table bolted on; it *is* the app.
+
 ---
 
 ## Why this wins (map straight to the rubric)

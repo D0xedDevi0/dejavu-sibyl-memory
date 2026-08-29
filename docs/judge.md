@@ -3,9 +3,11 @@
 > Everything in one page. Each claim → exact file/line, test, tx hash, or video
 > timestamp. Reproduce any of it in under two minutes.
 >
-> **Pitch:** a *team* of specialist agents coordinated by **one shared Sibyl Memory
-> store** — delete the store and the team falls apart. The single-agent memory-dejavu
-> loop (`dejavu`) that inspired it is the documented fallback lane.
+> **Pitch:** memory as a *dynamic data layer*. A team of specialist agents is
+> coordinated by **one shared Sibyl Memory store** — they write to it and read from
+> it as their live coordination substrate; delete the store and the team falls
+> apart. The single-agent memory-dejavu loop (`dejavu`) that inspired it is the
+> documented fallback lane.
 
 ---
 
