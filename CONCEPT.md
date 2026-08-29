@@ -3,14 +3,16 @@
 **Build window: Sep 1–10, 2026 · Judging Sep 11–12 · Team: NEURAL_MESH**
 
 ## The one-liner
-**A self-improving autonomous agent whose decisions are *driven by* its own persistent memory — and it acts onchain (Base) because of what it remembers.**
+**An agent whose memory is an ownable, self-authoring data layer — it owns itself, earns from itself, and writes itself, and it acts onchain (Base) because of what it remembers.**
 
 > "Forgetting is a bug." → **"Remembering is the strategy."**
 
 **Reframed for Sibyl's own language (8/29 post):** *"any application that utilizes
-the memory as a dynamic data layer is applicable."* Our FLEET is precisely that — the
-shared Sibyl store is the **live data layer** the agent team reads and writes as its
-coordination substrate. Memory isn't a lookup table bolted on; it *is* the app.
+the memory as a dynamic data layer is applicable."* We took it all the way. The
+shared store isn't a lookup table — it's a **live data layer that is the agent**: it
+mints its own fingerprint onchain (Sovereign), defines the agent's identity (Identity),
+authors new skills from its own journal (Dream), coordinates a team through one pool
+(Commons), and remembers the road not taken (Regret). Five layers, one spine.
 
 ---
 
@@ -19,7 +21,7 @@ coordination substrate. Memory isn't a lookup table bolted on; it *is* the app.
 | Rubric band | How we score it |
 |---|---|
 | **Memory load-bearing (40)** | The agent's core function — deciding what to do with real money — *fails without Sibyl Memory*. Delete the layer → agent reverts to a naive, memory-less policy and makes the wrong onchain decision. Recall is competitive, not decorative. |
-| **Innovation (25)** | A **memory-dejavu loop**: the agent not only *recalls* prior state but *writes its own outcomes back*, so it compounds across sessions — it literally gets smarter the more it runs. Memory-to-decision-to-onchain-action is a closed loop nobody else in the field is shipping. |
+| **Innovation (25)** | A **memory-dejavu spine**: not just recall — the memory is a *sovereign asset* it mints onchain, *defines its identity*, *authors new skills* from its own journal, *coordinates a team* through one pool, and *remembers the road not taken*. Memory→decision→onchain is a closed loop, and the memory itself compounds. Nobody else is making memory an economic identity. |
 | **Technical execution (20)** | Clean, runnable twice, survives a curious judge. Real SQLite-backed Sibyl store (five-tier schema), real Base transaction in the demo, no smoke and mirrors. |
 | **Pitch (15)** | 2–5 min demo with an unmistakable **fresh-session recall beat** (split-screen: session A learns → session B cold-starts, recalls, and changes its trade). |
 

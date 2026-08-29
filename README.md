@@ -1,4 +1,4 @@
-# THE FLEET — memory as a dynamic data layer (dejavu)
+# THE SPINE — memory as an ownable, self-authoring data layer (dejavu)
 
 **NEURAL_MESH × Sibyl Memory** · Sibyl Memory Hackathon (hack.sibyllabs.org) ·
 [github.com/D0xedDevi0/dejavu-sibyl-memory](https://github.com/D0xedDevi0/dejavu-sibyl-memory)
@@ -6,23 +6,41 @@
 > *"Forgetting is a bug. Remembering is the strategy."*
 
 > **The framing, in Sibyl's own words:** *"any application that utilizes the memory
-> as a dynamic data layer is applicable."* That is exactly what this is. The shared
-> Sibyl store is not a filing cabinet — it is a **live, typed, tamper-evident data
-> layer** that specialist agents write to and read from as their coordination
-> substrate. Delete it and the team stops coordinating. Memory isn't decoration;
-> it *is* the application.
+> as a dynamic data layer is applicable."* We took it all the way. The memory isn't
+> a filing cabinet — it's a **live, typed, tamper-evident data layer that owns
+> itself, earns from itself, and writes itself.**
 
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
 
-**The headline is THE FLEET** — not one agent that remembers, a *team* of specialist
-agents (news, risk, allocator, executor) coordinated by **one shared Sibyl Memory
-store**. The single-agent memory-dejavu loop (`dejavu`) that inspired it is kept as
-the documented, test-covered fallback lane.
+**The headline is THE SPINE** — five layers, one system:
+
+> **The agent doesn't *have* memory. The memory IS the agent — and it owns
+> itself, earns from itself, and writes itself.**
+
+| Layer | What it proves | Module |
+|---|---|---|
+| **L1 Sovereign** | The memory root is committed **onchain (Base)** — memory is an ownable, content-addressed asset. Wipe it and you don't just lose a decision, you orphan-destroy the committed asset. | `src/dejavu/sovereign.py` |
+| **L2 Identity** | The agent **IS its memory** — a fresh box mounting the same store is the same being; wipe it and the identity changes. | `src/dejavu/sovereign.py` |
+| **L3 Dream** | Memory **authors new skills** from its own journal while idle (Learner/DREAM). It gets sharper the more it runs. | `src/dejavu/memory.py` |
+| **L4 Commons** | Many agents coordinate through **one shared pool** — a team that remembers together. | `src/dejavu/fleet.py` |
+| **L5 Regret** | Memory of the **road not taken** — it remembers the mistakes it never made. | `src/dejavu/regret.py` |
+
+**Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
+wiped-store naive fallback — see the **Run** section.
+
+> **THE FLEET (L4)** is retained as a first-class, fully-tested lane — the
+> multi-agent shared-memory blackboard that inspired the spine. See the FLEET
+> section below.
 
 ---
 
 ## THE FLEET (headline lane — multi-agent shared memory)
+
+> **Note:** THE FLEET is now layer **L4** of THE SPINE. It remains a fully-tested,
+> first-class lane and the original headline. The spine adds Sovereign (L1),
+> Identity (L2), Dream (L3), and Regret (L5) around it — but the shared-memory
+> coordination the fleet pioneered is the core of the whole system.
 
 Three specialist agents coordinate through ONE shared Sibyl store — **no direct
 agent-to-agent calls**. The shared memory *is* the coordination layer:
@@ -56,6 +74,35 @@ agent-to-agent calls**. The shared memory *is* the coordination layer:
 
 The original memory-dejavu loop — one agent whose own past lessons flip its decision.
 Kept fully wired as the safe, always-submittable floor.
+
+---
+
+## THE SPINE — five layers, one system
+
+`dejavu-sovereign` runs the whole thing as **one continuous arc** — not five demos,
+one story. A judge runs one command and sees all five layers:
+
+```bash
+dejavu-sovereign --crisis        # full spine arc (dry-run by default)
+DEJAVU_DRY_RUN=0 dejavu-sovereign  # broadcast the sovereign mint onchain
+```
+
+| Stage | What happens | Proof |
+|---|---|---|
+| **L5+L1** | Session A learns a lesson AND a regret (the road not taken: "would have lost 18%"). | `src/dejavu/regret.py::write_regret` |
+| **L1** | The store's content-addressed root is minted onchain (Base dust tx carrying the root in `data`). Memory = an ownable asset. | `src/dejavu/sovereign.py::sovereign_mint` |
+| **L4** | News/risk agents write views to the shared board; the allocator reads it. | `src/dejavu/fleet.py` |
+| **L3** | The Learner mines the journal and the agent accepts a **new skill** it wrote itself. | `src/dejavu/memory.py::learn` |
+| **L4** | The store **earns** — a paid query hits the ledger. | `src/dejavu/sovereign.py::record_payment` |
+| **L2** | A fresh box mounts the same store → **same being** (identity hash is content-derived). | `src/dejavu/sovereign.py::identity` |
+| **Wipe** | Delete the store → asset **orphaned**, identity **changes**, back to naive 0.55. | `src/dejavu/sovereign.py::asset_orphaned` |
+
+The economic deletion gate: **with memory** it de-risks to 0.015 equity; **delete the
+store** and you don't just lose the decision — the committed onchain asset is
+orphan-destroyed and the agent becomes a *different being*. That's memory-load-bearing
+with money attached.
+
+`tests/test_sovereign.py` (11) + `tests/test_spine.py` (1) pin all of it.
 
 ---
 
@@ -204,7 +251,7 @@ From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx bloc
 Sibyl's recent posts flex **graph-structured relational memory**, **perfect recall
 at scale** (191k records / 365-day simulation, 350/350), and a coming
 **"Sovereign" 100% compliance guarantee**. This build now meets all three head-on
-(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 58 tests total):
+(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 70 tests total):
 
 - 🕸 **Relational board** — typed edges written into Sibyl's *native*
   `entity_relations` table (the client exposes no relation API, so we drive the
@@ -242,9 +289,14 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 58 tests (52 core + 6 optional NEURAL_MESH-backend)
+pip install -e ".[test]" && pytest            # 70 tests (64 core + 6 optional NEURAL_MESH-backend)
 
-# THE FLEET (headline)
+# THE SPINE (headline — five layers, one arc)
+dejavu-sovereign --crisis                       # full arc: learn+regret -> mint -> same-being
+                                                #   -> dream a skill -> earn -> wipe -> orphan+naive
+DEJAVU_DRY_RUN=0 dejavu-sovereign               # broadcast the sovereign mint onchain
+
+# THE FLEET (L4 — multi-agent shared memory)
 dejavu-fleet --crisis                           # coordinated board -> de-risk (equity 0.05)
 dejavu-fleet --crisis --wipe                    # deleted brain -> naive (equity 0.55)
 dejavu-fleet --crisis --learn                   # + self-evolve: accept a discovered skill

@@ -3,11 +3,36 @@
 > Everything in one page. Each claim → exact file/line, test, tx hash, or video
 > timestamp. Reproduce any of it in under two minutes.
 >
-> **Pitch:** memory as a *dynamic data layer*. A team of specialist agents is
-> coordinated by **one shared Sibyl Memory store** — they write to it and read from
-> it as their live coordination substrate; delete the store and the team falls
-> apart. The single-agent memory-dejavu loop (`dejavu`) that inspired it is the
-> documented fallback lane.
+> **Pitch:** memory as an *ownable, self-authoring data layer*. Five layers, one
+> system — the agent doesn't *have* memory, the memory **IS** the agent and owns
+> itself, earns from itself, and writes itself. Wipe the store and you don't lose
+> a decision, you orphan-destroy a committed onchain asset and turn the agent into
+> a different being.
+
+---
+
+## 0. THE SPINE (headline — five layers, one arc)
+
+> **One command, one story:** `dejavu-sovereign --crisis`
+
+| Layer | Proof | Where | Verdict |
+|---|---|---|---|
+| L1 Sovereign | memory root committed onchain (ownable asset); wipe → **asset orphaned** | `src/dejavu/sovereign.py::sovereign_mint` / `asset_orphaned` | run it |
+| L2 Identity | same store = same being; wipe → **new identity** | `src/dejavu/sovereign.py::identity` / `is_same_being` | run it |
+| L3 Dream | Learner mines journal → agent accepts a **new skill** it wrote | `src/dejavu/memory.py::learn` · `dejavu-sovereign` L3 line | run it |
+| L4 Commons | news/risk → shared board → allocator (multi-agent coordination) | `src/dejavu/fleet.py` | run it |
+| L5 Regret | remembers the **road not taken** ("would have lost 18%") | `src/dejavu/regret.py::write_regret` / `recall_regrets` | run it |
+| L4 earn | store **earns** — paid query ledger | `src/dejavu/sovereign.py::record_payment` | run it |
+
+```bash
+pip install -e ".[test]" && pytest tests/test_sovereign.py tests/test_spine.py -v
+# 12 PASSED (root deterministic, identity=memory, mint, orphan-on-wipe, query ledger,
+#           write/recall regret, urgency scales, wiped -> zero urgency, full arc)
+```
+
+**The economic deletion gate:** with memory → de-risks to 0.015 equity; delete the
+store → asset orphaned + new identity + naive 0.55. Memory-load-bearing *with money
+attached* — the strongest version of the 40-point proof.
 
 ---
 
