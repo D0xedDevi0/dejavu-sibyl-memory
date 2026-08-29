@@ -25,6 +25,7 @@
 | **L3 Dream** | Memory **authors new skills** from its own journal while idle (Learner/DREAM). It gets sharper the more it runs. | `src/dejavu/memory.py` |
 | **L4 Commons** | Many agents coordinate through **one shared pool** — a team that remembers together. | `src/dejavu/fleet.py` |
 | **L5 Regret** | Memory of the **road not taken** — it remembers the mistakes it never made. | `src/dejavu/regret.py` |
+| **L6 Temporal** | Memory is a **time-bound, dynamic layer** — it knows *when* it knew things, answers point-in-time "as-of" recalls, and **strategically forgets** stale lessons to ARCH (recoverable). Deliberate, auditable forgetting — distinct from the destructive wipe. | `src/dejavu/temporal.py` |
 
 **Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
 wiped-store naive fallback — see the **Run** section.
@@ -94,6 +95,7 @@ DEJAVU_DRY_RUN=0 dejavu-sovereign  # broadcast the sovereign mint onchain
 | **L4** | News/risk agents write views to the shared board; the allocator reads it. | `src/dejavu/fleet.py` |
 | **L3** | The Learner mines the journal and the agent accepts a **new skill** it wrote itself. | `src/dejavu/memory.py::learn` |
 | **L4** | The store **earns** — a paid query hits the ledger. | `src/dejavu/sovereign.py::record_payment` |
+| **L6** | The memory **consolidates** — fresh lessons stay, stale ones go to ARCH (recoverable), so the live store stays lean and time-aware. | `src/dejavu/temporal.py::consolidate` |
 | **L2** | A fresh box mounts the same store → **same being** (identity hash is content-derived). | `src/dejavu/sovereign.py::identity` |
 | **Wipe** | Delete the store → asset **orphaned**, identity **changes**, back to naive 0.55. | `src/dejavu/sovereign.py::asset_orphaned` |
 
@@ -299,7 +301,7 @@ From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx bloc
 Sibyl's recent posts flex **graph-structured relational memory**, **perfect recall
 at scale** (191k records / 365-day simulation, 350/350), and a coming
 **"Sovereign" 100% compliance guarantee**. This build now meets all three head-on
-(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 72 tests total):
+(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 78 tests total):
 
 - 🕸 **Relational board** — typed edges written into Sibyl's *native*
   `entity_relations` table (the client exposes no relation API, so we drive the
@@ -337,7 +339,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 72 tests (66 core + 6 optional NEURAL_MESH-backend)
+pip install -e ".[test]" && pytest            # 78 tests (72 core + 6 optional NEURAL_MESH-backend)
 
 # THE SPINE (headline — five layers, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint -> same-being
