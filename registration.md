@@ -2,10 +2,11 @@
 
 - Team name: NEURAL_MESH
 - Build page slug: neural-mesh-eea5
-- Build link: https://hack.sibyllabs.org/team/enter?slug=neural-mesh-eea5&token=PASTE_BUILD_TOKEN
+- Build page slug: `neural-mesh-eea5` (the private edit token is intentionally not committed)
 - Contact email: d0xeddev@agentmail.to
 - Team size: 1
-- Partner stacks declared: Base, Virtuals Protocol  (x1.25 multiplier target)
+- Partner stacks registered: Base, Virtuals Protocol. Final submission claims
+  Base only unless a Virtuals-native job is visibly exercised in the demo.
 - Timeline: Registration open Aug 16-31 · Build window Sep 1-10 · Workshops Sep 5-7 · Judging Sep 11-12 · Winners Sep 13-15 (all UTC)
 - Prizes: $10k USDC top-5; 1st = $4k + Network School residency; 2nd = $2.5k + Base Support Program entry
 - Scoring: Builder Score = (Judge Score + PMF bonus) x Stack multiplier
