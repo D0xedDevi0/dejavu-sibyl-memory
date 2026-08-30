@@ -15,6 +15,8 @@
 | L4 Commons | Specialists coordinate through one shared Sibyl store without direct calls | `src/dejavu/fleet.py` |
 | L5 Regret | The store records avoided outcomes and the road not taken | `src/dejavu/regret.py` |
 | L6 Temporal | Beliefs carry time; stale lessons move to recoverable ARCH without changing the sovereign full-store root | `src/dejavu/temporal.py`, `tests/test_temporal.py`, `tests/test_sovereign.py::test_archiving_preserves_sovereign_root` |
+| L7 Sovereign Loop | Memory that knows it owns itself: the mint receipt is written back into the store (REFERENCE tier, folded into the root) so a fresh box's identity provably references its committed onchain root | `src/dejavu/sovereign.py::anchor_self`, `resolve_anchor`, `is_self_anchored` |
+| L8 Conflict | Write-time conflict resolution: a contradiction is superseded to ARCH + journaled (SUPERSEDES), never blindly overwritten; the full revision trail is reconstructable | `src/dejavu/supersede.py::supersede_entity`, `supersession_chain` |
 
 Run the canonical arc:
 
@@ -34,7 +36,8 @@ fails open to the naive **0.55** allocation.
 | Fresh-session read/write | `src/dejavu/memory.py::write_lesson`, `recall_lessons` |
 | Decision changes because of recall | `src/dejavu/policy.py::decide_differently` |
 | Destructive deletion test | `tests/test_loadbearing.py` |
-| Full six-layer arc test | `tests/test_spine.py` |
+| Full eight-beat arc test | `tests/test_spine.py` |
+| Self-referential anchor + supersession tests | `tests/test_sovereign_loop.py` |
 | Seeded economic ablation | `demo/spine_ablation.py`, `tests/test_spine_ablation.py` |
 
 Measured gate, seed 1337:
@@ -131,9 +134,11 @@ NEURAL_MESH backend tests skip cleanly when the sibling backend is unavailable.
 
 > THE SPINE makes Sibyl Memory load-bearing. A fresh agent recalls an earlier
 > crisis lesson and cuts risk from 0.55 to 0.05; deleting the store restores the
-> losing decision. That same store is a six-layer asset: identity, evolving
-> skills, team commons, regret, temporal archive, and a sovereign Base-anchored
-> proof that has already earned USDC through verified x402 settlements.
+> losing decision. That same store is a multi-layer asset: identity, evolving
+> skills, team commons, regret, temporal archive, a sovereign Base-anchored
+> proof that has already earned USDC through verified x402 settlements, a
+> self-referential loop where it remembers its own onchain anchor, and a
+> write-time conflict resolver that supersedes rather than overwrites.
 
 MIT licensed. Canonical repository:
 https://github.com/D0xedDevi0/dejavu-sibyl-memory

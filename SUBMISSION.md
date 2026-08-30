@@ -31,13 +31,16 @@ same Sibyl store with zero conversation history, recalls the lesson, and cuts
 equity exposure from 0.55 to 0.05. Delete the store and the same frame falls
 back to the naive 0.55 book.
 
-The same store forms a six-layer dynamic data system: L1 Sovereign commits its
+The same store forms a multi-layer dynamic data system: L1 Sovereign commits its
 content root on Base; L2 Identity derives the agent identity from that root; L3
 Dream converts recurring journal patterns into skills; L4 Commons coordinates
 specialist agents through one shared pool; L5 Regret records avoided outcomes;
-and L6 Temporal tracks belief formation and strategically moves stale knowledge
-to a recoverable archive. A live x402 endpoint sells an onchain-verifiable
-proof snapshot for $0.01 USDC, with two successful Base settlement receipts.
+L6 Temporal tracks belief formation and strategically moves stale knowledge to a
+recoverable archive; L7 Sovereign Loop makes the memory self-aware of its own
+onchain anchor (it remembers the Base root that committed it); and L8 Conflict
+resolves write-time contradictions by superseding the loser to ARCH rather than
+overwriting it. A live x402 endpoint sells an onchain-verifiable proof snapshot
+for $0.01 USDC, with two successful Base settlement receipts.
 
 Measured deletion gate (seed 1337): capital 0.82 with memory versus 0.49 after
 wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
@@ -48,22 +51,22 @@ wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
 - **x402 settlement 1 (0.01 USDC):** https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5
 - **x402 settlement 2 (0.01 USDC):** https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93
 - **Live HTTP 402 endpoint:** https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query
-- **Executable deletion gate:** `tests/test_loadbearing.py`, `tests/test_spine.py`, `tests/test_spine_ablation.py`
+- **Executable deletion gate:** `tests/test_loadbearing.py`, `tests/test_spine.py`, `tests/test_spine_ablation.py`, `tests/test_sovereign_loop.py`
 
 ## Rubric mapping
 
 | Rubric | Proof |
 |---|---|
 | Load-bearing 40 | Continuous fresh-session recall/deletion segment plus executable tests: memory → equity 0.05; wipe → 0.55 |
-| Innovation 25 | One Sibyl store is identity, sovereign asset, skill author, shared commons, regret record, temporal archive, and paid proof layer |
-| Technical 20 | Six-layer canonical arc, deterministic content root, Base receipts, x402 EIP-3009 settlements, reproducible seeded ablation, automated tests |
+| Innovation 25 | One Sibyl store is identity, sovereign asset, skill author, shared commons, regret record, temporal archive, self-referential onchain anchor, and paid proof layer |
+| Technical 20 | Eight-beat canonical arc, deterministic content root, Base receipts, x402 EIP-3009 settlements, reproducible seeded ablation, automated tests |
 | Pitch 15 | One THE SPINE narrative, canonical 2–5 minute video, judge proof table, source-linked receipts |
 | PMF bonus | Claim only with a public design-partner/pilot artifact tied to this product |
 
 ## Prior Work declaration
 
 - **Prior substrate:** MacroBench policy logic and the existing D0xedDev/NEURAL_MESH agent infrastructure.
-- **Entry work:** Sibyl persistence/recall, deletion gate, shared-memory fleet, self-learning loop, Sovereign/Identity/Regret/Temporal layers, Base anchoring, x402 paid proof, benchmarks, tests, and submission media.
+- **Entry work:** Sibyl persistence/recall, deletion gate, shared-memory fleet, self-learning loop, Sovereign/Identity/Regret/Temporal layers, self-referential onchain anchor, write-time conflict resolution, Base anchoring, x402 paid proof, benchmarks, tests, and submission media.
 - Commit history is intentionally preserved. Organizer clarification on pre-window prototyping should be attached if requested.
 
 ## Final pre-submit checklist

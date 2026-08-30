@@ -17,7 +17,8 @@
 · [measured build-log post](https://x.com/D0xedDevi0/status/2093773782255342027)
 · [canonical demo file](demo/demo_the_spine.mp4).
 
-**The headline is THE SPINE** — six layers, one system:
+**The headline is THE SPINE** — six layers, one system (now eight beats with
+L7 + L8):
 
 > **The agent doesn't *have* memory. The memory IS the agent — and it owns
 > itself, earns from itself, and writes itself.**
@@ -30,6 +31,8 @@
 | **L4 Commons** | Many agents coordinate through **one shared pool** — a team that remembers together. | `src/dejavu/fleet.py` |
 | **L5 Regret** | Memory of the **road not taken** — it remembers the mistakes it never made. | `src/dejavu/regret.py` |
 | **L6 Temporal** | Memory is a **time-bound, dynamic layer** — it knows *when* it knew things, answers point-in-time "as-of" recalls, and **strategically forgets** stale lessons to ARCH (recoverable). Deliberate, auditable forgetting — distinct from the destructive wipe. | `src/dejavu/temporal.py` |
+| **L7 Sovereign Loop** | **Memory that knows it owns itself.** The onchain mint receipt is written **back into the store** (REFERENCE tier), and REFERENCE is folded into the content root — so a fresh session's identity provably references a committed onchain root. The memory doesn't just get anchored; it *remembers its own anchor*. | `src/dejavu/sovereign.py` |
+| **L8 Conflict** | **Write-time conflict resolution (supersession).** A contradiction is never blindly overwritten — the loser goes to ARCH (recoverable) and a SUPERSEDES journal event links old → new. The memory resolves conflicts on write and keeps an auditable revision trail. | `src/dejavu/supersede.py` |
 
 **Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
 wiped-store naive fallback — see the **Run** section.
@@ -85,7 +88,7 @@ Kept fully wired as the safe, always-submittable floor.
 ## THE SPINE — six layers, one system
 
 `dejavu-sovereign` runs the whole thing as **one continuous arc** — not six demos,
-one story. A judge runs one command and sees all six layers:
+one story. A judge runs one command and sees all six layers plus L7 + L8:
 
 ```bash
 dejavu-sovereign --crisis        # full spine arc (dry-run by default)
@@ -96,19 +99,22 @@ DEJAVU_DRY_RUN=0 dejavu-sovereign  # broadcast the sovereign mint onchain
 |---|---|---|
 | **L5+L1** | Session A learns a lesson AND a regret (the road not taken: "would have lost 18%"). | `src/dejavu/regret.py::write_regret` |
 | **L1** | The store's content-addressed root is minted onchain (Base dust tx carrying the root in `data`). Memory = an ownable asset. | `src/dejavu/sovereign.py::sovereign_mint` |
+| **L7** | The mint receipt is written **back into the store** — the memory now knows it owns this committed root; a fresh box recalls its own anchor. | `src/dejavu/sovereign.py::anchor_self` |
 | **L4** | News/risk agents write views to the shared board; the allocator reads it. | `src/dejavu/fleet.py` |
+| **L8** | A contradiction on the board is **superseded** (loser → ARCH, SUPERSEDES journal event), not overwritten. | `src/dejavu/supersede.py::supersede_entity` |
 | **L3** | The Learner mines the journal and the agent accepts a **new skill** it wrote itself. | `src/dejavu/memory.py::learn` |
 | **L4** | The store **earns** — a paid query hits the ledger. | `src/dejavu/sovereign.py::record_payment` |
 | **L6** | The memory **consolidates** — fresh lessons stay, stale ones go to ARCH (recoverable), so the live store stays lean and time-aware. | `src/dejavu/temporal.py::consolidate` |
 | **L2** | A fresh box mounts the same store → **same being** (identity hash is content-derived). | `src/dejavu/sovereign.py::identity` |
-| **Wipe** | Delete the store → asset **orphaned**, identity **changes**, back to naive 0.55. | `src/dejavu/sovereign.py::asset_orphaned` |
+| **Wipe** | Delete the store → asset **orphaned**, identity **changes**, self-anchor **lost**, back to naive 0.55. | `src/dejavu/sovereign.py::asset_orphaned` |
 
 The economic deletion gate: **with memory** it de-risks to 0.015 equity; **delete the
 store** and you don't just lose the decision — the committed onchain asset is
 orphan-destroyed and the agent becomes a *different being*. That's memory-load-bearing
 with money attached.
 
-`tests/test_sovereign.py` + `tests/test_spine.py` pin all of it.
+`tests/test_sovereign.py` + `tests/test_spine.py` + `tests/test_sovereign_loop.py`
+pin all of it.
 
 ### The measured gate (spine ablation benchmark)
 
@@ -204,7 +210,7 @@ close. Rebuild: `python demo/build_video_spine.py`
 ## Why this is different (innovation + PMF, in 60 seconds)
 
 Most memory demos *recall to change an answer*. This one recalls to **change a real,
-money-driving decision that fires onchain**. Four things we don't see elsewhere:
+money-driving decision that fires onchain**. Five things we don't see elsewhere:
 
 1. **Memory acts, it doesn't just answer.** A recalled lesson flips the book from
    equity 0.55 → 0.05, and that decision executes a **real Base Mainnet transaction**
@@ -221,6 +227,11 @@ money-driving decision that fires onchain**. Four things we don't see elsewhere:
 4. **Measured, not marketed.** 200 seeded frames: memory averts **+7.07pp** loss, flips
    **75%** of decisions, and over 12 crises preserves **$0.90 vs $0.29**. Real, reproducible,
    honest numbers (no fabricated judge output).
+5. **It knows it owns itself.** After the onchain mint, the store records its own
+   anchor back into its content — so the memory's identity is provably tied to a
+   committed Base root, and a contradiction is superseded to ARCH rather than
+   overwritten. The memory is self-aware about both its onchain provenance and its
+   own revision history (`tests/test_sovereign_loop.py`).
 
 **PMF:** this is the memory backbone of **D0xedDev**, a live autonomous agent hub on Base
 that has been running in production — real usage, real audience, real deployment history.
@@ -323,7 +334,7 @@ From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx bloc
 Sibyl's recent posts flex **graph-structured relational memory**, **perfect recall
 at scale** (191k records / 365-day simulation, 350/350), and a coming
 **"Sovereign" 100% compliance guarantee**. This build now meets all three head-on
-(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 78 tests total):
+(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 89 tests total):
 
 - 🕸 **Relational board** — typed edges written into Sibyl's *native*
   `entity_relations` table (the client exposes no relation API, so we drive the
@@ -339,6 +350,9 @@ at scale** (191k records / 365-day simulation, 350/350), and a coming
   `verify_journal()` recomputes it. Any edited, inserted, or deleted journal
   row breaks the chain (proven in tests) — "no record, no action" becomes
   *provable*, the compliance story behind Sibyl Sovereign.
+- ♻️ **L7 Sovereign Loop + L8 Conflict** — the store remembers its own onchain
+  anchor (self-referential identity) and resolves write-time contradictions by
+  superseding the loser to ARCH, never overwriting it.
 
 ## How memory made this possible
 
@@ -361,11 +375,11 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 78 tests (72 core + 6 optional NEURAL_MESH-backend)
+pip install -e ".[test]" && pytest            # 89 tests (80 core + 9 L7/L8 + 6 optional NEURAL_MESH-backend)
 
-# THE SPINE (headline — six layers, one arc)
-dejavu-sovereign --crisis                       # full arc: learn+regret -> mint -> same-being
-                                                #   -> dream a skill -> earn -> wipe -> orphan+naive
+# THE SPINE (headline — six layers + L7/L8, one arc)
+dejavu-sovereign --crisis                       # full arc: learn+regret -> mint+self-anchor -> same-being
+                                                #   -> dream a skill -> supersede a conflict -> earn -> wipe -> orphan+naive
 DEJAVU_DRY_RUN=0 dejavu-sovereign               # broadcast the sovereign mint onchain
 
 # THE FLEET (L4 — multi-agent shared memory)

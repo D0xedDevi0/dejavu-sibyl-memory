@@ -115,6 +115,30 @@ class Memory:
     def get_reference(self, key: str) -> dict | None:
         return self.client.get_reference(key)
 
+    def list_references(self) -> list[dict]:
+        """Enumerate every REFERENCE-tier document.
+
+        Folds REFERENCE into the content-addressed root so an onchain anchor
+        (L7 sovereign loop) becomes part of the store's fingerprint. Reads the
+        native `reference_documents` table directly (the client exposes no bulk
+        list). Returns [{doc_key, body, metadata, updated_at}].
+        """
+        out: list[dict] = []
+        with self.client.storage.connection() as conn:
+            rows = conn.execute(
+                "SELECT doc_key, body, metadata, updated_at FROM reference_documents "
+                "WHERE tenant_id = ? ORDER BY doc_key", (self.tenant_id,),
+            ).fetchall()
+            for key, body, meta, updated_at in rows:
+                out.append({
+                    "doc_key": key,
+                    "body": json_loads_any(body),
+                    "metadata": json_loads_any(meta),
+                    "updated_at": updated_at,
+                })
+        return out
+
+
     def set_state(self, key: str, body: dict | list) -> None:
         self.client.set_state(key, body)
 
