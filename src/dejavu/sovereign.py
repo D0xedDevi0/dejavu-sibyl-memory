@@ -40,7 +40,7 @@ from eth_account.datastructures import SignedTransaction
 from . import base_action
 from .config import BASE_EXPLORER, Config
 from .graph_audit import _entity_id
-from .memory import Memory
+from .memory import Memory, json_loads_any
 
 log = logging.getLogger(__name__)
 
@@ -84,6 +84,16 @@ def memory_root(memory: Memory, *, include_journal: bool = True) -> dict:
             }, sort_keys=True, default=str)
             j_digest = _h(j_digest + payload)
 
+    # REFERENCE tier (static knowledge + L7 sovereign anchor). Folding this in
+    # means the store's fingerprint reflects its own onchain history — a memory
+    # that knows it owns itself. Canonical order by doc_key.
+    ref_parts = []
+    for ref in memory.list_references():
+        ref_parts.append(f"{ref.get('doc_key')}|"
+                         f"{json.dumps(ref.get('body'), sort_keys=True, default=str)}|"
+                         f"{json.dumps(ref.get('metadata'), sort_keys=True, default=str)}")
+    ref_digest = _h("\n".join(sorted(ref_parts)))
+
     # Graph edges from the native entity_relations table.
     edge_parts = []
     tenant = memory.tenant_id
@@ -99,13 +109,14 @@ def memory_root(memory: Memory, *, include_journal: bool = True) -> dict:
         log.warning("[sovereign] graph edges unavailable (%s)", e)
     edge_digest = _h("\n".join(sorted(edge_parts)))
 
-    root = _h(f"{tenant}|{ent_digest}|{j_digest}|{edge_digest}")
+    root = _h(f"{tenant}|{ent_digest}|{j_digest}|{ref_digest}|{edge_digest}")
     return {
         "root": root,
         "tenant": tenant,
         "entities": len(entities),
         "archived_entities": len(archived),
         "journal_rows": (len(events) if include_journal else 0),
+        "references": len(ref_parts),
         "edges": len(edge_parts),
     }
 
@@ -222,6 +233,75 @@ def asset_orphaned(memory: Memory, mint: MintReceipt) -> bool:
     committed fingerprint). This is the economic deletion-gate proof.
     """
     return memory_root(memory)["root"] != mint.root
+
+
+# ---------------------------------------------------------------------------
+# (5) SELF-REFERENTIAL SOVEREIGN LOOP — memory that knows it owns itself
+# ---------------------------------------------------------------------------
+
+ANCHOR_KEY = "sovereign/anchor"
+
+
+def anchor_self(memory: Memory, mint: MintReceipt) -> dict:
+    """Write the onchain mint receipt BACK INTO the store (REFERENCE tier).
+
+    This closes the sovereign loop. The memory doesn't just get anchored — it
+    *remembers its own anchor*. Because REFERENCE is folded into the
+    content-addressed root, the store's fingerprint now reflects the onchain
+    transaction that committed it. A fresh box mounting the same store recalls
+    "I was committed onchain at block/root R" as part of its own content.
+
+    Deterministic, network-free, reversible (a re-mint simply updates it).
+    """
+    body = {
+        "root": mint.root,
+        "identity_id": mint.identity_id,
+        "owner": mint.owner,
+        "dry_run": mint.dry_run,
+        "details": mint.details,
+        "tx_hash": mint.tx_hash,
+        "explorer_url": mint.explorer_url,
+    }
+    metadata = {"chain": "base", "network": "eip155:8453",
+                "self": True, "layer": "L7"}
+    memory.set_reference(ANCHOR_KEY, body, metadata=metadata)
+    return {"anchored": True, "doc_key": ANCHOR_KEY, "body": body}
+
+
+def resolve_anchor(memory: Memory) -> dict | None:
+    """Read the memory's self-recorded onchain anchor (REFERENCE tier)."""
+    ref = memory.get_reference(ANCHOR_KEY)
+    if not ref:
+        return None
+    body = ref.get("body")
+    if isinstance(body, str):
+        body = json_loads_any(body)
+    return {
+        "root": body.get("root"),
+        "tx_hash": body.get("tx_hash"),
+        "owner": body.get("owner"),
+        "identity_id": body.get("identity_id"),
+        "explorer_url": body.get("explorer_url"),
+        "dry_run": body.get("dry_run"),
+    }
+
+
+def is_self_anchored(memory: Memory, mint: MintReceipt | None = None) -> bool:
+    """Is the store self-anchored? Optionally, does its anchor match `mint`?
+
+    `mint is None`: true if ANY anchor is recorded.
+    `mint given`: true only if the recorded anchor matches that exact mint
+    (root + identity). This is the "the memory knows it owns THIS committed
+    root" check — a fresh box that mounts the same store returns True; a wiped
+    or divergent store returns False.
+    """
+    anchor = resolve_anchor(memory)
+    if anchor is None:
+        return False
+    if mint is None:
+        return True
+    return (anchor.get("root") == mint.root
+            and anchor.get("identity_id") == mint.identity_id)
 
 
 # ---------------------------------------------------------------------------

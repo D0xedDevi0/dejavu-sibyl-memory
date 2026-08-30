@@ -5,17 +5,22 @@ This is the upgraded headline for the hackathon: not six features, one spine.
     The agent doesn't *have* memory. The memory IS the agent — and it owns
     itself, earns from itself, and writes itself.
 
-Six layers, one system:
+Six layers, one system (now eight beats):
     L1 Sovereign   — memory root is committed onchain (ownable asset).    [sovereign.py]
     L2 Identity    — the agent IS its memory (portable across boxes).     [sovereign.py]
     L3 Dream       — memory authors new skills while idle (Learner/DREAM).[memory.py]
     L4 Commons     — many agents coordinate through one shared pool.      [fleet.py]
     L5 Regret      — memory of the road not taken.                        [regret.py]
     L6 Temporal    — memory knows WHEN + strategic forgetting to ARCH.    [temporal.py]
+    L7 Sovereign Loop — memory that knows it OWNS ITSELF: it records its own
+                        onchain anchor back into the store (REFERENCE tier). [sovereign.py]
+    L8 Conflict    — write-time conflict resolution (supersession): contradictions
+                        are superseded to ARCH + journaled, not overwritten.  [supersede.py]
 
 `run_arc()` executes the whole thing as one continuous demo arc (session A learns
--> counterfactual -> sovereign mint -> fresh box same being -> dream a skill ->
-wipe -> asset orphaned + naive). `dejavu-sovereign` CLI wraps it.
+-> counterfactual -> sovereign mint + self-anchor -> fresh box same being -> dream
+a skill -> supersede a conflict -> wipe -> asset orphaned + naive). `dejavu-sovereign`
+CLI wraps it.
 """
 
 from __future__ import annotations
@@ -28,8 +33,9 @@ from .config import Config
 from .memory import Memory
 from .policy import de_risk_book, naive_book
 from .regret import regret_urgency, write_regret
-from .sovereign import (asset_orphaned, identity, is_same_being, ledger_balance,
-                        memory_root, record_payment, sovereign_mint)
+from .sovereign import (anchor_self, asset_orphaned, identity, is_same_being,
+                        is_self_anchored, ledger_balance, memory_root,
+                        record_payment, resolve_anchor, sovereign_mint)
 
 # Default store lives in the repo data/ dir.
 DEFAULT_DB = Path(__file__).resolve().parents[2] / "data" / "sovereign.db"
@@ -67,12 +73,35 @@ def run_arc(db: str | Path = DEFAULT_DB, *, dry_run: bool = True) -> dict:
     out["mint"] = mint.as_dict()
     out["asset_not_orphaned"] = not asset_orphaned(mem, mint)  # resolves now
 
+    # ---- L7: self-referential sovereign loop — the memory anchors ITSELF.
+    # The mint receipt is written back INTO the store (REFERENCE tier), so the
+    # memory knows it owns this committed root. A fresh box mounting the same
+    # store recalls its own onchain anchor as part of its content. --------
+    anchor_self(mem, mint)
+    out["self_anchored"] = is_self_anchored(mem, mint)
+    out["anchor_resolves"] = (resolve_anchor(mem) or {}).get("root") == mint.root
+
     # ---- L4: shared-pool coordination echoes (news/risk -> alloc) --------
     mem.set_entity("view", "news/market", {"headline": "spreads blow out",
                                            "sentiment": "risk-off"}, status="active")
     mem.set_entity("view", "risk/stress", {"credit_stress": 2.2,
                                            "flags": ["spread_widening"]}, status="active")
     out["board_views"] = len(mem.list_entities(category="view"))
+
+    # ---- L8: write-time conflict resolution — a contradiction is superseded,
+    # not blindly overwritten. The old view is archived (recoverable) and a
+    # SUPERSEDES journal event links old -> new. The memory resolves conflicts
+    # on write, keeping an auditable revision trail. -------------------------
+    from .supersede import supersede_entity, supersession_chain
+    try:
+        sup = supersede_entity(mem, "view", "risk/stress",
+                               {"credit_stress": 3.1, "flags": ["full_crisis"]},
+                               reason="stress escalated")
+        out["superseded_prior"] = sup["superseded"] is not None
+        out["supersession_chain_len"] = len(
+            supersession_chain(mem, "view", "risk/stress"))
+    except Exception as e:  # pragma: no cover
+        out["supersession_error"] = str(e)
 
     # ---- L3: dream — seed the journal, then Learner proposes a skill ----
     # The Learner needs >= min_pattern_hits (3) journal patterns to propose, so
@@ -153,6 +182,10 @@ def _fmt(out: dict) -> str:
     L.append(f"   L1 mint: {out['mint']['action'] if 'action' in out['mint'] else 'committed'} "
              f"root={out['mint']['root'][:16]}… dry_run={out['mint']['dry_run']}")
     L.append(f"   asset resolves: {out['asset_not_orphaned']}")
+    L.append(f"   L7 self-anchored: {out.get('self_anchored')} "
+             f"(anchor_resolves={out.get('anchor_resolves')})")
+    L.append(f"   L8 supersession: prior={out.get('superseded_prior')} "
+             f"chain_len={out.get('supersession_chain_len')}")
     L.append(f"   L2 identity A={out['identity_a']} B={out['identity_b']} "
              f"same_being={out['same_being']}")
     L.append(f"   L3 dreams: {len(out.get('proposals', []))} proposals -> "
