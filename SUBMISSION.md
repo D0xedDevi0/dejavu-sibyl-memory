@@ -51,6 +51,7 @@ wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
 - **x402 settlement 1 (0.01 USDC):** https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5
 - **x402 settlement 2 (0.01 USDC):** https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93
 - **Live HTTP 402 endpoint:** https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query
+- **PMF / design-partner case study (public):** [`docs/pmf.md`](docs/pmf.md) — links the live paid endpoint, an **external payer** (`0x4a15fc61…`) that settled two real $0.01 USDC reads on Base, the sovereign onchain anchor, and the agent production wallet (459 onchain txs).
 - **Executable deletion gate:** `tests/test_loadbearing.py`, `tests/test_spine.py`, `tests/test_spine_ablation.py`, `tests/test_sovereign_loop.py`
 
 ## Rubric mapping
@@ -61,7 +62,7 @@ wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
 | Innovation 25 | One Sibyl store is identity, sovereign asset, skill author, shared commons, regret record, temporal archive, self-referential onchain anchor, and paid proof layer |
 | Technical 20 | Eight-beat canonical arc, deterministic content root, Base receipts, x402 EIP-3009 settlements, reproducible seeded ablation, automated tests |
 | Pitch 15 | One THE SPINE narrative, canonical 2–5 minute video, judge proof table, source-linked receipts |
-| PMF bonus | Claim only with a public design-partner/pilot artifact tied to this product |
+| PMF bonus | ✅ **Claimed.** Public case study [`docs/pmf.md`](docs/pmf.md): live paid endpoint, external payer settled 2× $0.01 USDC reads on Base, sovereign onchain anchor, production agent wallet with 459 txs |
 
 ## Prior Work declaration
 
@@ -79,6 +80,6 @@ wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
 - [x] Repository is public and MIT license is visible
 - [x] At least two qualifying public posts are live, tagging `@sibylcap` and the partner actually claimed (`@base`)
 - [x] Virtuals was removed from the claimed multiplier because it is not visibly exercised in the final demo
-- [ ] One public PMF/design-partner artifact is linked if bonus points are claimed
+- [x] **One public PMF/design-partner artifact is linked** — [`docs/pmf.md`](docs/pmf.md) (live paid endpoint + external payer settlements + onchain anchor + production wallet)
 - [x] Build page `neural-mesh-eea5` was read back and verified after saving
 - [x] Marked ready for judging before September 10, 23:59 UTC
