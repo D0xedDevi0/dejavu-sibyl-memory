@@ -114,7 +114,7 @@ def scene_open():
     d.text((120,250),"THE SPINE",font=F(120,True),fill=CYAN)
     d.text((120,430),"memory that owns itself",font=F(44,True),fill=WHITE)
     d.text((120,510),"NEURAL_MESH  x  Sibyl Memory",font=F(28),fill=GRAY)
-    d.text((120,560),"> sovereign · identity · self-authored · shared · regret · temporal",font=F(26),fill=AMBER)
+    d.text((120,560),"> sovereign · identity · self-authored · shared · regret · temporal · loop · conflict",font=F(25),fill=AMBER)
     d.text((120,660),"Built for the Sibyl Memory Hackathon  ·  @base  @virtuals_io",font=F(22),fill=DIM)
     footer(d,"Forgetting is a bug. Remembering is the strategy.")
     return img
@@ -260,39 +260,104 @@ def scene_temporal():
     ], "L6  ·  temporal  ·  dynamic, not static", CYAN, tag="TIME-BOUND")
 
 def scene_earns():
-    img,d=new_frame(); header(d,"it earns  ·  a paid read, settled on-chain",GREEN,tag="LIVE")
+    img,d=new_frame(); header(d,"it earns  ·  paid reads, settled on-chain",GREEN,tag="PMF · LIVE")
     px,py,pw,ph=44,168,W-88,H-168-60
     d.rounded_rectangle((px,py,px+pw,py+ph),radius=14,outline=BLUE,fill=PANEL,width=2)
     lines=[
-      "memory-query endpoint  (x402 paid read)",
+      "memory-query endpoint  (x402 paid read · $0.01 USDC)",
       "",
       "GET  -> HTTP 402   (pay 10000 micro-USDC = $0.01)",
       "sign -> EIP-3009 TransferWithAuthorization",
       "retry-> HTTP 200   (memory data returned)",
       "",
-      "on-chain: payer USDC 1.0 -> 0.99   (settled)",
-      "chain: Base mainnet  ·  block 50608909",
+      "EXTERNAL payer 0x4a15fc61...  settled 2x on Base",
+      "  tx 0x7f3e577b...   status 1   block 50,609,928",
+      "  tx 0x57f15297...   status 1   block 50,609,934",
+      "agent production wallet 0x23129c04...  ->  459 txs",
       "",
-      "> the memory is not a database. it is an economy.",
+      "> someone outside us paid to read the memory.",
     ]
-    y=py+24; f=F(24)
+    y=py+20; f=F(23)
     for ln in lines:
         col=WHITE
-        if ln.startswith(">") or "economy" in ln: col=AMBER
-        elif "200" in ln or "1.0" in ln or "settled" in ln.lower(): col=GREEN
+        if ln.startswith(">"): col=AMBER
+        elif "200" in ln or "1.0" in ln or "settled" in ln.lower() or "status 1" in ln or "459" in ln: col=GREEN
         elif "402" in ln or "10000" in ln or "USDC" in ln: col=CYAN
+        elif "EXTERNAL" in ln or "0x4a15fc61" in ln or "0x7f3e577b" in ln or "0x57f15297" in ln: col=MAGENTA
         elif "sign" in ln.lower(): col=GRAY
-        d.text((px+28,y),ln,font=f,fill=col); y+=40
-    footer(d,"demo/x402/memory-query.ts  ·  verified live settlement 2026-08-29")
+        d.text((px+28,y),ln,font=f,fill=col); y+=36
+    footer(d,"docs/pmf.md  ·  verified settlements 2026-08-29  ·  all receipts on basescan")
+    return img
+
+def scene_loop():
+    img,d=new_frame(); header(d,"the sovereign loop  ·  it remembers",GREEN,tag="SELF-REFERENTIAL")
+    px,py,pw,ph=44,168,W-88,H-168-60
+    d.rounded_rectangle((px,py,px+pw,py+ph),radius=14,outline=BLUE,fill=PANEL,width=2)
+    lines=[
+      "mint the root on-chain  ->  tx committed on Base",
+      "",
+      "anchor_self(memory, mint)",
+      "  writes the receipt BACK INTO the store",
+      "  (REFERENCE tier, folded into the root)",
+      "",
+      "fresh box, same store:",
+      "  identity provably references committed root",
+      "  is_self_anchored -> True",
+      "",
+      "wipe the store:",
+      "  anchor lost, asset orphaned, identity churns",
+      "",
+      "> the memory doesn't get anchored. it remembers.",
+    ]
+    y=py+20; f=F(23)
+    for ln in lines:
+        col=WHITE
+        if ln.startswith(">"): col=AMBER
+        elif "True" in ln or "committed" in ln or "self_anchored" in ln or "back INTO" in ln: col=GREEN
+        elif "wipe" in ln.lower() or "orphaned" in ln.lower() or "churns" in ln: col=RED
+        elif "fresh" in ln.lower() or "identity" in ln.lower(): col=CYAN
+        d.text((px+28,y),ln,font=f,fill=col); y+=36
+    footer(d,"src/dejavu/sovereign.py::anchor_self  ·  tests/test_sovereign_loop.py")
+    return img
+
+def scene_conflict():
+    img,d=new_frame(); header(d,"write-time conflict resolution",MAGENTA,tag="L8 · CONFLICT")
+    px,py,pw,ph=44,168,W-88,H-168-60
+    d.rounded_rectangle((px,py,px+pw,py+ph),radius=14,outline=BLUE,fill=PANEL,width=2)
+    lines=[
+      "view/risk/stress  { credit_stress: 0.3 }   (day 1)",
+      "view/risk/stress  { credit_stress: 1.4 }   (day 2)",
+      "view/risk/stress  { credit_stress: 2.2 }   (day 3)",
+      "",
+      "supersede_entity(old, new):",
+      "  winner  -> live WARM entity",
+      "  loser   -> ARCH tier  (recoverable)",
+      "  event   -> SUPERSEDES  (journaled)",
+      "",
+      "supersession_chain(key):",
+      "  reconstructs old -> new revision trail",
+      "",
+      "> contradictions are resolved, never erased.",
+    ]
+    y=py+20; f=F(23)
+    for ln in lines:
+        col=WHITE
+        if ln.startswith(">"): col=AMBER
+        elif "winner" in ln or "WARM" in ln or "reconstruct" in ln.lower() or "trail" in ln: col=GREEN
+        elif "loser" in ln or "ARCH" in ln or "recoverable" in ln: col=CYAN
+        elif "SUPERSEDES" in ln or "resolved" in ln: col=MAGENTA
+        d.text((px+28,y),ln,font=f,fill=col); y+=36
+    footer(d,"src/dejavu/supersede.py  ·  Mem0-equivalent  ·  tests/test_sovereign_loop.py")
     return img
 
 def scene_close():
     img,d=new_frame()
-    d.text((120,250),"Forgetting is a bug.",font=F(72,True),fill=RED)
-    d.text((120,360),"Remembering is the strategy.",font=F(72,True),fill=CYAN)
-    d.text((120,540),"THE SPINE",font=F(56,True),fill=WHITE)
-    d.text((120,640),"sovereign · identity · self-authored · shared · regret · temporal · earned",font=F(24),fill=GRAY)
-    d.text((120,700),"MIT  ·  github.com/D0xedDevi0/dejavu-sibyl-memory  ·  @D0xedDevi0",font=F(22),fill=DIM)
+    d.text((120,220),"Forgetting is a bug.",font=F(68,True),fill=RED)
+    d.text((120,320),"Remembering is the strategy.",font=F(68,True),fill=CYAN)
+    d.text((120,470),"THE SPINE",font=F(56,True),fill=WHITE)
+    d.text((120,560),"sovereign · identity · self-authored · shared · regret · temporal",font=F(24),fill=GRAY)
+    d.text((120,604),"sovereign loop · conflict resolution · earned (PMF live)",font=F(24),fill=GRAY)
+    d.text((120,690),"MIT  ·  github.com/D0xedDevi0/dejavu-sibyl-memory  ·  @D0xedDevi0",font=F(22),fill=DIM)
     footer(d,"THE SPINE  ·  memory owns itself, earns from itself, writes itself")
     return img
 
@@ -307,8 +372,10 @@ SCENES=[
   ("08_commons", scene_commons,   "spine_08_commons.mp3", 1.2, 1.4),
   ("09_regret",  scene_regret,    "spine_09_regret.mp3",  1.2, 1.4),
   ("10_temporal",scene_temporal,  "spine_10_temporal.mp3",1.2,1.4),
-  ("11_earns",   scene_earns,     "spine_11_earns.mp3",   1.2, 1.4),
-  ("12_close",   scene_close,     "spine_12_close.mp3",   1.0, 2.6),
+  ("11_loop",    scene_loop,      "spine_11_loop.mp3",    1.2, 1.4),
+  ("12_conflict",scene_conflict,  "spine_12_conflict.mp3",1.2,1.4),
+  ("13_earns",   scene_earns,     "spine_13_earns.mp3",   1.2, 1.4),
+  ("14_close",   scene_close,     "spine_14_close.mp3",   1.0, 2.6),
 ]
 
 def ffprobe_dur(p):
