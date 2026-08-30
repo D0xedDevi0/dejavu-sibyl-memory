@@ -200,11 +200,13 @@ SESSION A ──learn──► SIBYL MEMORY (SQLite + FTS5) ──recall──�
 
 ## Demo video
 
-The current cinematic explainer — **`demo/demo_the_spine.mp4`** — is a narrated 2:41 walkthrough
+The current cinematic explainer — **`demo/demo_the_spine.mp4`** — is a narrated 3:11 walkthrough
 (1600x900, voice-over + ambient bed) following the exact money-shot arc: the problem →
 Session A learns → the deletion gate → Session B remembers and fires a **real Base tx** →
-measured evidence (ablation + compounding charts) → the self-learning dejavu loop → PMF
-close. Rebuild: `python demo/build_video_spine.py`
+measured evidence (ablation + compounding charts) → the self-learning dejavu loop →
+**L7 self-referential sovereign loop** → **L8 write-time conflict resolution** → the live
+PMF/earns scene (external payer settling real USDC) → close. Rebuild:
+`python demo/build_video_spine.py`
 (PIL terminal frames → restrained Ken Burns motion → Brian narration → mix/mux).
 
 ## Why this is different (innovation + PMF, in 60 seconds)

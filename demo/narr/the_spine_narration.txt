@@ -23,6 +23,10 @@
 
 10_temporal The memory is a time-bound layer. It knows when a belief was formed, reinforces what is useful, and archives the stale. Strategic forgetting, not amnesia.
 
-11_earns    And it earns. A paid read of this memory settles on-chain. Real USDC, real transaction. The memory is not a database. It is an economy.
+11_loop     And now it remembers its own anchor. The on-chain mint receipt is written back into the store, so a fresh box proves it was committed on Base. The memory knows it owns itself.
 
-12_close    Forgetting is a bug. Remembering is the strategy. THE SPINE. NEURAL_MESH, times, Sibyl Memory.
+12_conflict And it never overwrites the past. When a new belief contradicts an old one, the loser is archived, not destroyed. A full revision trail survives. Write-time conflict resolution.
+
+13_earns    And it earns. Real parties have already paid real USDC to read this memory — settled on-chain, on Base. The memory is not a database. It is an economy.
+
+14_close    Forgetting is a bug. Remembering is the strategy. THE SPINE. NEURAL_MESH, times, Sibyl Memory.
