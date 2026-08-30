@@ -233,9 +233,12 @@ money-driving decision that fires onchain**. Five things we don't see elsewhere:
    overwritten. The memory is self-aware about both its onchain provenance and its
    own revision history (`tests/test_sovereign_loop.py`).
 
-**PMF:** this is the memory backbone of **D0xedDev**, a live autonomous agent hub on Base
-that has been running in production — real usage, real audience, real deployment history.
-Not a toy, not a demo prop.
+**PMF (verified, linked, claimed +10):** THE SPINE is the memory backbone of
+**D0xedDev**, a live autonomous agent hub on Base. It is a **real paid product**:
+the live x402 endpoint has already been **paid to read twice by an external
+wallet** (`0x4a15fc61…`, settled $0.01 USDC on Base), the sovereign root is
+committed onchain, and the production agent wallet has executed **459 onchain
+transactions**. Full public case study: **`docs/pmf.md`**. Not a demo prop.
 
 ## Where Sibyl Memory is load-bearing (exact file/line)
 

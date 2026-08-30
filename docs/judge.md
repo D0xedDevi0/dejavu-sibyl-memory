@@ -127,8 +127,11 @@ NEURAL_MESH backend tests skip cleanly when the sibling backend is unavailable.
 - **Virtuals:** code and registration docs exist in `src/dejavu/virtuals.py` and
   `virtuals-dejavu-agent.md`; claim its multiplier only if a real ACP job is
   visibly exercised in the final demo.
-- **PMF bonus:** claim only with a public design-partner/pilot artifact that
-  specifically validates THE SPINE.
+- **PMF bonus (+10):** ✅ **CLAIMED.** Public design-partner/pilot artifact:
+  **`docs/pmf.md`** — live paid x402 endpoint with **two real settlements from an
+  external wallet** (`0x4a15fc61…`, $0.01 USDC each, Base), the sovereign onchain
+  anchor, and the production agent wallet (459 onchain txs). All receipts
+  verifiable via `eth_getTransactionReceipt`.
 
 ## 8. Thirty-second summary
 
