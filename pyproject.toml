@@ -12,9 +12,9 @@ license = { text = "MIT" }
 authors = [{ name = "NEURAL_MESH / D0xedDev" }]
 keywords = ["memory", "agent", "sibyl", "base", "onchain", "hackathon"]
 dependencies = [
-    "sibyl-memory-client==0.6.1",
-    "sibyl-memory-cli==0.3.22",
-    "sibyl-memory-hermes==0.3.15",
+    "sibyl-memory-client==0.8.0",
+    "sibyl-memory-cli==0.4.0",
+    "sibyl-memory-hermes==0.4.0",
     # onchain actions (base_action.py imports eth_account at module load;
     # it is NOT optional — the load-bearing agent path depends on it)
     "eth-account==0.13.7",

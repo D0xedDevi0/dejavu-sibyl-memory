@@ -81,7 +81,7 @@ persistent memory — and it acts onchain (Base) because of what it remembers.**
 
 **Python venv:** `/opt/data/sibyl-hackathon/.venv` (python3.13)
 **Packages installed:**
-- `sibyl-memory-client==0.6.1` [VERIFIED]
+- `sibyl-memory-client==0.8.0` [VERIFIED]
 - `sibyl-memory-cli` [VERIFIED, CLI binary `sibyl` works]
 - `sibyl-memory-hermes` [VERIFIED, adapter imports]
 
