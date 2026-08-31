@@ -37,14 +37,14 @@
     "recall_after_each": {
       "crisis-1": 1,
       "crisis-2": 2,
-      "crisis-3": 2
+      "crisis-3": 3
     },
     "equity_after_each": {
       "crisis-1": 0.05,
       "crisis-2": 0.05,
       "crisis-3": 0.05
     },
-    "all_recalled_by_end": 2
+    "all_recalled_by_end": 3
   },
   "selective_deletion": {
     "delete_succeeded": true,

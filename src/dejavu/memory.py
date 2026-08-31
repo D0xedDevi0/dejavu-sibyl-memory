@@ -149,10 +149,26 @@ class Memory:
     def search(self, query: str, *, limit: int = 20, phrase: bool = False,
                category: str | None = None) -> list[dict]:
         """Search the store. Multi-word phrase queries should be quoted for
-        phrase mode (client default is AND-of-tokens)."""
+        phrase mode (client default is AND-of-tokens).
+
+        Returns a ``SearchResults`` (a ``list`` of hit dicts, so iteration is
+        unchanged) that ALSO carries a ``.verdict`` (v0.8.0 'lucid'): even an
+        empty result is not a silent failure — inspect ``.verdict.code`` to
+        distinguish NO_MATCH / EMPTY_STORE / GATED from a genuine hit-0.
+        """
         if category is None:
             return self.client.search(query, limit=limit)
         return self.client.search_entities(query, limit=limit, category=category)
+
+    def search_verdict(self, query: str, *, limit: int = 20,
+                       category: str | None = None) -> str:
+        """Return the v0.8.0 search verdict code for a query ('ok',
+        'no_match', 'empty_store', 'gated', ...) without discarding failure
+        reasons. Mirrors the patch's 'no silent failures' behavior."""
+        res = self.search(query, limit=limit, category=category)
+        v = getattr(res, "verdict", None)
+        return getattr(v, "code", None) or "unknown"
+
 
     def verified_search(self, query: str, *, limit: int = 10) -> list[dict]:
         """Two-stage retrieve-then-verify search (SDK multi_record).
