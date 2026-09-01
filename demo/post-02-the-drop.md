@@ -44,6 +44,6 @@
 ---
 
 ## Notes
-- Attach `demo/demo_video.mp4` (or host it) — the split-screen recall beat IS the pitch.
+- Attach the canonical final cut `demo/demo_the_spine.mp4` (2:39, THE SPINE arc) — the split-screen recall beat IS the pitch. (Legacy `demo_video.mp4` is superseded; do not link it.)
 - This is post #2 of the required 2, dropped near submission.
 - If posting from `xurl`: keep each segment ≤ 250 UTF-16 chars, 🟦 square bullets.
