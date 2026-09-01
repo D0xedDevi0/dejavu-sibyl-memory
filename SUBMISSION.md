@@ -11,6 +11,7 @@
 - **Repository (public, MIT):** https://github.com/D0xedDevi0/dejavu-sibyl-memory
 - **Demo video:** https://github.com/D0xedDevi0/dejavu-sibyl-memory/raw/refs/heads/main/demo/demo_the_spine.mp4 (2:39 canonical final cut)
 - **Demo-video post:** https://x.com/D0xedDevi0/status/2093773724596175008
+- **Demo-video post (reply to @sibylcap, 2026-09-01):** https://x.com/D0xedDevi0/status/2094844680517341277
 - **Build-log post:** https://x.com/D0xedDevi0/status/2093773782255342027
 - **Partner stack claimed now:** Base
 - **Virtuals:** implemented/registered integration is documented, but claim the multiplier only if a real ACP job is visibly exercised in the final demo
