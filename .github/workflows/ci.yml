@@ -28,6 +28,9 @@ jobs:
       - name: Run test suite (incl. deletion gate + ablation + advanced analyses)
         run: python -m pytest tests/ -v
 
+      - name: Memory health gate (SDK Linter — critical findings fail the build)
+        run: python -m tests.memory_health_gate
+
       - name: Regenerate demo figures (verifies build scripts stay runnable)
         run: |
           python demo/ablation_benchmark.py
