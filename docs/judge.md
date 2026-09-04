@@ -160,6 +160,12 @@ NEURAL_MESH backend tests skip cleanly when the sibling backend is unavailable.
 > proof that has already earned USDC through verified x402 settlements, a
 > self-referential loop where it remembers its own onchain anchor, and a
 > write-time conflict resolver that supersedes rather than overwrites.
+>
+> **Second act (L9–L16)** — the part the field hasn't built: the memory gates what
+> gets written, knows what it doesn't know, vetoes what hurts, trades what it
+> learns (live x402), agrees on truth across agents, schedules its own learning,
+> distills experience into capability, and refuses to be silently erased. For the
+> 90-second narrative pitch, read **[`docs/doctrine.md`](doctrine.md)**.
 
 MIT licensed. Canonical repository:
 https://github.com/D0xedDevi0/dejavu-sibyl-memory

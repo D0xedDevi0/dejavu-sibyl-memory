@@ -12,6 +12,10 @@
 
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
+>
+> **📜 The narrative pitch (90 seconds):** the Memory Doctrine — what memory is,
+> the 16-layer spine as one story, the thesis in one breath:
+> **[`docs/doctrine.md`](docs/doctrine.md)**.
 
 > **🎯 How the memory improves the build (the crux of scoring) — the 30‑second answer:**
 > this build's decision function *cannot work without Sibyl Memory*. A fresh agent
