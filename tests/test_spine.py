@@ -29,3 +29,33 @@ def test_spine_arc_full(tmp_path):
     assert out["asset_orphaned_after_wipe"] is True
     assert out["same_being_after_wipe"] is False
     assert out["book_without_memory_equity"] == 0.55
+
+
+def test_spine_second_act_runs_live(tmp_path):
+    """The full 16-layer arc: L9-L16 execute on the live store before the wipe,
+    each beat deterministic and load-bearing."""
+    out = run_arc(str(tmp_path / "arc2.db"), dry_run=True)
+    # L9: the gate rejects noise and persists a rich lesson
+    assert out["l9_noise_rejected"] is True
+    assert out["l9_rich_persisted"] is True
+    # L10: knows what it knows (COVERED) and flags what it doesn't (UNKNOWN)
+    assert out["l10_known"] in ("COVERED", "THIN")
+    assert out["l10_unknown"] == "UNKNOWN"
+    assert out["l10_confidence"] > 0.5
+    # L11: guard vetoes the naive 0.55 book under stress
+    assert out["l11_guards_naive"] is True
+    # L12: a store that never lived the crisis imports + de-risks
+    assert out["l12_imported"] is True
+    assert out["l12_buyer_derisks"] is True
+    # L13: high-confidence belief wins over the low-confidence dissenter
+    assert out["l13_consensus"] == "CONVERGED"
+    # L14: the UNKNOWN topic is scheduled into the curriculum
+    assert out["l14_plans_unknown"] == "unexplored alien-trading topic"
+    # L15: scar tissue distills into a rule that generalizes to a novel frame
+    assert out["l15_rule_learned"] is True
+    assert out["l15_generalizes"] is True
+    # L16: refuses the silent wipe, then wipes only under an explicit, audited
+    # force — leaving the asset orphaned and identity changed (the beat lives on)
+    assert out["l16_refuses"] is True
+    assert out["l16_wiped"] is True
+    assert out["wipe_audit"] is True
