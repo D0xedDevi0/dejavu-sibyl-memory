@@ -97,6 +97,67 @@ class Memory:
         return gate_write(self, category, name, body, source=source,
                           evidence=evidence, falsifiable=falsifiable, cap=cap)
 
+    # ---- L10 META: memory that knows itself --------------------------------
+    def record_provenance(self, category: str, name: str, *,
+                          source: str | None = None, evidence: int = 0,
+                          falsifiable: bool = False, hard: bool = False) -> None:
+        """Persist why a memory is (or isn't) trusted. Call after a write so
+        `confidence` is grounded, not guessed. `hard` marks a non-negotiable
+        lesson that feeds L11 GUARD."""
+        from .meta import record_provenance as _rp
+        _rp(self, category, name, source=source, evidence=evidence,
+            falsifiable=falsifiable, hard=hard)
+
+    def snapshot(self) -> dict:
+        """Census of the store across every tier (live/archived/ref/journal)."""
+        from .meta import snapshot as _snap
+        return _snap(self)
+
+    def coverage(self) -> dict:
+        """Per-category maturity + blind spots (where scar tissue is thin)."""
+        from .meta import coverage as _cov
+        return _cov(self)
+
+    def confidence(self, category: str, name: str) -> dict:
+        """Reliability 0..1 for one entity, grounded in recorded provenance."""
+        from .meta import confidence as _conf
+        return _conf(self, category, name)
+
+    def known_unknowns(self, query: str, *, limit: int = 10) -> dict:
+        """Anti-hallucination read: COVERED / THIN / UNKNOWN for a query."""
+        from .meta import known_unknowns as _ku
+        return _ku(self, query, limit=limit)
+
+    # ---- L11 GUARD: memory that acts ---------------------------------------
+    def hard_lessons(self) -> list[dict]:
+        """The non-negotiable lessons (prov.hard OR serious outcome drawdown)."""
+        from .guard import hard_lessons as _hl
+        return _hl(self)
+
+    def guard_book(self, frame: dict, proposed_equity: float):
+        """Veto power over the macro allocation: allow/warn/block a book weight
+        given stored hard lessons + current stress. Returns a GuardVerdict."""
+        from .guard import guard_book as _gb
+        return _gb(self, frame, proposed_equity)
+
+    # ---- L12 EXCHANGE: memory that travels ---------------------------------
+    def export_lesson(self, name: str, *, price_wei: int = 1_000_000_000) -> dict:
+        """Package a live lesson (+ provenance) into a verifiable artifact."""
+        from .exchange import export_lesson as _ex
+        return _ex(self, name, price_wei=price_wei)
+
+    def import_lesson(self, artifact: dict, *, cap: int | None = None,
+                      credit_seller=None) -> dict:
+        """Verify + L9-gate a foreign lesson into this store, record provenance,
+        journal the purchase, optionally credit the seller's earnings ledger."""
+        from .exchange import import_lesson as _im
+        return _im(self, artifact, cap=cap, credit_seller=credit_seller)
+
+    def verify_artifact(self, artifact: dict) -> dict:
+        """Confirm an exported artifact is intact (content-hash check)."""
+        from .exchange import verify_artifact as _va
+        return _va(artifact)
+
     def get_entity(self, category: str, name: str) -> dict:
         return self.client.get_entity(category, name)
 

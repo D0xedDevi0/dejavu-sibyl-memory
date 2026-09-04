@@ -163,7 +163,18 @@ def _write_usage(memory, category: str, name: str, record: dict) -> None:
 
 
 def _read_policy(memory) -> dict:
-    pol = memory.get_reference(_POLICY_DOC)
+    ref = memory.get_reference(_POLICY_DOC)
+    pol = None
+    if isinstance(ref, dict):
+        body = ref.get("body")
+        if isinstance(body, str):
+            try:
+                import json as _json
+                body = _json.loads(body)
+            except (ValueError, TypeError):
+                body = None
+        if isinstance(body, dict):
+            pol = body
     if isinstance(pol, dict) and pol.get("weights"):
         return pol
     return {"weights": dict(DEFAULT_WEIGHTS), "cap": DEFAULT_CAP}

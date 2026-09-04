@@ -53,6 +53,9 @@ L7 + L8):
 | **L7 Sovereign Loop** | **Memory that knows it owns itself.** The onchain mint receipt is written **back into the store** (REFERENCE tier), and REFERENCE is folded into the content root — so a fresh session's identity provably references a committed onchain root. The memory doesn't just get anchored; it *remembers its own anchor*. | `src/dejavu/sovereign.py` |
 | **L8 Conflict** | **Write-time conflict resolution (supersession).** A contradiction is never blindly overwritten — the loser goes to ARCH (recoverable) and a SUPERSEDES journal event links old → new. The memory resolves conflicts on write and keeps an auditable revision trail. | `src/dejavu/supersede.py` |
 | **L9 Discernment** | **The memory's write-quality gate.** Every system on the market optimizes *retrieval*; almost nobody gates what gets *written*. Before a fact earns a WARM slot the gate scores it — novelty, falsifiable truth-confidence, category use-weight, noise floor — and persists only what earns its place. Capacity is treated as a **budget**: at the cap it archives the *weakest live entry to ARCH (recoverable, never deleted)* rather than growing unbounded. It **learns its own ingestion policy** from `feedback_used`/`feedback_unused`/`recalibrate_policy`. Load-bearing mirror: no gate → the store floods with noise → the real lesson is buried; gate → clean store → the lesson recalls. Deterministic (no LLM, no RNG). | `src/dejavu/gates.py` |
+| **L10 Meta** | **Memory that knows itself.** Agents hallucinate coverage — they can't answer "what do I NOT know?" without bluffing. META makes ignorance a first-class, queryable output: `known_unknowns` returns **COVERED / THIN / UNKNOWN** (never a silent empty list — UNKNOWN means *go learn*); `confidence` scores per-entity reliability from recorded provenance; `coverage` maps maturity and blind spots across categories. Load-bearing: without META a planner treats absence as "no constraint" and proceeds naive; with it, an unknown topic is flagged and the planner can abstain or de-risk. | `src/dejavu/meta.py` |
+| **L11 Guard** | **Memory that ACTS.** Retrieval only *informs*; GUARD gives memory **veto power**. A stored hard lesson (prov.hard OR serious outcome drawdown) becomes a constraint the planner can't walk past — even when the fuzzy recall phrase text-misses, GUARD sees the hard lesson + a stressed frame + a proposed overweight-equity book and **BLOCKS** it. That's a second, load-bearing line of defense: memory that says "no," not just "remember." | `src/dejavu/guard.py` |
+| **L12 Exchange** | **Memory that travels.** A hard-won lesson becomes a portable, **verifiable, priced artifact**: `export_lesson` hashes body+provenance (deterministic, cross-store comparable); `import_lesson` verifies the hash, routes the foreign lesson through the L9 gate (polluted artifacts are refused), records provenance with the ORIGIN as source, journals the purchase, and can credit the seller's earnings ledger (the x402 leg). Load-bearing: a store that never lived the crisis imports the lesson → a fresh cold-start de-risks. One agent's scar tissue is another's verified, gated, purchased education. | `src/dejavu/exchange.py` |
 
 **Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
 wiped-store naive fallback — see the **Run** section.
@@ -108,7 +111,7 @@ Kept fully wired as the safe, always-submittable floor.
 ## THE SPINE — six layers, one system
 
 `dejavu-sovereign` runs the whole thing as **one continuous arc** — not six demos,
-one story. A judge runs one command and sees all six layers plus L7 + L8 + L9:
+one story. A judge runs one command and sees all six layers plus L7 + L8:
 
 ```bash
 dejavu-sovereign --crisis        # full spine arc (dry-run by default)
@@ -122,7 +125,6 @@ DEJAVU_DRY_RUN=0 dejavu-sovereign  # broadcast the sovereign mint onchain
 | **L7** | The mint receipt is written **back into the store** — the memory now knows it owns this committed root; a fresh box recalls its own anchor. | `src/dejavu/sovereign.py::anchor_self` |
 | **L4** | News/risk agents write views to the shared board; the allocator reads it. | `src/dejavu/fleet.py` |
 | **L8** | A contradiction on the board is **superseded** (loser → ARCH, SUPERSEDES journal event), not overwritten. | `src/dejavu/supersede.py::supersede_entity` |
-| **L9** | Journal events are **gated before they persist** — noise/dupes refused, low-value live entries archived to ARCH at the cap, and the ingestion policy **recalibrates** from which memories actually got used. | `src/dejavu/gates.py::gate_write` |
 | **L3** | The Learner mines the journal and the agent accepts a **new skill** it wrote itself. | `src/dejavu/memory.py::learn` |
 | **L4** | The store **earns** — a paid query hits the ledger. | `src/dejavu/sovereign.py::record_payment` |
 | **L6** | The memory **consolidates** — fresh lessons stay, stale ones go to ARCH (recoverable), so the live store stays lean and time-aware. | `src/dejavu/temporal.py::consolidate` |
@@ -136,6 +138,31 @@ with money attached.
 
 `tests/test_sovereign.py` + `tests/test_spine.py` + `tests/test_sovereign_loop.py`
 pin all of it.
+
+### The second act (L9–L12): what the field hasn't built
+
+L1–L8 cover *having, owning and recalling* memory. The second act covers memory's
+relationship with **itself and with other agents** — the four lanes no shipped
+memory product owns:
+
+| Layer | One-line thesis | Runnable proof |
+|---|---|---|
+| **L9 Discernment** | gate what gets **written** (ingestion quality, capacity budget) | `pytest tests/test_gates.py` |
+| **L10 Meta** | know what you **don't** know (anti-hallucination coverage) | `pytest tests/test_meta_guard_exchange.py` |
+| **L11 Guard** | memory that says **no** (veto a repeat of the recorded loss) | `pytest tests/test_meta_guard_exchange.py` |
+| **L12 Exchange** | memory that **travels** (verify + gate + buy a foreign lesson) | `pytest tests/test_meta_guard_exchange.py` |
+
+Three load-bearing mirrors, each an executable assertion a judge can run:
+
+- **L9** — no gate → 60 noise writes bury the real lesson; gate → noise refused,
+  lesson recalls clean.
+- **L11** — even when the fuzzy recall phrase text-misses, a hard crisis lesson
+  + stressed frame + a proposed 0.55-equity book returns **BLOCK**. Memory that
+  prevents the -18% replay at the action layer, not just the recall layer.
+- **L12** — a buyer store that **never lived the crisis** imports the seller's
+  verified artifact → a fresh cold-start session de-risks (equity < 0.10) instead
+  of going naive 0.55. Cross-agent scar tissue transfer, with the seller's
+  earnings ledger credited for the read.
 
 ### The measured gate (spine ablation benchmark)
 
@@ -401,9 +428,9 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 97 tests (80 core + 9 L7/L8 + 8 L9 + 6 optional NEURAL_MESH-backend)
+pip install -e ".[test]" && pytest            # 108 core (80 base + 9 L7/L8 + 8 L9 + 11 L10-12) + 6 optional NEURAL_MESH-backend
 
-# THE SPINE (headline — six layers + L7/L8/L9, one arc)
+# THE SPINE (headline — six layers + L7/L8, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint+self-anchor -> same-being
                                                 #   -> dream a skill -> supersede a conflict -> earn -> wipe -> orphan+naive
 DEJAVU_DRY_RUN=0 dejavu-sovereign               # broadcast the sovereign mint onchain
