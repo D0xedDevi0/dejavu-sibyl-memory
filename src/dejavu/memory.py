@@ -87,6 +87,16 @@ class Memory:
                    *, status: str = "active") -> dict:
         return self.client.set_entity(category, name, body, status=status)
 
+    def gated_write(self, category: str, name: str, body: dict, *,
+                    source: str | None = None, evidence: int = 0,
+                    falsifiable: bool = False, cap: int | None = None):
+        """L9 DISCERNMENT write path: score the fact, and only persist it if it
+        earns its slot (or evicts the weakest live entry to ARCH recoverably to
+        make room). Deterministic, returns an explicit GateDecision."""
+        from .gates import gate_write  # lazy: keeps memory.py light
+        return gate_write(self, category, name, body, source=source,
+                          evidence=evidence, falsifiable=falsifiable, cap=cap)
+
     def get_entity(self, category: str, name: str) -> dict:
         return self.client.get_entity(category, name)
 
