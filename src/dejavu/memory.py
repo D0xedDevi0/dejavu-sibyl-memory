@@ -190,6 +190,37 @@ class Memory:
         from .curriculum import record_attempt as _ra
         return _ra(self, topic, learned=learned, source=source, note=note)
 
+    # ---- L15 DISTILL: memory becomes capability ----------------------------
+    def distill_rule(self, *, min_samples: int = 2, margin: float = 0.05):
+        """Compress crisis scar tissue into one protective decision rule."""
+        from .distill import distill_rule as _dr
+        return _dr(self, min_samples=min_samples, margin=margin)
+
+    def decide_with_skill(self, frame: dict, *, min_samples: int = 2,
+                          margin: float = 0.05):
+        """Apply the distilled rule to a new frame (de-risk when risk clears
+        the learned threshold). Fails open to naive when under-sampled."""
+        from .distill import decide_with_skill as _dws
+        return _dws(self, frame, min_samples=min_samples, margin=margin)
+
+    # ---- L16 CONSENT: memory argues for its own life ------------------------
+    def wipe_impact(self) -> dict:
+        """Enumerate everything a wipe would destroy (identity, onchain anchor,
+        guard lessons, live/archived memory, journal). Read-only."""
+        from .consent import wipe_impact as _wi
+        return _wi(self)
+
+    def request_wipe(self, *, force: bool = False, reason: str = "") -> dict:
+        """Refuse a silent wipe; audit a deliberate one to a store-independent
+        log that survives deletion. Pass force=True + a reason to authorize."""
+        from .consent import request_wipe as _rw
+        return _rw(self, force=force, reason=reason)
+
+    def read_wipe_audit(self) -> list:
+        """Read the store-independent wipe log (survives any single deletion)."""
+        from .consent import read_wipe_audit as _rwa
+        return _rwa(self)
+
     def get_entity(self, category: str, name: str) -> dict:
         return self.client.get_entity(category, name)
 
