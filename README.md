@@ -52,6 +52,7 @@ L7 + L8):
 | **L6 Temporal** | Memory is a **time-bound, dynamic layer** — it knows *when* it knew things, answers point-in-time "as-of" recalls, and **strategically forgets** stale lessons to ARCH (recoverable). Deliberate, auditable forgetting — distinct from the destructive wipe. | `src/dejavu/temporal.py` |
 | **L7 Sovereign Loop** | **Memory that knows it owns itself.** The onchain mint receipt is written **back into the store** (REFERENCE tier), and REFERENCE is folded into the content root — so a fresh session's identity provably references a committed onchain root. The memory doesn't just get anchored; it *remembers its own anchor*. | `src/dejavu/sovereign.py` |
 | **L8 Conflict** | **Write-time conflict resolution (supersession).** A contradiction is never blindly overwritten — the loser goes to ARCH (recoverable) and a SUPERSEDES journal event links old → new. The memory resolves conflicts on write and keeps an auditable revision trail. | `src/dejavu/supersede.py` |
+| **L9 Discernment** | **The memory's write-quality gate.** Every system on the market optimizes *retrieval*; almost nobody gates what gets *written*. Before a fact earns a WARM slot the gate scores it — novelty, falsifiable truth-confidence, category use-weight, noise floor — and persists only what earns its place. Capacity is treated as a **budget**: at the cap it archives the *weakest live entry to ARCH (recoverable, never deleted)* rather than growing unbounded. It **learns its own ingestion policy** from `feedback_used`/`feedback_unused`/`recalibrate_policy`. Load-bearing mirror: no gate → the store floods with noise → the real lesson is buried; gate → clean store → the lesson recalls. Deterministic (no LLM, no RNG). | `src/dejavu/gates.py` |
 
 **Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
 wiped-store naive fallback — see the **Run** section.
@@ -107,7 +108,7 @@ Kept fully wired as the safe, always-submittable floor.
 ## THE SPINE — six layers, one system
 
 `dejavu-sovereign` runs the whole thing as **one continuous arc** — not six demos,
-one story. A judge runs one command and sees all six layers plus L7 + L8:
+one story. A judge runs one command and sees all six layers plus L7 + L8 + L9:
 
 ```bash
 dejavu-sovereign --crisis        # full spine arc (dry-run by default)
@@ -121,6 +122,7 @@ DEJAVU_DRY_RUN=0 dejavu-sovereign  # broadcast the sovereign mint onchain
 | **L7** | The mint receipt is written **back into the store** — the memory now knows it owns this committed root; a fresh box recalls its own anchor. | `src/dejavu/sovereign.py::anchor_self` |
 | **L4** | News/risk agents write views to the shared board; the allocator reads it. | `src/dejavu/fleet.py` |
 | **L8** | A contradiction on the board is **superseded** (loser → ARCH, SUPERSEDES journal event), not overwritten. | `src/dejavu/supersede.py::supersede_entity` |
+| **L9** | Journal events are **gated before they persist** — noise/dupes refused, low-value live entries archived to ARCH at the cap, and the ingestion policy **recalibrates** from which memories actually got used. | `src/dejavu/gates.py::gate_write` |
 | **L3** | The Learner mines the journal and the agent accepts a **new skill** it wrote itself. | `src/dejavu/memory.py::learn` |
 | **L4** | The store **earns** — a paid query hits the ledger. | `src/dejavu/sovereign.py::record_payment` |
 | **L6** | The memory **consolidates** — fresh lessons stay, stale ones go to ARCH (recoverable), so the live store stays lean and time-aware. | `src/dejavu/temporal.py::consolidate` |
@@ -399,9 +401,9 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 89 tests (80 core + 9 L7/L8 + 6 optional NEURAL_MESH-backend)
+pip install -e ".[test]" && pytest            # 97 tests (80 core + 9 L7/L8 + 8 L9 + 6 optional NEURAL_MESH-backend)
 
-# THE SPINE (headline — six layers + L7/L8, one arc)
+# THE SPINE (headline — six layers + L7/L8/L9, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint+self-anchor -> same-being
                                                 #   -> dream a skill -> supersede a conflict -> earn -> wipe -> orphan+naive
 DEJAVU_DRY_RUN=0 dejavu-sovereign               # broadcast the sovereign mint onchain

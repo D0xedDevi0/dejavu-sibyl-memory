@@ -27,6 +27,7 @@
 | L6 Temporal | Beliefs carry time; stale lessons move to recoverable ARCH without changing the sovereign full-store root | `src/dejavu/temporal.py`, `tests/test_temporal.py`, `tests/test_sovereign.py::test_archiving_preserves_sovereign_root` |
 | L7 Sovereign Loop | Memory that knows it owns itself: the mint receipt is written back into the store (REFERENCE tier, folded into the root) so a fresh box's identity provably references its committed onchain root | `src/dejavu/sovereign.py::anchor_self`, `resolve_anchor`, `is_self_anchored` |
 | L8 Conflict | Write-time conflict resolution: a contradiction is superseded to ARCH + journaled (SUPERSEDES), never blindly overwritten; the full revision trail is reconstructable | `src/dejavu/supersede.py::supersede_entity`, `supersession_chain` |
+| L9 Discernment | The write-quality gate — the half of memory everyone ignores. Facts are scored (novelty, falsifiable truth, category use, noise floor) and only those that EARN a slot persist; capacity is a budget (weakest live → ARCH, recoverable), and the ingestion policy recalibrates from which memories actually got used. Deterministic, no-LLM. Load-bearing mirror: no gate → store floods → real lesson buried. | `src/dejavu/gates.py::gate_write`, `feedback_used`, `recalibrate_policy` |
 
 Run the canonical arc:
 
