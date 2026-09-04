@@ -16,6 +16,10 @@
 > **📜 The narrative pitch (90 seconds):** the Memory Doctrine — what memory is,
 > the 16-layer spine as one story, the thesis in one breath:
 > **[`docs/doctrine.md`](docs/doctrine.md)**.
+>
+> **🎨 The visual showcase (open in a browser):** the whole system as a
+> D0xedDev-style terminal surface — navy pixel-grid, live arc output, receipts:
+> **[`docs/showcase.html`](docs/showcase.html)**.
 
 > **🎯 How the memory improves the build (the crux of scoring) — the 30‑second answer:**
 > this build's decision function *cannot work without Sibyl Memory*. A fresh agent

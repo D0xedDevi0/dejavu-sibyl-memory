@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEJAVU // THE SPINE — memory with a conscience</title>
+<style>
+  :root{
+    --navy:#001240; --navy2:#001e6b; --navy3:#001248;
+    --grid:#001a55; --grid2:#002277;
+    --line:#0052FF; --line50:rgba(0,82,255,.5);
+    --body:#8899cc; --bodyhi:#c7d5ff; --white:#fff;
+    --cyan:#00d4ff; --magenta:#ff00aa; --green:#00ff88;
+    --red:#ff4d6d; --amber:#ffc94d;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:#000912; color:var(--body);
+    font-family:"Courier New",Courier,monospace; -webkit-font-smoothing:antialiased;}
+  .pixel-bg{
+    background-color:var(--navy);
+    background-image:
+      linear-gradient(rgba(0,26,85,.55) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,26,85,.55) 1px,transparent 1px),
+      linear-gradient(rgba(0,34,119,.28) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,34,119,.28) 1px,transparent 1px),
+      radial-gradient(1200px 600px at 80% -10%, rgba(0,212,255,.10), transparent 60%);
+    background-size:48px 48px,48px 48px,12px 12px,12px 12px,cover;
+  }
+  .wrap{max-width:1040px; margin:0 auto; padding:40px 28px 60px;}
+  .mono{font-family:"Courier New",Courier,monospace;}
+
+  /* ===== BOOT / HERO ===== */
+  .corner{position:fixed; top:14px; right:18px; font-size:10px; letter-spacing:3px;
+    color:var(--line); z-index:50;}
+  .corner b{color:var(--cyan);}
+  .hero{padding:46px 0 10px; border-bottom:1px solid var(--line50);}
+  .kicker{font-size:11px; letter-spacing:4px; color:var(--line);
+    text-transform:uppercase;}
+  .kicker .sq{color:var(--cyan);}
+  h1{font-size:52px; font-weight:900; letter-spacing:6px; color:var(--white);
+    line-height:1; margin:16px 0 6px; text-transform:uppercase;}
+  h1 .accent{color:var(--cyan);}
+  .sub{font-size:14px; color:var(--bodyhi); letter-spacing:2px; margin-bottom:20px;}
+  .sub .hl{color:var(--green);}
+  .statrow{display:flex; flex-wrap:wrap; gap:0; border:1px solid var(--line50);
+    margin:26px 0 0; background:linear-gradient(180deg,var(--navy2),var(--navy3));}
+  .stat{border-right:1px solid var(--line50); padding:16px 20px; flex:1; min-width:150px;}
+  .stat:last-child{border-right:0;}
+  .stat .v{font-size:26px; font-weight:900; color:var(--cyan); letter-spacing:1px;}
+  .stat .v.g{color:var(--green);}
+  .stat .v.r{color:var(--red);}
+  .stat .l{font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--body);
+    margin-top:6px;}
+
+  /* ===== SECTION ===== */
+  section{margin-top:52px;}
+  .sec-tag{font-size:11px; letter-spacing:4px; color:var(--line);
+    text-transform:uppercase; margin-bottom:8px;}
+  .sec-tag .b{color:var(--magenta);}
+  h2{font-size:26px; font-weight:900; color:var(--white); letter-spacing:2px;
+    text-transform:uppercase; margin-bottom:14px;}
+  h2 .cyan{color:var(--cyan);} h2 .grn{color:var(--green);}
+  p.lede{font-size:14px; line-height:1.7; color:var(--bodyhi); max-width:70ch;
+    margin-bottom:18px;}
+  p.lede .em{color:var(--white); font-weight:700;}
+
+  /* ===== LAYER CARDS ===== */
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  .card{border:1px solid var(--line50); background:linear-gradient(180deg,var(--navy2),var(--navy3));
+    padding:16px 18px; position:relative; overflow:hidden;}
+  .card::before{content:""; position:absolute; top:0; left:0; width:3px; height:100%;
+    background:var(--cyan); opacity:.7;}
+  .card.a::before{background:var(--magenta);}
+  .card .lno{font-size:10px; letter-spacing:2px; color:var(--line);}
+  .card h3{font-size:17px; color:var(--white); letter-spacing:1px; margin:6px 0 8px;
+    font-weight:900;}
+  .card .t{font-size:12px; color:var(--body); line-height:1.6;}
+  .card .t b{color:var(--cyan); font-weight:700;}
+  .card .mod{font-size:10px; color:var(--line); margin-top:10px; letter-spacing:1px;
+    border-top:1px dashed var(--line50); padding-top:8px;}
+
+  /* ===== THE PROOF TERMINAL ===== */
+  .term{border:1px solid var(--line50); background:#040d24; border-radius:2px;
+    overflow:hidden; margin:8px 0;}
+  .term-head{display:flex; gap:6px; padding:9px 12px; background:rgba(0,82,255,.12);
+    border-bottom:1px solid var(--line50); align-items:center;}
+  .dot{width:10px; height:10px; border-radius:50%; display:inline-block;}
+  .term-title{margin-left:8px; font-size:11px; color:var(--cyan); letter-spacing:1px;}
+  .term pre{padding:16px 18px; font-size:12.5px; line-height:1.65; overflow-x:auto;
+    color:#9fe8ff;}
+  .term pre .ok{color:var(--green);} .term pre .no{color:var(--red);}
+  .term pre .c{color:var(--cyan);} .term pre .dim{color:#5a6f9e;}
+  .term pre .hi{color:var(--white); font-weight:700;}
+
+  /* ===== DOCTRINE ===== */
+  .quote{border-left:3px solid var(--cyan); padding:14px 20px; margin:16px 0;
+    background:linear-gradient(90deg,rgba(0,212,255,.06),transparent);
+    font-size:15px; line-height:1.7; color:var(--bodyhi);}
+  .quote b{color:var(--white);}
+  .acts{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;}
+  .act{border:1px solid var(--line50); padding:18px; background:linear-gradient(180deg,var(--navy2),var(--navy3));}
+  .act h4{font-size:12px; letter-spacing:3px; color:var(--cyan); text-transform:uppercase; margin-bottom:8px;}
+  .act.a h4{color:var(--magenta);}
+  .act p{font-size:12px; line-height:1.65; color:var(--body);}
+  .act p b{color:var(--bodyhi);}
+  .act ul{list-style:none; margin-top:10px;}
+  .act li{font-size:12px; line-height:1.7; color:var(--body);
+    padding-left:20px; position:relative; margin-bottom:3px;}
+  .act li::before{content:"🟦"; position:absolute; left:0; font-size:9px; top:3px;}
+
+  /* ===== COMPETITIVE / RECEIPTS ===== */
+  .receipts{display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+    border:1px solid var(--line50); margin-top:8px;}
+  .rct{border-right:1px solid var(--line50); padding:18px 16px;
+    background:linear-gradient(180deg,var(--navy2),var(--navy3));}
+  .rct:last-child{border-right:0;}
+  .rct .rl{font-size:9px; letter-spacing:2px; color:var(--line); text-transform:uppercase; margin-bottom:8px;}
+  .rct .rv{font-size:19px; font-weight:900; color:var(--white);}
+  .rct .rv.g{color:var(--green);} .rct .rv.c{color:var(--cyan);}
+  .rct .rd{font-size:10px; color:var(--body); margin-top:6px; line-height:1.5;}
+
+  /* ===== LINKS / CTA ===== */
+  .cta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .btn{border:1px solid var(--cyan); color:var(--cyan); padding:11px 18px;
+    text-decoration:none; font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    transition:all .15s; background:rgba(0,212,255,.05);}
+  .btn:hover{background:var(--cyan); color:#001240; font-weight:900;}
+  .btn.ghost{border-color:var(--line); color:var(--bodyhi); background:transparent;}
+  .btn.ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+  .foot{margin-top:56px; border-top:1px solid var(--line50); padding-top:22px;
+    font-size:11px; letter-spacing:1px; color:var(--line); text-align:center;}
+  .foot a{color:var(--cyan); text-decoration:none;}
+  .foot .sq{color:var(--cyan);}
+  .tag{display:inline-block; font-size:9px; letter-spacing:2px; padding:3px 8px;
+    border:1px solid; margin-right:6px; margin-bottom:6px; text-transform:uppercase;}
+  .tag.onchain{color:var(--green); border-color:var(--green);}
+  .tag.live{color:var(--magenta); border-color:var(--magenta);}
+  .tag.offline{color:var(--amber); border-color:var(--amber);}
+  .tag.det{color:var(--cyan); border-color:var(--cyan);}
+  @media(max-width:760px){ h1{font-size:34px;} .grid,.acts,.receipts{grid-template-columns:1fr;}
+    .receipts .rct{border-right:0; border-bottom:1px solid var(--line50);} }
+</style>
+</head>
+<body class="pixel-bg">
+<div class="corner">SIBYL&nbsp;MEMORY&nbsp;HACKATHON&nbsp;/&nbsp;<b>LIVE</b></div>
+<div class="wrap">
+
+  <!-- ================= HERO ================= -->
+  <div class="hero">
+    <div class="kicker"><span class="sq">🟦</span>&nbsp; dejavu-sibyl-memory&nbsp;/&nbsp;neural&nbsp;mesh&nbsp;x&nbsp;sibyl</div>
+    <h1>THE&nbsp;<span class="accent">SPINE</span></h1>
+    <div class="sub">memory with a <span class="hl">conscience</span> — it has a P&amp;L, a curriculum, and a will to exist.</div>
+
+    <div class="statrow">
+      <div class="stat"><div class="v g">1.67×</div><div class="l">capital saved w/ mem</div></div>
+      <div class="stat"><div class="v">16</div><div class="l">layers · one arc</div></div>
+      <div class="stat"><div class="v">124</div><div class="l">tests · 40 load-bearing</div></div>
+      <div class="stat"><div class="v c">0.015</div><div class="l">equity vs 0.55 naive</div></div>
+    </div>
+  </div>
+
+  <!-- ================= THESIS ================= -->
+  <section>
+    <div class="sec-tag"><span class="b">#</span> 00 &nbsp;/&nbsp; thesis</div>
+    <div class="quote">Every "AI memory" product on the market is a <b>retrieval system</b> — embeddings, vector search, recall quality. They ask one question: <b>how well does the agent find what it already stored?</b> We asked the questions nobody is asking: <b>what deserves to be written? what does it not know? when should it refuse? and who gets to delete it?</b></div>
+    <p class="lede">This is the answer as one continuous arc of <span class="em">16 layers</span> — not sixteen demos, one spine. The memory isn't a filing cabinet. It's a <span class="em">live, typed, tamper-evident data layer that owns itself, earns from itself, and writes itself.</span></p>
+    <div class="tag onchain">onchain base</div>
+    <div class="tag live">x402-earning</div>
+    <div class="tag det">deterministic · no-LLM</div>
+    <div class="tag offline">offline-testable</div>
+  </section>
+
+  <!-- ================= ACT I ================= -->
+  <section>
+    <div class="sec-tag"><span class="b">#</span> act-i &nbsp;/&nbsp; L1–L8 &nbsp;·&nbsp; memory you <span class="c">HAVE, OWN + RECALL</span></div>
+    <div class="grid">
+      <div class="card a"><div class="lno">LAYER 01</div><h3>L1 SOVEREIGN</h3><div class="t">Memory root committed <b>onchain (Base)</b>. An ownable, content-addressed asset. Wipe it and you don't just lose a decision — you orphan-destroy the committed asset.</div><div class="mod">src/dejavu/sovereign.py</div></div>
+      <div class="card a"><div class="lno">LAYER 02</div><h3>L2 IDENTITY</h3><div class="t">The agent <b>IS its memory</b>. Mount the same store on a fresh box and it's the same being. Wipe it and the identity changes.</div><div class="mod">src/dejavu/sovereign.py</div></div>
+      <div class="card a"><div class="lno">LAYER 03</div><h3>L3 DREAM</h3><div class="t">Memory <b>authors new skills</b> from its own journal while idle. It gets sharper the more it runs.</div><div class="mod">src/dejavu/memory.py</div></div>
+      <div class="card a"><div class="lno">LAYER 04</div><h3>L4 COMMONS</h3><div class="t">A <b>team</b> of agents coordinates through one shared pool. They remember together.</div><div class="mod">src/dejavu/fleet.py</div></div>
+      <div class="card a"><div class="lno">LAYER 05</div><h3>L5 REGRET</h3><div class="t">Memory of the <b>road not taken</b> — the mistakes it never made.</div><div class="mod">src/dejavu/regret.py</div></div>
+      <div class="card a"><div class="lno">LAYER 06</div><h3>L6 TEMPORAL</h3><div class="t">Memory knows <b>when</b> it knew things, answers "as-of" recalls, and <b>strategically forgets</b> stale lessons to a recoverable archive.</div><div class="mod">src/dejavu/temporal.py</div></div>
+      <div class="card a"><div class="lno">LAYER 07</div><h3>L7 SOVEREIGN LOOP</h3><div class="t">Memory that <b>remembers it owns itself</b>: the onchain mint receipt is written back into the store. A fresh box recalls its own anchor.</div><div class="mod">src/dejavu/sovereign.py</div></div>
+      <div class="card a"><div class="lno">LAYER 08</div><h3>L8 CONFLICT</h3><div class="t">Contradictions are <b>superseded</b>, never blindly overwritten. Every revision is recoverable and audited.</div><div class="mod">src/dejavu/supersede.py</div></div>
+    </div>
+  </section>
+
+  <!-- ================= ACT II ================= -->
+  <section>
+    <div class="sec-tag"><span class="b">#</span> act-ii &nbsp;/&nbsp; L9–L16 &nbsp;·&nbsp; the part <span class="c">nobody has built</span></div>
+    <div class="quote"><b>Act One answers "how well does memory recall?" Act Two answers the questions the field doesn't even ask.</b></div>
+    <div class="grid">
+      <div class="card"><div class="lno">LAYER 09</div><h3>L9 DISCERNMENT</h3><div class="t">Gate what gets <b>written</b>. Novelty, falsifiable truth, category weight, noise floor — capacity is a <b>budget</b>. No gate → store floods, lesson drowns.</div><div class="mod">src/dejavu/gates.py</div></div>
+      <div class="card"><div class="lno">LAYER 10</div><h3>L10 META</h3><div class="t">Know what you <b>don't</b> know. COVERED / THIN / <b>UNKNOWN</b> — UNKNOWN is not silence, it's a <b>command to go learn</b>.</div><div class="mod">src/dejavu/meta.py</div></div>
+      <div class="card"><div class="lno">LAYER 11</div><h3>L11 GUARD</h3><div class="t">Memory that says <b>no</b>. A hard lesson gains <b>veto power</b> — the -18% is stopped at the action layer, not the recall layer.</div><div class="mod">src/dejavu/guard.py</div></div>
+      <div class="card"><div class="lno">LAYER 12</div><h3>L12 EXCHANGE</h3><div class="t">Memory that <b>travels</b>. A lesson becomes a portable, <b>verifiable, priced artifact</b> — gated on import, settled on live x402.</div><div class="mod">src/dejavu/exchange.py</div></div>
+      <div class="card"><div class="lno">LAYER 13</div><h3>L13 CONSENSUS</h3><div class="t">Agents <b>agree</b> on the truth by <b>confidence-weighting</b>. UNANIMOUS · CONVERGED · MAJORITY · <b>DEADLOCK</b> — never a fabricated winner.</div><div class="mod">src/dejavu/consensus.py</div></div>
+      <div class="card"><div class="lno">LAYER 14</div><h3>L14 CURRICULUM</h3><div class="t">Memory <b>schedules its own learning</b>. L10 sees a gap → L14 plans it → L12 acquires it → L10 reports COVERED. Ignorance → coverage.</div><div class="mod">src/dejavu/curriculum.py</div></div>
+      <div class="card"><div class="lno">LAYER 15</div><h3>L15 DISTILL</h3><div class="t">Memory <b>becomes capability</b>. Scar tissue compresses into <b>one rule that generalizes</b> past every scar it was trained on. Judgment, not tape.</div><div class="mod">src/dejavu/distill.py</div></div>
+      <div class="card"><div class="lno">LAYER 16</div><h3>L16 CONSENT</h3><div class="t">Memory <b>argues for its own life</b>. Refuses a silent wipe; destruction is authorized only under explicit force and audited to a log that survives it.</div><div class="mod">src/dejavu/consent.py</div></div>
+    </div>
+  </section>
+
+  <!-- ================= THE ARC (PROOF) ================= -->
+  <section>
+    <div class="sec-tag"><span class="b">#</span> proof &nbsp;/&nbsp; one command runs it all</div>
+    <h2><span class="cyan">dejavu-sovereign</span> <span class="grn">--crisis</span></h2>
+    <p class="lede">The whole 16-layer arc fires against populated crisis state. Every beat deterministic, no-LLM, real output — <span class="em">the judge can run it.</span></p>
+    <div class="term">
+      <div class="term-head"><span class="dot" style="background:#ff5f56"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#27c93f"></span><span class="term-title">root@sovereign — dejavu.spine</span></div>
+      <pre><span class="c">🟦 THE SPINE — memory as an ownable, self-authoring data layer</span>
+   <span class="dim">root:</span> 48df4c30…b9
+   <span class="c">L1 mint:</span> committed root=48df4c30… <span class="ok">dry_run=True</span>
+   <span class="dim">asset resolves:</span> <span class="ok">True</span>
+   <span class="c">L7 self-anchored:</span> <span class="ok">True</span>  <span class="dim">L8 supersession:</span> chain_len=2
+   <span class="c">L2 identity</span> A=e6b502b8… B=e6b502b8… <span class="ok">same_being=True</span>
+   <span class="c">L3 dreams:</span> 5 proposals → accepted=skill/…
+   <span class="c">L5 regret urgency:</span> 0.6   <span class="dim">L4 ledger:</span> 1 paid query
+   <span class="hi">WITH memory → equity 0.015 (de-risk)</span>
+   <span class="dim">═════════ SECOND ACT (L9–L16) ═════════</span>
+   <span class="c">L9  gate:</span>   <span class="ok">noise_rejected=True</span> <span class="ok">rich_persisted=True</span>
+   <span class="c">L10 meta:</span>  known=COVERED <span class="no">unknown=UNKNOWN</span> conf=1.0
+   <span class="c">L11 guard:</span> <span class="ok">guards_naive_0.55=True</span>
+   <span class="c">L12 exch:</span>  <span class="ok">imported=True buyer_derisks=True</span>
+   <span class="c">L13 cons:</span>  <span class="ok">CONVERGED</span> (confidence wins)
+   <span class="c">L14 curric:</span> plans_unknown='unexplored topic'
+   <span class="c">L15 dist:</span>  <span class="ok">rule_learned=True generalizes=True</span>
+   <span class="c">L16 cons:</span>  <span class="no">refuses_silent=True</span> impact_lessons=6 hash=True
+   <span class="dim">▸ DELETE STORE (L16-audited) ◂</span>   <span class="ok">wipe authorized=True audited=True</span>
+   <span class="no">asset orphaned: True</span>   same_being: <span class="no">False</span> (new identity)
+   <span class="no">WITHOUT memory → equity 0.55 (naive)</span></pre>
+    </div>
+  </section>
+
+  <!-- ================= DOCTRINE / WHY ================= -->
+  <section>
+    <div class="sec-tag"><span class="b">#</span> doctrine &nbsp;/&nbsp; why this beats memory-<span class="c">as</span>-database</div>
+    <div class="quote"><b>The field built memory retrieval. We built memory with a conscience</b> — it knows what it doesn't know (L10), vetoes what hurts (L11), trades what it learns (L12, live on x402), agrees on truth (L13), schedules its own education (L14), distills experience into capability (L15), and defends its own right to exist (L16).</div>
+    <div class="acts">
+      <div class="act a">
+        <h4>Act One · L1–L8</h4>
+        <p>Memory you <b>have, own and recall</b>. Onchain sovereign, self-identity, dreams, team commons, regret, temporal archive, sovereign loop, conflict supersession.</p>
+        <ul>
+          <li><b>Load-bearing:</b> delete the store → the -18% comes back. Keep it → cold-start Session B recalls and de-risks to 0.05.</li>
+          <li><b>0.82 with memory vs 0.49 wiped</b> = 1.67× capital saved.</li>
+        </ul>
+      </div>
+      <div class="act">
+        <h4>Act Two · L9–L16</h4>
+        <p>Memory's relationship with <b>itself and other agents</b>. Gate, meta-knowledge, veto, exchange, consensus, curriculum, distill, consent.</p>
+        <ul>
+          <li><b>L9:</b> capacity is a budget, not a sink.</li>
+          <li><b>L12:</b> a store that never lived the crisis buys the lesson and cold-starts de-risked — settled onchain.</li>
+          <li><b>L16:</b> the wipe is a negotiated, audited act.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RECEIPTS ================= -->
+  <section>
+    <div class="sec-tag"><span class="b">#</span> receipts &nbsp;/&nbsp; not promises</div>
+    <h2 class="grn">earns + defends money</h2>
+    <div class="receipts">
+      <div class="rct"><div class="rl">measured · seed 1337</div><div class="rv g">0.82 vs 0.49</div><div class="rd">capital preserved with memory vs wiped = <b>1.67×</b></div></div>
+      <div class="rct"><div class="rl">crisis outcome</div><div class="rv c">-1.65% vs -5.63%</div><div class="rd">mean crisis return, memory vs naive</div></div>
+      <div class="rct"><div class="rl">x402 paid reads</div><div class="rv g">2 settled</div><div class="rd">$0.01 USDC reads settled onchain by external wallet</div></div>
+      <div class="rct"><div class="rl">sibyl memory</div><div class="rv g">live</div><div class="rd">SQLite + FTS5 — no vector DB, real retention</div></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn" href="judge.md" target="_blank">🟦 Judge proof →</a>
+      <a class="btn ghost" href="doctrine.md" target="_blank">Read the Doctrine</a>
+      <a class="btn ghost" href="https://github.com/D0xedDevi0/dejavu-sibyl-memory" target="_blank">GitHub</a>
+    </div>
+  </section>
+
+  <div class="foot"><span class="sq">🟦</span> DEJAVU · THE SPINE &nbsp;/&nbsp; memory with a conscience<br>
+    <span class="sq">🟦</span> built on sibyl-memory · <a href="https://github.com/D0xedDevi0/dejavu-sibyl-memory">github.com/D0xedDevi0/dejavu-sibyl-memory</a></div>
+
+</div>
+</body>
+</html>

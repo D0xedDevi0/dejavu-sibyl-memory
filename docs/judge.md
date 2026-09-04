@@ -165,7 +165,9 @@ NEURAL_MESH backend tests skip cleanly when the sibling backend is unavailable.
 > gets written, knows what it doesn't know, vetoes what hurts, trades what it
 > learns (live x402), agrees on truth across agents, schedules its own learning,
 > distills experience into capability, and refuses to be silently erased. For the
-> 90-second narrative pitch, read **[`docs/doctrine.md`](doctrine.md)**.
+> 90-second narrative pitch, read **[`docs/doctrine.md`](doctrine.md)** — or open
+> the D0xedDev-style visual showcase **[`docs/showcase.html`](showcase.html)**
+> (preview: `preview-full.png`) for the whole system as one browser surface.
 
 MIT licensed. Canonical repository:
 https://github.com/D0xedDevi0/dejavu-sibyl-memory
