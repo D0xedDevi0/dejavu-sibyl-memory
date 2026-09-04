@@ -158,6 +158,38 @@ class Memory:
         from .exchange import verify_artifact as _va
         return _va(artifact)
 
+    # ---- L13 CONSENSUS: agents agree on the truth ---------------------------
+    def agent_believe(self, topic: str, claim: dict, *,
+                      provenance: dict | None = None) -> dict:
+        """Record THIS agent's belief on a topic (feeds cross-agent consensus)."""
+        from .consensus import agent_believe as _ab
+        return _ab(self, topic, claim, provenance=provenance)
+
+    def reach_consensus(self, stores: list, topic: str, *,
+                        quorum: float = 0.6, consensus_memory=None) -> dict:
+        """Reconcile independent stores' beliefs on a topic. Returns
+        UNANIMOUS/CONVERGED/MAJORITY/DEADLOCK — never a fabricated winner."""
+        from .consensus import reach_consensus as _rc
+        return _rc(stores, topic, quorum=quorum,
+                   consensus_memory=consensus_memory)
+
+    # ---- L14 CURRICULUM: memory schedules its own learning -----------------
+    def learn_plan(self, topics: dict, *, quorum_conf: float = 0.6) -> list:
+        """Priority-ranked list of learning gaps from L10 known_unknowns."""
+        from .curriculum import learn_plan as _lp
+        return _lp(self, topics, quorum_conf=quorum_conf)
+
+    def gaps_remaining(self, topics: dict) -> list:
+        """The outstanding curriculum (uncovered, important topics)."""
+        from .curriculum import gaps_remaining as _gr
+        return _gr(self, topics)
+
+    def record_attempt(self, topic: str, *, learned: bool,
+                       source: str = "internal", note: str = "") -> dict:
+        """Record whether a curriculum gap was closed."""
+        from .curriculum import record_attempt as _ra
+        return _ra(self, topic, learned=learned, source=source, note=note)
+
     def get_entity(self, category: str, name: str) -> dict:
         return self.client.get_entity(category, name)
 

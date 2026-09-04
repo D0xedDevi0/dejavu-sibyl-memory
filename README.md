@@ -56,6 +56,8 @@ L7 + L8):
 | **L10 Meta** | **Memory that knows itself.** Agents hallucinate coverage — they can't answer "what do I NOT know?" without bluffing. META makes ignorance a first-class, queryable output: `known_unknowns` returns **COVERED / THIN / UNKNOWN** (never a silent empty list — UNKNOWN means *go learn*); `confidence` scores per-entity reliability from recorded provenance; `coverage` maps maturity and blind spots across categories. Load-bearing: without META a planner treats absence as "no constraint" and proceeds naive; with it, an unknown topic is flagged and the planner can abstain or de-risk. | `src/dejavu/meta.py` |
 | **L11 Guard** | **Memory that ACTS.** Retrieval only *informs*; GUARD gives memory **veto power**. A stored hard lesson (prov.hard OR serious outcome drawdown) becomes a constraint the planner can't walk past — even when the fuzzy recall phrase text-misses, GUARD sees the hard lesson + a stressed frame + a proposed overweight-equity book and **BLOCKS** it. That's a second, load-bearing line of defense: memory that says "no," not just "remember." | `src/dejavu/guard.py` |
 | **L12 Exchange** | **Memory that travels.** A hard-won lesson becomes a portable, **verifiable, priced artifact**: `export_lesson` hashes body+provenance (deterministic, cross-store comparable); `import_lesson` verifies the hash, routes the foreign lesson through the L9 gate (polluted artifacts are refused), records provenance with the ORIGIN as source, journals the purchase, and can credit the seller's earnings ledger (the x402 leg). Load-bearing: a store that never lived the crisis imports the lesson → a fresh cold-start de-risks. One agent's scar tissue is another's verified, gated, purchased education. | `src/dejavu/exchange.py` |
+| **L13 Consensus** | **Memory that agrees.** L8 resolves conflict *inside one store*; L13 is the cross-agent version: independent agents holding differing beliefs are reconciled by **L10-confidence weighting** — UNANIMOUS / CONVERGED (confidence ≥ quorum wins) / MAJORITY (honestly labelled) / **DEADLOCK** (genuine split → no fabricated winner, recorded CONTESTED). A lone low-confidence dissent can't move a hard-won truth; an unknown split isn't papered over. | `src/dejavu/consensus.py` |
+| **L14 Curriculum** | **Memory that schedules its own learning.** The self-improving capstone that closes the loop: L10 *sees* a gap (UNKNOWN/THIN) → L14 *plans* it (priority = coverage-gap × importance, scar-adjacent topics boosted) → L12 *acquires* it (verifiably, through the gate) → L9 *gates* the incoming memory → L10 reports **COVERED**. A judge watches ignorance become coverage in one cycle. | `src/dejavu/curriculum.py` |
 
 **Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
 wiped-store naive fallback — see the **Run** section.
@@ -139,10 +141,10 @@ with money attached.
 `tests/test_sovereign.py` + `tests/test_spine.py` + `tests/test_sovereign_loop.py`
 pin all of it.
 
-### The second act (L9–L12): what the field hasn't built
+### The second act (L9–L14): what the field hasn't built
 
 L1–L8 cover *having, owning and recalling* memory. The second act covers memory's
-relationship with **itself and with other agents** — the four lanes no shipped
+relationship with **itself and with other agents** — the six lanes no shipped
 memory product owns:
 
 | Layer | One-line thesis | Runnable proof |
@@ -151,6 +153,8 @@ memory product owns:
 | **L10 Meta** | know what you **don't** know (anti-hallucination coverage) | `pytest tests/test_meta_guard_exchange.py` |
 | **L11 Guard** | memory that says **no** (veto a repeat of the recorded loss) | `pytest tests/test_meta_guard_exchange.py` |
 | **L12 Exchange** | memory that **travels** (verify + gate + buy a foreign lesson) | `pytest tests/test_meta_guard_exchange.py` |
+| **L13 Consensus** | agents **agree** on the truth (confidence-weighted, never a fabricated winner) | `pytest tests/test_consensus_curriculum.py` |
+| **L14 Curriculum** | memory **schedules its own learning** (ignorance → coverage) | `pytest tests/test_consensus_curriculum.py` |
 
 Three load-bearing mirrors, each an executable assertion a judge can run:
 
@@ -163,6 +167,14 @@ Three load-bearing mirrors, each an executable assertion a judge can run:
   verified artifact → a fresh cold-start session de-risks (equity < 0.10) instead
   of going naive 0.55. Cross-agent scar tissue transfer, with the seller's
   earnings ledger credited for the read.
+- **L13** — a lone low-confidence dissenting view (conf ~0.35) does **not**
+  overturn a provenance-backed hard lesson (conf ~0.85): consensus CONVERGES on
+  the credible value and preserves the dissent. A genuine 3-way unknown split
+  returns **DEADLOCK**, never a fabricated winner.
+- **L14** — the self-improving **loop**: L10 sees a topic as UNKNOWN → L14
+  schedules it → L12 imports the seller's verified lesson through the L9 gate →
+  L10 now reports **COVERED** and the gap is gone from the curriculum. Ignorance
+  becomes coverage across one executable cycle.
 
 ### The measured gate (spine ablation benchmark)
 
@@ -428,7 +440,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 108 core (80 base + 9 L7/L8 + 8 L9 + 11 L10-12) + 6 optional NEURAL_MESH-backend
+pip install -e ".[test]" && pytest            # 117 core (80 base + 9 L7/L8 + 8 L9 + 11 L10-12 + 9 L13-14) + 6 optional NEURAL_MESH-backend
 
 # THE SPINE (headline — six layers + L7/L8, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint+self-anchor -> same-being
