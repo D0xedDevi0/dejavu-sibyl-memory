@@ -58,6 +58,8 @@ L7 + L8):
 | **L12 Exchange** | **Memory that travels.** A hard-won lesson becomes a portable, **verifiable, priced artifact**: `export_lesson` hashes body+provenance (deterministic, cross-store comparable); `import_lesson` verifies the hash, routes the foreign lesson through the L9 gate (polluted artifacts are refused), records provenance with the ORIGIN as source, journals the purchase, and can credit the seller's earnings ledger (the x402 leg). Load-bearing: a store that never lived the crisis imports the lesson → a fresh cold-start de-risks. One agent's scar tissue is another's verified, gated, purchased education. | `src/dejavu/exchange.py` |
 | **L13 Consensus** | **Memory that agrees.** L8 resolves conflict *inside one store*; L13 is the cross-agent version: independent agents holding differing beliefs are reconciled by **L10-confidence weighting** — UNANIMOUS / CONVERGED (confidence ≥ quorum wins) / MAJORITY (honestly labelled) / **DEADLOCK** (genuine split → no fabricated winner, recorded CONTESTED). A lone low-confidence dissent can't move a hard-won truth; an unknown split isn't papered over. | `src/dejavu/consensus.py` |
 | **L14 Curriculum** | **Memory that schedules its own learning.** The self-improving capstone that closes the loop: L10 *sees* a gap (UNKNOWN/THIN) → L14 *plans* it (priority = coverage-gap × importance, scar-adjacent topics boosted) → L12 *acquires* it (verifiably, through the gate) → L9 *gates* the incoming memory → L10 reports **COVERED**. A judge watches ignorance become coverage in one cycle. | `src/dejavu/curriculum.py` |
+| **L15 Distill** | **Memory that becomes capability.** The field stores lessons as *tape* (N similar notes, each firing only on narrow recall). DISTILL compresses the recurring invariant behind many loss-lessons into ONE learned decision rule: it reads every structured crisis scar, finds the most conservative risk level that triggered protection, and writes a threshold. The rule **generalizes** to frames none of the scars named (a pure-volatility spike, when every scar was credit-driven) because it captured the invariant, not the wording. Under-sampled → no rule (honest), never a guess. | `src/dejavu/distill.py` |
+| **L16 Consent** | **Memory that argues for its own life.** L1 says memory owns itself — yet any caller can delete a store with one silent call. CONSENT makes destruction a negotiated, audited act: `wipe_impact` enumerates exactly what dies (identity, onchain anchor, guard lessons, live/archived memory); `request_wipe` **refuses** a silent wipe until `force=True` + a reason, then journals its own destruction to a **store-independent log that survives the deletion**. A wipe is permanent but never untraceable. | `src/dejavu/consent.py` |
 
 **Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
 wiped-store naive fallback — see the **Run** section.
@@ -141,10 +143,10 @@ with money attached.
 `tests/test_sovereign.py` + `tests/test_spine.py` + `tests/test_sovereign_loop.py`
 pin all of it.
 
-### The second act (L9–L14): what the field hasn't built
+### The second act (L9–L16): what the field hasn't built
 
 L1–L8 cover *having, owning and recalling* memory. The second act covers memory's
-relationship with **itself and with other agents** — the six lanes no shipped
+relationship with **itself and with other agents** — the eight lanes no shipped
 memory product owns:
 
 | Layer | One-line thesis | Runnable proof |
@@ -155,8 +157,10 @@ memory product owns:
 | **L12 Exchange** | memory that **travels** (verify + gate + buy a foreign lesson) | `pytest tests/test_meta_guard_exchange.py` |
 | **L13 Consensus** | agents **agree** on the truth (confidence-weighted, never a fabricated winner) | `pytest tests/test_consensus_curriculum.py` |
 | **L14 Curriculum** | memory **schedules its own learning** (ignorance → coverage) | `pytest tests/test_consensus_curriculum.py` |
+| **L15 Distill** | memory **becomes capability** (scar tissue → one generalizing rule) | `pytest tests/test_distill_consent.py` |
+| **L16 Consent** | memory **argues for its own life** (refuses silent wipe, audits its own death) | `pytest tests/test_distill_consent.py` |
 
-Three load-bearing mirrors, each an executable assertion a judge can run:
+Eight load-bearing mirrors, each an executable assertion a judge can run:
 
 - **L9** — no gate → 60 noise writes bury the real lesson; gate → noise refused,
   lesson recalls clean.
@@ -175,6 +179,14 @@ Three load-bearing mirrors, each an executable assertion a judge can run:
   schedules it → L12 imports the seller's verified lesson through the L9 gate →
   L10 now reports **COVERED** and the gap is gone from the curriculum. Ignorance
   becomes coverage across one executable cycle.
+- **L15** — five realized-*volatility*-driven crisis scars (which raw recall,
+  keyed to vix/credit_stress, never sees) still produce a distilled rule that
+  **generalizes**: it de-risks a novel vol spike no scar ever named, while a
+  genuinely calm frame is untouched. Memory as judgment, not tape.
+- **L16** — `request_wipe()` **refuses** a silent deletion and enumerates what
+  dies (identity, guard lessons, anchor); only an explicit `force=True` +
+  reason wipes — and it writes a **store-independent audit log that survives
+  the deletion**. Permanent, but never untraceable.
 
 ### The measured gate (spine ablation benchmark)
 
@@ -440,7 +452,7 @@ the decision is memory-driven, the resulting action *onchain is memory-driven to
 ## Run
 
 ```bash
-pip install -e ".[test]" && pytest            # 117 core (80 base + 9 L7/L8 + 8 L9 + 11 L10-12 + 9 L13-14) + 6 optional NEURAL_MESH-backend
+pip install -e ".[test]" && pytest            # 123 core (80 base + 9 L7/L8 + 8 L9 + 11 L10-12 + 9 L13-14 + 6 L15-16) + 6 optional NEURAL_MESH-backend
 
 # THE SPINE (headline — six layers + L7/L8, one arc)
 dejavu-sovereign --crisis                       # full arc: learn+regret -> mint+self-anchor -> same-being
