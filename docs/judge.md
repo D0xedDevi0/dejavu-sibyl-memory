@@ -1,5 +1,15 @@
 # Judge's Cheat-Sheet — THE SPINE (NEURAL_MESH × Sibyl Memory)
 
+> **🎯 The crux of scoring — *how* the memory improves the build (30‑second answer):**
+> the decision function cannot work without Sibyl Memory. Cold-start Session B recalls
+> the past crisis lesson and flips **equity 0.55 → 0.05** (naive → de-risk); delete the
+> store and the same frame reverts to the naïve 0.55 losing book. Measured (seed 1337):
+> **0.82 vs 0.49 capital = 1.67× saved**, mean crisis return −1.65% vs −5.63%. The memory
+> also defends money economically: the sibling NEURAL_MESH Proof-of-Memory stack
+> slashes a lying agent **$0.10/claim vs $0.00 without** (repo `D0xedDevi0/NEURAL_MESH`,
+> `bench/bond_economics.py`), and a live `$0.01 USDC` x402 endpoint earned two real
+> Base settlements from an external wallet.
+
 > **Pitch:** The agent does not merely have memory. The memory is the agent's
 > dynamic data layer: it determines decisions and identity, coordinates its team,
 > evolves skills, preserves temporal context, anchors itself on Base, and earns

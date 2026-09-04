@@ -13,6 +13,25 @@
 > **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
 > timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
 
+> **🎯 How the memory improves the build (the crux of scoring) — the 30‑second answer:**
+> this build's decision function *cannot work without Sibyl Memory*. A fresh agent
+> cold-starts with zero context, recalls a past crisis lesson from the shared Sibyl
+> store, and flips a **−18% losing trade** into a **surviving one**. Delete the store
+> and the *same frame* reverts to the naive losing book.
+>
+> Measured, seed 1337 (reproducible): capital preserved **0.82 with memory vs 0.49
+> wiped** = **1.67×** capital saved; mean crisis return **−1.65% vs −5.63%**. And the
+> memory *earns and defends money* economically:
+> - **Saves agents money** — the sibling NEURAL_MESH Proof-of-Memory stack
+>   (repo `D0xedDevi0/NEURAL_MESH`, `bench/bond_economics.py`) shows a lying agent is
+>   slashed **$0.10/claim with memory vs $0.00 without**; honesty becomes the cheaper
+>   strategy.
+> - **Retains historic data** — Session A's lesson and journal are still readable by a
+>   brand-new Session B (SQLite + FTS5, no vector DB). That *retention* is what changes
+>   the decision.
+> - **Earns from memory** — a live `$0.01 USDC` x402 endpoint sold two paid reads,
+>   settled onchain by an external wallet.
+
 **Final public proof:** [2:39 demo-video post](https://x.com/D0xedDevi0/status/2093773724596175008) · [video dropped as reply to @sibylcap](https://x.com/D0xedDevi0/status/2094844680517341277)
 · [measured build-log post](https://x.com/D0xedDevi0/status/2093773782255342027)
 · [canonical demo file](demo/demo_the_spine.mp4).
