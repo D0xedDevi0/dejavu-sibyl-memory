@@ -17,10 +17,22 @@ Six layers, one system (now eight beats):
     L8 Conflict    — write-time conflict resolution (supersession): contradictions
                         are superseded to ARCH + journaled, not overwritten.  [supersede.py]
 
+Then THE SECOND ACT (L9-L16) runs live on the same store before the wipe —
+memory's relationship with ITSELF and with OTHER agents:
+    L9 Discernment  — gate what gets written.          [gates.py]
+    L10 Meta        — know what you don't know.        [meta.py]
+    L11 Guard       — memory that says NO.             [guard.py]
+    L12 Exchange    — memory that travels (verified).  [exchange.py]
+    L13 Consensus   — agents agree on the truth.       [consensus.py]
+    L14 Curriculum  — memory schedules its own learning.[curriculum.py]
+    L15 Distill     — scar tissue becomes capability.  [distill.py]
+    L16 Consent     — memory argues for its own life (the wipe becomes an
+                      audited, negotiated act).        [consent.py]
+
 `run_arc()` executes the whole thing as one continuous demo arc (session A learns
 -> counterfactual -> sovereign mint + self-anchor -> fresh box same being -> dream
-a skill -> supersede a conflict -> wipe -> asset orphaned + naive). `dejavu-sovereign`
-CLI wraps it.
+a skill -> supersede a conflict -> the full second act -> wipe -> asset orphaned +
+naive). `dejavu-sovereign` CLI wraps it.
 """
 
 from __future__ import annotations
@@ -161,8 +173,101 @@ def run_arc(db: str | Path = DEFAULT_DB, *, dry_run: bool = True) -> dict:
     book_with = de_risk_book(len(lessons), risk=1.0)
     out["book_with_memory_equity"] = round(book_with.equity, 3)
 
-    # ---- the wipe: delete the store --------------------------------------
-    mem.delete_store()
+    # ==== THE SECOND ACT (L9-L16): what the field hasn't built ==============
+    # Memory's relationship with itself and with other agents — run live on the
+    # populated store, each beat deterministic and load-bearing.
+    # Seed the crisis lesson with hard provenance so L11/L12/L15 can use it.
+    from .meta import record_provenance
+    record_provenance(mem, "lesson", "crisis-1", source="backtest",
+                      evidence=3, falsifiable=True, hard=True)
+
+    # -- L9 DISCERNMENT: noise refused, rich lesson gated in ---------------
+    from .gates import gate_write
+    noise_dec = gate_write(mem, "fact", "noise-1", {"note": "meh"})
+    rich_dec = gate_write(mem, "lesson", "gated-rich",
+                          {"lesson": "de-risk first, ask later when vix>30"},
+                          source="arc", evidence=2, falsifiable=True)
+    out["l9_noise_rejected"] = (noise_dec.action == "REJECT")
+    out["l9_rich_persisted"] = (rich_dec.action == "PERSIST")
+
+    # -- L10 META: know what you know and don't ----------------------------
+    from .meta import known_unknowns, coverage, confidence
+    ku_known = known_unknowns(mem, "credit stress crisis de-risk")
+    ku_unknown = known_unknowns(mem, "unexplored alien-trading topic")
+    out["l10_known"] = ku_known["status"]          # COVERED/THIN
+    out["l10_unknown"] = ku_unknown["status"]      # UNKNOWN (go learn)
+    out["l10_confidence"] = confidence(mem, "lesson", "crisis-1")["confidence"]
+    out["l10_categories"] = len(coverage(mem))
+
+    # -- L11 GUARD: memory says NO -----------------------------------------
+    from .guard import guard_book
+    g_block = guard_book(mem, CRISIS_FRAME, 0.55)   # naive book under stress
+    out["l11_guards_naive"] = (g_block.verdict == "block")
+
+    # -- L12 EXCHANGE: memory travels to a store that never lived it --------
+    from .exchange import export_lesson, import_lesson
+    _tmp = db.parent
+    buyer = Memory(str(_tmp / "second-act-buyer.db"), tenant_id="buyer-brain")
+    art = export_lesson(mem, "crisis-1")
+    imp = import_lesson(buyer, art, credit_seller=mem)
+    from .policy import is_stressed
+    b_book = (de_risk_book(1, risk=1.0)
+              if is_stressed(CRISIS_FRAME) and len(buyer.recall_lessons(
+                  ["credit stress crisis"])) > 0
+              else naive_book())
+    out["l12_imported"] = (imp["verdict"] == "imported")
+    out["l12_buyer_derisks"] = (b_book.equity < 0.10)
+    buyer.close()
+
+    # -- L13 CONSENSUS: agents agree on the truth ---------------------------
+    from .consensus import agent_believe, reach_consensus
+    a1 = Memory(str(_tmp / "second-act-cons-a.db"))
+    a2 = Memory(str(_tmp / "second-act-cons-b.db"))
+    agent_believe(a1, "regime", {"regime": "crisis", "equity_target": 0.05},
+                  provenance={"source": "backtest", "evidence": 3,
+                              "falsifiable": True, "hard": True})
+    agent_believe(a2, "regime", {"regime": "calm", "equity_target": 0.55})
+    consensus = reach_consensus([a1, a2], "regime")
+    out["l13_consensus"] = consensus["status"]     # CONVERGED (conf wins)
+    a1.close(); a2.close()
+
+    # -- L14 CURRICULUM: memory schedules its own learning ------------------
+    from .curriculum import learn_plan
+    plan = learn_plan(mem, {"unexplored alien-trading topic": 0.9,
+                            "credit stress crisis de-risk": 0.9})
+    _p_unknown = [p for p in plan if p["status"] != "COVERED"][0]
+    out["l14_plans_unknown"] = _p_unknown["topic"]
+
+    # -- L15 DISTILL: scar tissue -> one generalizing capability ------------
+    from .distill import decide_with_skill, distill_rule
+    for i in range(3):
+        mem.write_lesson(
+            f"vol-scar-{i}",
+            f"realized-vol crisis scar {i}: the loss was volatility, not credit",
+            frame={"vix": 20.0, "credit_stress": 0.4, "realized_vol": 40.0},
+            outcome={"max_drawdown": -0.2})
+    _rule = distill_rule(mem)
+    _novel = {"vix": 20.0, "credit_stress": 0.4, "realized_vol": 55.0,
+              "yield_slope": 0.5}
+    _skill_book = decide_with_skill(mem, _novel)
+    out["l15_rule_learned"] = _rule is not None
+    out["l15_generalizes"] = (_skill_book.equity < 0.10)
+
+    # -- L16 CONSENT: memory argues for its own life ------------------------
+    from .consent import request_wipe, wipe_impact
+    refuse = request_wipe(mem)                       # refuses silent wipe
+    impact = wipe_impact(mem)
+    out["l16_refuses"] = (not refuse["granted"])
+    out["l16_impact_lessons"] = impact["lessons"]
+    out["l16_wipe_hash"] = bool(impact["pre_wipe_content_hash"])
+
+    # ---- the wipe: now a negotiated, audited act (L16) --------------------
+    # L16 authorizes the destructive wipe with an explicit reason and journals
+    # it to a store-independent log BEFORE the store is deleted.
+    wipe = request_wipe(mem, force=True,
+                        reason="spine demo: demonstrate the orphan/naive beat")
+    out["l16_wiped"] = wipe["wiped"]
+    out["wipe_audit"] = bool(wipe["audit_path"])
     mem = Memory(str(db), tenant_id="sovereign-brain")
     out["asset_orphaned_after_wipe"] = asset_orphaned(mem, mint)  # True
     out["identity_after_wipe"] = identity(mem)["id"]
@@ -197,7 +302,24 @@ def _fmt(out: dict) -> str:
              f"{out.get('consolidation_retained', 0)} retained (fresh stays, "
              f"stale->ARCH, recoverable={out.get('archive_recoverable', 0)})")
     L.append(f"   WITH memory -> equity {out['book_with_memory_equity']} (de-risk)")
-    L.append("   >>> DELETE STORE <<<")
+    L.append("   ==== SECOND ACT (L9-L16): what the field hasn't built ====")
+    L.append(f"   L9 gate: noise_rejected={out['l9_noise_rejected']} "
+             f"rich_persisted={out['l9_rich_persisted']}")
+    L.append(f"   L10 meta: known={out['l10_known']} "
+             f"unknown={out['l10_unknown']} conf={out['l10_confidence']} "
+             f"cats={out['l10_categories']}")
+    L.append(f"   L11 guard: guards_naive_0.55={out['l11_guards_naive']}")
+    L.append(f"   L12 exchange: imported={out['l12_imported']} "
+             f"buyer_derisks={out['l12_buyer_derisks']}")
+    L.append(f"   L13 consensus: {out['l13_consensus']} (confidence wins)")
+    L.append(f"   L14 curriculum: plans_unknown='{out['l14_plans_unknown']}'")
+    L.append(f"   L15 distill: rule_learned={out['l15_rule_learned']} "
+             f"generalizes_to_novel={out['l15_generalizes']}")
+    L.append(f"   L16 consent: refuses_silent={out['l16_refuses']} "
+             f"impact_lessons={out['l16_impact_lessons']} "
+             f"hash={out['l16_wipe_hash']}")
+    L.append("   >>> DELETE STORE (L16-audited) <<<")
+    L.append(f"   wipe authorized: {out['l16_wiped']} audited={out['wipe_audit']}")
     L.append(f"   asset orphaned: {out['asset_orphaned_after_wipe']}")
     L.append(f"   same_being: {out['same_being_after_wipe']} (new identity)")
     L.append(f"   WITHOUT memory -> equity {out['book_without_memory_equity']} (naive)")
