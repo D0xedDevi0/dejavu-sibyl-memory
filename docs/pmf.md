@@ -14,7 +14,8 @@
 
 THE SPINE is exposed as a **paid memory-query endpoint** on Base, settled via
 x402 (EIP-3009). A read costs **$0.01 USDC** and returns the onchain-committed
-memory root + six-layer state + de-risk verdict.
+memory root + the full 16-layer state (Act I L1-L8 + the second act L9-L16) +
+de-risk verdict.
 
 **The endpoint is live right now.** An unauthenticated request returns the x402
 challenge (HTTP 402):
@@ -27,7 +28,7 @@ challenge (HTTP 402):
     "scheme": "exact",
     "network": "eip155:8453",
     "amount": "10000",
-    "description": "Paid read of THE SPINE sovereign memory — onchain-committed root + 6-layer state + de-risk verdict. Memory as a dynamic data layer.",
+    "description": "Paid read of THE SPINE sovereign memory — onchain-committed root + 16-layer state (L1-L16, Act I + second act) + measured de-risk verdict. Memory as a dynamic data layer.",
     "payTo": "0x8AEE621035D93Deb3C0C1177fac252dC2dd501a0",
     "asset": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
   }]

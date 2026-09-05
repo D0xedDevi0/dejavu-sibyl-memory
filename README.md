@@ -226,7 +226,7 @@ endpoint** on Bankr Cloud:
 | Price | **$0.01 USDC** (10000 micro-USDC, 6 decimals) |
 | Network | Base (`eip155:8453`), asset `0x833589fcd6...` (USDC) |
 | Pays to | `0x8AEE621035D93Deb3C0C1177fac252dC2dd501a0` (facilitator) |
-| Serves | onchain-committed proof snapshot + six-layer state + de-risk verdict |
+| Serves | onchain-committed proof snapshot + 16-layer state (L1-L16) + de-risk verdict |
 | Source | `demo/x402/memory-query.ts` |
 
 Verification: `curl -X GET https://x402.bankr.bot/0xf8f96d.../memory-query` returns
