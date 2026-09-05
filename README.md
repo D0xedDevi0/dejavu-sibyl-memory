@@ -215,6 +215,32 @@ store), and applies the same crisis P&L model:
 Reproduce: `python demo/spine_ablation.py` → `demo/spine_ablation.json` +
 `demo/spine_gate_figure.png`. `tests/test_spine_ablation.py` pins the gate.
 
+### The conscience gate (second-act ablation — L9–L16 load-bearing)
+
+The spine gate above proves **some** memory beats a wiped store (L1–L8 recall).
+The harder claim is that the **second act is load-bearing on top of intact
+first-act memory**. `demo/conscience_ablation.py` holds stored content
+IDENTICAL across three arms (same lessons, same scars, same hard lessons) and
+runs the real modules across a deterministic panel of crisis channels:
+
+| Metric | FULL (16L) | ACT-ONE (L1–L8) | NO MEMORY |
+|---|---|---|---|
+| Capital after panel | **0.80** | 0.63 | 0.49 |
+| Recall-blind novel crises caught | **3 / 3** | 0 / 3 | 0 / 3 |
+
+The load-bearing gap: `decide_differently` only de-risks when `is_stressed()`
+trips, which keys on `credit_stress>0.7` **or** `vix>30` — it never reads
+`realized_vol`/`yield_slope`. A pure-volatility or curve-inversion crisis is
+**invisible to first-act recall** no matter how many scars the store holds.
+**L15 DISTILL** learns the shared `risk_score` threshold from those scars and
+fires on the novel frame anyway (risk_score *does* read vol + slope) — 3/3
+novel crises caught that ACT-ONE suffered flat-footed. **L11 GUARD** is the
+backstop that vetoes the overweight book on a stressed frame even when the
+store is too thin to distill (one hard lesson, no rule → still `block`s 0.55
+→ 0.05). Reproduce: `python demo/conscience_ablation.py` →
+`demo/conscience_ablation.json` + `demo/conscience_gate_figure.png`.
+`tests/test_conscience_ablation.py` pins the gradient FULL > ACT-ONE > NO-MEM.
+
 ## x402 query-payment status (LIVE)
 
 The L4 "memory earns" layer is **real, tested, and deployed as a live paid x402

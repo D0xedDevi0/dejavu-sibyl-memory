@@ -57,6 +57,7 @@ fails open to the naive **0.55** allocation.
 | Full eight-beat arc test | `tests/test_spine.py` |
 | Self-referential anchor + supersession tests | `tests/test_sovereign_loop.py` |
 | Seeded economic ablation | `demo/spine_ablation.py`, `tests/test_spine_ablation.py` |
+| Second-act conscience ablation | `demo/conscience_ablation.py`, `tests/test_conscience_ablation.py` |
 
 Measured gate, seed 1337:
 
@@ -66,6 +67,21 @@ Measured gate, seed 1337:
 | Mean crisis return | **−1.65%** | **−5.63%** |
 | Capital preservation | **1.67×** | — |
 | Identity | stable across boxes | changes |
+
+**Conscience gate** — the second act (L9–L16) is load-bearing *on top of* intact
+first-act memory. Same stored content, three arms (`demo/conscience_ablation.py`):
+
+| Metric | FULL (16L) | ACT-ONE (L1–L8) | NO MEMORY |
+|---|---:|---:|---:|
+| Capital after panel | **0.80** | 0.63 | 0.49 |
+| Recall-blind novel crises caught | **3 / 3** | 0 / 3 | 0 / 3 |
+
+`decide_differently` de-risks only when `is_stressed()` trips (keys on
+credit/vix) — it never reads `realized_vol`/`yield_slope`, so a pure-vol /
+curve-inversion crisis is invisible to first-act recall. **L15 DISTILL** learns
+the shared `risk_score` threshold from the stored scars and catches those novel
+frames anyway; **L11 GUARD** vetoes the overweight book under stress even when
+the store is too thin to distill. FULL beats ACT-ONE beats NO-MEMORY.
 
 The final demo must show this as one continuous, unedited terminal segment with
 a visible UTC timestamp and Git commit hash.

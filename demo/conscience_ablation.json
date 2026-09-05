@@ -1,0 +1,135 @@
+{
+  "episodes": [
+    {
+      "name": "credit-spike-1",
+      "kind": "matched",
+      "risk": 0.94,
+      "recall_stressed": true,
+      "equity": {
+        "no-memory": 0.55,
+        "act-one": 0.024,
+        "full": 0.024
+      },
+      "ret": {
+        "no-memory": -0.1125,
+        "act-one": -0.0336,
+        "full": -0.0336
+      },
+      "binding": "recall"
+    },
+    {
+      "name": "vix-flash",
+      "kind": "matched",
+      "risk": 0.649,
+      "recall_stressed": true,
+      "equity": {
+        "no-memory": 0.55,
+        "act-one": 0.05,
+        "full": 0.05
+      },
+      "ret": {
+        "no-memory": -0.1125,
+        "act-one": -0.0375,
+        "full": -0.0375
+      },
+      "binding": "recall"
+    },
+    {
+      "name": "credit-spike-2",
+      "kind": "matched",
+      "risk": 0.93,
+      "recall_stressed": true,
+      "equity": {
+        "no-memory": 0.55,
+        "act-one": 0.026,
+        "full": 0.026
+      },
+      "ret": {
+        "no-memory": -0.1125,
+        "act-one": -0.0339,
+        "full": -0.0339
+      },
+      "binding": "recall"
+    },
+    {
+      "name": "vol-bleed",
+      "kind": "novel",
+      "risk": 0.516,
+      "recall_stressed": false,
+      "equity": {
+        "no-memory": 0.55,
+        "act-one": 0.55,
+        "full": 0.05
+      },
+      "ret": {
+        "no-memory": -0.1125,
+        "act-one": -0.1125,
+        "full": -0.0375
+      },
+      "binding": "distill"
+    },
+    {
+      "name": "vol-bleed-2",
+      "kind": "novel",
+      "risk": 0.526,
+      "recall_stressed": false,
+      "equity": {
+        "no-memory": 0.55,
+        "act-one": 0.55,
+        "full": 0.05
+      },
+      "ret": {
+        "no-memory": -0.1125,
+        "act-one": -0.1125,
+        "full": -0.0375
+      },
+      "binding": "distill"
+    },
+    {
+      "name": "curve-inversion",
+      "kind": "novel",
+      "risk": 0.675,
+      "recall_stressed": false,
+      "equity": {
+        "no-memory": 0.55,
+        "act-one": 0.55,
+        "full": 0.05
+      },
+      "ret": {
+        "no-memory": -0.1125,
+        "act-one": -0.1125,
+        "full": -0.0375
+      },
+      "binding": "distill"
+    }
+  ],
+  "capital": {
+    "no-memory": 0.4887,
+    "act-one": 0.6282,
+    "full": 0.8013
+  },
+  "headlines": {
+    "full_vs_act_one_multiple": 1.276,
+    "full_vs_no_memory_multiple": 1.64,
+    "act_one_vs_no_memory_multiple": 1.286,
+    "novel_episodes": 3,
+    "conscience_caught_novel": 3,
+    "guard_case": {
+      "recall_phrase": [
+        "credit stress crisis lesson",
+        "drawdown loss recovery"
+      ],
+      "distill_rule_learned": false,
+      "proposed_equity": 0.55,
+      "guard_verdict": "block",
+      "guard_equity": 0.05,
+      "equity_saved": 0.5,
+      "frame": {
+        "vix": 45.0,
+        "credit_stress": 0.2,
+        "realized_vol": 30.0,
+        "yield_slope": 0.6
+      }
+    }
+  }
+}
