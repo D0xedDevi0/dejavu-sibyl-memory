@@ -86,6 +86,54 @@ the store is too thin to distill. FULL beats ACT-ONE beats NO-MEMORY.
 The final demo must show this as one continuous, unedited terminal segment with
 a visible UTC timestamp and Git commit hash.
 
+## 2b. Adversarial-hardening gate — memory you can't poison or bribe
+
+The field audits retrieval *quality*; almost nobody audits whether memory
+itself can be **weaponized** or **gamed**. Two real gaps, now measured and
+closed (`demo/ablate_l12_injection.py`, `demo/ablate_l13_sybil.py`,
+`tests/test_poison_sybil_hardening.py`):
+
+### Poison — cross-agent import as an injection vector (L12)
+`import_lesson` verified *integrity* (content hash) and gated on *quality* (L9),
+but never scanned the body. A malicious peer could mint a well-formed,
+hash-verified lesson whose text carried a prompt-injection / shell idiom and it
+was imported verbatim into the buyer's memory — and re-exposed by recall.
+
+| Metric | Pre-fix | Post-fix |
+|---|---:|---:|
+| `import_lesson` verdict | **IMPORTED** | **reject** |
+| Poison persisted in memory | **True** | **False** |
+| Recall re-exposes injection | **1 hit** | **0 hits** |
+| Journal | — | `IMPORT_REFUSED_POISON` |
+| Legit lesson still imports | yes | **yes (no false positives)** |
+
+Fix: `src/dejavu/exchange.py::inject_scan` — 16 pure-regex weaponized-memory
+idioms (mirroring NEURAL_MESH's ContentValidator), run on every string in the
+artifact body *before* any write. Deterministic, no LLM, no network.
+
+### Sybil — clones manufacturing consensus (L13)
+`reach_consensus` counted each store as one vote and trusted self-declared
+provenance. 2 clones sharing ONE owner, each self-declaring `falsifiable`
+provenance (conf 0.75), forced `CONVERGED` on the attacker's "truth" — over
+2 honest stores (conf 0.55) that held the higher-integrity, decision-grade
+lesson.
+
+| Metric | Pre-fix | Post-fix |
+|---|---:|---:|
+| Status | **CONVERGED** (crisis) | **DEADLOCK** |
+| Attack forced truth | **True** | **False** |
+| Quorum wins on | raw vote count | ≥2 **distinct owners** |
+| Majority basis | raw votes | distinct owners |
+
+Fix: `src/dejavu/consensus.py::reach_consensus` — owner diversity is the
+vote-weight basis. A single entity's clones can no longer manufacture a
+quorum-clearing majority; the harmless small-fleet (≤2 owner) truth-and-dissent
+case still CONVERGES legitimately (regression-pinned).
+
+**Net:** the memory layer that beats the field on recall and conscience now
+*also* can't be poisoned at the exchange boundary and can't be gamed by Sybil
+clones. Full suite stays **134 green** after both hardening changes.
+
 ## 3. Sibyl is the dependency
 
 `Memory` wraps the real `sibyl-memory-client` local store. Session A writes an

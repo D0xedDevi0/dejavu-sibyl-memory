@@ -40,7 +40,9 @@ def _fresh(name="c.db"):
 
 def _believer(db, owner_suffix, claim, *, topic="regime", source=None,
               evidence=0, falsifiable=False, hard=False):
-    m = Memory(os.path.join(tempfile.mkdtemp(), f"b{owner_suffix}.db"))
+    # Each believer is an INDEPENDENT agent -> a distinct tenant identity.
+    m = Memory(os.path.join(tempfile.mkdtemp(), f"b{owner_suffix}.db"),
+               tenant_id=f"agent-{owner_suffix}")
     consensus.agent_believe(m, topic, claim,
                             provenance={"source": source, "evidence": evidence,
                                         "falsifiable": falsifiable, "hard": hard})

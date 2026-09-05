@@ -23,8 +23,8 @@ m = Memory("agent.db")            # a fresh store. that's it.
 | L9 Discernment | `m.gated_write(cat, name, body, ...)` | persist only what earns its slot |
 | L10 Meta | `m.known_unknowns(q)`, `m.confidence(c,n)`, `m.snapshot()` | COVERED/THIN/UNKNOWN, provenance-trusted reliability |
 | L11 Guard | `m.guard_book(frame, eq)`, `m.hard_lessons()` | veto a repeat of a recorded loss |
-| L12 Exchange | `m.export_lesson(n)`, `m.import_lesson(art)` | verify + gate + buy a foreign lesson |
-| L13 Consensus | `m.agent_believe(t, claim)`, `m.reach_consensus(stores, t)` | confidence-weighted cross-agent truth |
+| L12 Exchange | `m.export_lesson(n)`, `m.import_lesson(art)` | verify + gate + buy a foreign lesson; every imported body is content-safety scanned (`inject_scan`) so a weaponized artifact is refused, not stored |
+| L13 Consensus | `m.agent_believe(t, claim)`, `m.reach_consensus(stores, t)` | confidence-weighted cross-agent truth, Sybil-hardened: quorum/majority are decided by distinct owners, so one entity's clones can't manufacture consensus |
 | L14 Curriculum | `m.learn_plan({topic: importance})`, `m.gaps_remaining(...)` | schedule what to learn next |
 | L15 Distill | `m.distill_rule()`, `m.decide_with_skill(frame)` | scar tissue -> one generalizing rule |
 | L16 Consent | `m.wipe_impact()`, `m.request_wipe(force=, reason=)` | refuse / audit a wipe |
@@ -114,10 +114,11 @@ buyer.import_lesson(artifact, credit_seller=seller) # verifies + L9-gates it
 ## Tests
 
 ```bash
-pytest tests/ -q          # 124 tests; the second-act suites are offline & fast
+pytest tests/ -q          # 142 tests; the second-act suites are offline & fast
+# the 48 load-bearing L9-L16 + arc + hardening tests:
 pytest tests/test_gates.py tests/test_meta_guard_exchange.py \
        tests/test_consensus_curriculum.py tests/test_distill_consent.py \
-       tests/test_spine.py            # the 40 load-bearing L9-L16 + arc tests
+       tests/test_spine.py tests/test_poison_sybil_hardening.py
 ```
 
 Full narrative: `docs/doctrine.md` (90s pitch) · `docs/showcase.html` (visual) ·

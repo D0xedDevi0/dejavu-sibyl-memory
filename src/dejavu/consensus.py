@@ -123,8 +123,10 @@ def reach_consensus(stores: list, topic: str, *,
     for v in votes:
         fp = _fingerprint(v["claim"])
         g = groups.setdefault(fp, {"claim": v["claim"], "votes": [],
-                                   "max_conf": 0.0, "total_conf": 0.0})
+                                   "max_conf": 0.0, "total_conf": 0.0,
+                                   "owners": set()})
         g["votes"].append(v)
+        g["owners"].add(v["owner"])
         g["max_conf"] = max(g["max_conf"], v["confidence"])
         g["total_conf"] += v["confidence"]
     ordered = sorted(groups.values(), key=lambda g: -g["max_conf"])
@@ -136,20 +138,37 @@ def reach_consensus(stores: list, topic: str, *,
     else:
         top = ordered[0]
         n = len(votes)
-        if top["max_conf"] >= quorum:
+        # --- L13 Sybil hardening: owner diversity is the vote-weight basis. ---
+        # A single entity running N clones used to be counted as N independent
+        # agents, so clones + fabricated provenance could manufacture a
+        # quorum-clearing CONVERGED/MAJORITY over higher-integrity honest peers.
+        # Now each UNIQUE OWNER contributes one effective vote, and a claim
+        # clears quorum via confidence only when it is corroborated by >=2
+        # distinct owners — OR the fleet is genuinely small (<=2 owners) where
+        # a single sourced, high-confidence lesson is still the credible truth.
+        # A strict majority also requires a majority of DISTINCT OWNERS, so one
+        # entity's clones can never outvote the rest of the fleet alone.
+        distinct_owners = len(top["owners"])
+        unique_votes = len({v["owner"] for v in votes})
+        small_fleet = unique_votes <= 2
+        if top["max_conf"] >= quorum and (distinct_owners >= 2 or small_fleet):
             status = "CONVERGED"
             winner = top
             reason = (f"confidence-backed: max {top['max_conf']:.2f} >= "
-                      f"quorum {quorum:.2f}")
-        elif len(top["votes"]) > n / 2.0:
+                      f"quorum {quorum:.2f} across {distinct_owners} distinct "
+                      f"owners")
+        elif distinct_owners > unique_votes / 2.0:
             status = "MAJORITY"
             winner = top
-            reason = f"strict majority ({len(top['votes'])}/{n}) without quorum"
+            reason = (f"majority of distinct owners ({distinct_owners}/"
+                      f"{unique_votes}) without quorum")
         else:
             status = "DEADLOCK"
             winner = None
-            reason = ("genuine split: no quorum and no majority — refusing to "
-                      "fabricate a winner")
+            reason = ("no quorum from independent owners and no majority of "
+                      "distinct owners — refusing to fabricate a winner (Sybil-"
+                      "hardened: a single owner's clones don't manufacture "
+                      "consensus)")
     dissent = [v for v in votes
                if winner is not None and _fingerprint(v["claim"]) != _fingerprint(winner["claim"])]
 
