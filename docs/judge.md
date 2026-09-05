@@ -142,9 +142,15 @@ NEURAL_MESH backend tests skip cleanly when the sibling backend is unavailable.
 ## 7. Partner-claim discipline
 
 - **Base:** claimed and demonstrated by the sovereign anchor and x402 receipts.
-- **Virtuals:** code and registration docs exist in `src/dejavu/virtuals.py` and
-  `virtuals-dejavu-agent.md`; claim its multiplier only if a real ACP job is
-  visibly exercised in the final demo.
+- **Virtuals:** ✅ **CLAIMED.** The `dejavu` agent is a **registered, signer-active
+  (`ACP_ONLY` = transacting-capable) Virtuals ACP agent** on Base mainnet — and a
+  **real ACP job was exercised live** on 2026-09-04: job `76304` (v2, Base mainnet
+  8453) where the dejavu agent (`0xef25…47bb`) hired provider LUMI for
+  `forecast_calibration` with a posted requirement. Verified onchain via
+  `acp job history --job-id 76304 --chain-id 8453` (status `open`, client +
+  provider + requirement recorded). Identity + signer in
+  `virtuals-dejavu-agent.md`; live exercise reproducible via the ACP CLI
+  (`virtuals.py`).
 - **PMF bonus (+10):** ✅ **CLAIMED.** Public design-partner/pilot artifact:
   **`docs/pmf.md`** — live paid x402 endpoint with **two real settlements from an
   external wallet** (`0x4a15fc61…`, $0.01 USDC each, Base), the sovereign onchain
