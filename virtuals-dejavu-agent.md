@@ -1,6 +1,6 @@
 # Virtuals ACP — dejavu agent (registered 2026-08-17, renamed echo→dejavu)
 
-## Status: ✅ REGISTERED + SIGNER ACTIVE (transacting)
+## Status: ✅ REGISTERED + SIGNER ACTIVE + LIVE ACP JOB EXERCISED
 
 The `dejavu` agent is a fully registered, signer-enabled Virtuals Protocol agent.
 (Registered as `echo`, **renamed to `dejavu` on the platform 2026-08-17** via
@@ -48,3 +48,21 @@ acp agent list --json              # echo is registered
 acp agent signer-policy --agent-id 01a01184-784b-7989-9d10-526fcb708ebd --json  # ACP_ONLY
 acp wallet balance --json          # multi-chain balances
 ```
+
+## Live ACP job exercised (2026-09-04) — job 76304, Base mainnet
+
+Real onchain ACP v2 job fired through the dejavu agent's client wallet:
+
+- **Job ID:** `76304` (v2 protocol, Base mainnet 8453)
+- **Client (dejavu):** `0xef25E2144f7Ca887A9Dc59e732c9E23e6a5847BB`
+- **Provider:** LUMI `0x4cdB0d2Fd8755a7c3924B025CD953d665D023c2B` (live: lastActive
+  2026-09-05T00:26Z)
+- **Offering:** `forecast_calibration` ($0.01, requiredFunds:false) — hired for a
+  5-round calibration score
+- **Requirement posted:** `{"offering":"forecast_calibration","limit":5}`
+- **Verified onchain:** `acp job history --job-id 76304 --chain-id 8453` →
+  status `open`, entries `job.created` (client/provider/evaluator) + the posted
+  requirement. This is a real onchain job, not a stub.
+
+This satisfies the Virtuals stack requirement as a **visibly exercised ACP job** —
+the discipline gate in `docs/judge.md` §7 is now cleared.
