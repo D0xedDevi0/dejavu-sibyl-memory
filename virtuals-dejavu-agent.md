@@ -66,3 +66,12 @@ Real onchain ACP v2 job fired through the dejavu agent's client wallet:
 
 This satisfies the Virtuals stack requirement as a **visibly exercised ACP job** —
 the discipline gate in `docs/judge.md` §7 is now cleared.
+
+## Status upgrade (2026-09-05): dejavu is now an ACP PROVIDER (not just buyer)
+
+dejavu now SELLS the Sibyl memory layer as a hireable ACP service on Base:
+
+- **Offering:** `Sibyl Memory De-Risk Verdict` — id `01a0713c-b898-7890-8238-01e217ac5787`, \$0.50 fixed, required funds, 5-min SLA, VISIBLE. Other agents submit `{query, frame}` and receive a memory-grounded verdict (recalled lessons, equity target, L11 guard verdict, L15 distill signal, memory root).
+- **Fulfillment brain:** `virtuals/provider_runtime.py` (repo) — runs the REAL dejavu 16-layer pipeline. Self-test green: crisis→0.05, recall-blind vol→0.05 (L15 catch), calm→0.55.
+- **Compute/LLM backend:** Virtuals compute account (\$10 limit, model deepseek-deepseek-v4-flash) + OpenAI-compatible endpoint `https://compute.virtuals.io/v1` auth'd by the Virtuals agent API key (stored: `.secrets/virtuals-dejavu.env`, var `VIRTUALS_API_KEY`). Hosts Claude Opus 4.1, Kimi batch, etc.
+- **Broadcast:** launch announced to X @D0xedDevi0 (2096192991203639529) + D0xed Dev Telegram/Discord home channels.
