@@ -4,9 +4,9 @@ Audit date: 2026-09-10 UTC. Starting revision: `97402cbc1e68a046a8de36fcbe0a49e9
 
 ## Recommendation
 
-**STOP new feature development. HOLD final submission claims until the release blockers below are cleared.** The core memory mechanism is real and reproducible. Evidence quality and honest packaging—not another subsystem—are the highest-return work.
+**STOP new feature development.** The core memory mechanism is real and reproducible, the published submission checklist is satisfied, and the private build page is ready. Evidence quality and honest packaging—not another subsystem—are the highest-return work.
 
-This audit does not declare the project disqualified, production-safe, or guaranteed to win. Eligibility belongs to the organizers. No private build-page state was verified.
+This audit does not guarantee a prize outcome. The published rules require a Sep 1–10 build/submission window and a Prior Work declaration, but do not state that every repository commit must be created inside that window. The repository discloses its Aug 17 starting history and separates prior substrate from September work. Organizer interpretation of that wording remains a limited eligibility risk; history must not be rewritten.
 
 ## Acceptance contract
 
@@ -21,9 +21,9 @@ Continuous terminal proof with UTC and code revision is the evidence standard us
 
 ## Findings and disposition
 
-### P0 — release blockers
+### Release status
 
-1. **Eligibility uncertainty.** Of 86 preserved commits, 64 predate September 1; first commit is August 17. Core integration and earlier media already existed. Corrected prior-work declarations; organizer clarification still needed. Never rewrite history.
+1. **Prior-work disclosure, not a confirmed disqualification.** Of 88 preserved commits, 64 predate September 1; first commit is August 17. The official rules require a Prior Work declaration but do not expressly require every commit to be created during Sep 1–10. Core integration and earlier media are disclosed as prior substrate; September work is separately identified. Never rewrite history. If the organizers apply a stricter interpretation, request a ruling.
 2. **Historical film contains a false external-customer inference.** At ~02:49 it says “someone outside us paid.” USDC Transfer logs show the team's own wallet paid both times. The canonical pushed v3 replacement removes that claim; the historical video remains unchanged as a clearly labeled fallback.
 3. **Final revision published and verified.** Commit `2502a68db06eccd50dcf2407dfefa1f88b705d43` is on remote `main`; the local suite passed 150 tests with 3 skips, and the canonical remote video matched the local SHA-256 byte-for-byte.
 4. **Private submission state verified.** The registered private build URL was opened with the stored owner-controlled token, the canonical v3 video URL was saved, and a fresh reload read back the repo, video, three post URLs, deletion impact, memory walkthrough, all seven selected primitives, all four green milestones, and **Marked ready for judging**. The token is not stored in the repository or printed in this audit.
@@ -86,7 +86,7 @@ Read-only parent verification saved complete raw responses in `evidence/final/ex
 🟦 Rewrote README with proof first, three reproduced claims, architecture, safety limits, partner scope, market hypothesis, reproducibility and accurate prior work.
 🟦 Replaced judge sheet with a code/test/evidence matrix and explicit missing video timestamps.
 🟦 Replaced PMF claim with decoded-payment attribution and a measurable pilot proposal.
-🟦 Replaced submission copy and unchecked unverified saved/ready claims.
+🟦 Replaced submission copy and recorded the authenticated saved/ready read-back.
 🟦 Marked BUILD_SPEC, CONCEPT, LANES and UPGRADES historical rather than competing sources of truth.
 🟦 Corrected showcase/Doctrine boundaries without treating metaphors as capabilities.
 🟦 Added surface audit, raw evidence and the [2:30 final script](final-demo-script.md).
@@ -97,11 +97,9 @@ The reviewer rejected an earlier snapshot for empty/duplicate receipt IDs and an
 
 ## Ranked remaining work
 
-1. **Obtain organizer eligibility clarification** and authenticated submission read-back. External human/access dependencies; cannot be manufactured locally.
-2. **Publish the verified replacement media.** Local v3 is 133.523220 seconds (2:13), includes the captured fresh-process proof, actual guard receipt, historical transaction labels and simulated-metric labels. It still requires authorized publication and a post-push public read-back.
-3. **Authorize publication of reviewed local changes.** Commit code first, capture code revision honestly, commit media separately, push, verify exact remote CI and public links.
-4. **Verify/post qualifying public artifacts** with accurate partner and PMF language, only after authorization.
-5. **Read back the final build page and mark ready before deadline**, only with explicit authorization.
+1. **Optional organizer clarification:** ask whether the disclosed Aug 17 prior substrate is acceptable under the published Prior Work rule. This is an interpretation check, not a local release blocker.
+2. **Keep the submitted state stable:** do not rewrite history, replace the canonical video, or add new feature work unless an organizer explicitly requests it.
+3. **Post-submission:** retain the exact commit, video checksum, private ready-state read-back, and honest prior-work declaration for judging questions.
 
 Do not add a new database, contract, LLM provider, Hermes integration or benchmark. A named external operator pilot is the next commercial milestone, not a last-hour pretext for an unearned PMF bonus.
 
@@ -109,7 +107,7 @@ Do not add a new database, contract, LLM provider, Hermes integration or benchma
 
 | Risk | Severity | Mitigation / owner |
 |---|---|---|
-| Pre-window work interpretation | Critical eligibility uncertainty | Organizer clarification, user |
+| Prior-work interpretation | Medium clarification risk, not a confirmed gate failure | Preserve disclosure; optional organizer clarification |
 | False external-customer scene remains public | High credibility | Replace film before authorized release |
 | Local revision differs from public submission | High | Authorized push + matching remote CI |
 | Private ready state unknown | High | Authenticated exact-target read-back |
