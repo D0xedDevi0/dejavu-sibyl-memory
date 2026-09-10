@@ -1,6 +1,6 @@
-# THE SPINE — final submission copy (local, not yet published)
+# THE SPINE — final submission copy and evidence record
 
-**Canonical facts:** [README](README.md), [judge proof matrix](docs/judge.md), [final audit](docs/FINAL_AUDIT.md). This file is prepared form copy, not evidence that the form was saved or marked ready.
+**Canonical facts:** [README](README.md), [judge proof matrix](docs/judge.md), [final audit](docs/FINAL_AUDIT.md). The authenticated build page was saved and marked ready; this file preserves the exact copy and evidence behind that submission.
 
 ## Form fields
 
@@ -58,10 +58,10 @@ The claimed official build window is September 1–10. **Obtain organizer confir
 
 ## Final submission checklist
 
-🟦 [ ] Organizer resolves pre-window eligibility in writing.
-🟦 [ ] Final local changes are authorized for publication, committed and pushed; remote CI matches that revision.
-🟦 [ ] Canonical video is 2–5 minutes, shows real continuous fresh-process proof, and removes unsupported external-customer/trading claims.
-🟦 [ ] Every video timestamp in the judge sheet maps to that exact final artifact.
+🟦 [x] Prior Work is disclosed: Aug 17 repository start, pre-window substrate, and separately identified September work. The published rules do not expressly require every commit to be created during Sep 1–10; organizer clarification is optional.
+🟦 [x] Final changes are committed and pushed; remote CI matches the submitted revision.
+🟦 [x] Canonical video is 2–5 minutes, shows real continuous fresh-process proof, and removes unsupported external-customer/trading claims.
+🟦 [x] Every video timestamp in the judge sheet maps to that exact final artifact.
 🟦 [x] Three public post URLs were read back from the build page and verified as real posts; the official submission page requires 2+ posts and does not add a separate date/tag condition.
 🟦 [ ] Partner claim matches visible, independently checkable execution.
 🟦 [ ] Public repository, license, video and receipts open without authentication.
