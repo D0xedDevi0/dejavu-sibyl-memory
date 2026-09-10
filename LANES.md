@@ -1,5 +1,7 @@
 # NEURAL_MESH × Sibyl Memory — LANES (novel, unexplored build directions)
 
+> **HISTORICAL PLAN — superseded, not current readiness.** This document preserves earlier design decisions, counts, claims and TODOs. Use [the current README](README.md) and the final audit instead. Earlier partner multipliers, production/PMF claims and completed-submission checkboxes here are not current verification. Pre-September work is prior work; preserve its history.
+
 **Goal:** don't build the obvious single-agent "memory-dejavu" demo everyone will
 submit. Create lanes that *haven't been done* — each grounded in verified Sibyl
 capability and our real onchain/agent stack. Winner = one that clears the

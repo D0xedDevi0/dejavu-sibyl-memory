@@ -1,8 +1,8 @@
-"""Virtuals ACP stack tests (M4).
+"""Virtuals ACP stack tests.
 
-Requires the registered `dejavu` agent + `TS_KEYRING_BACKEND=file` (see
-virtuals-dejavu-agent.md). Tests skip gracefully if the CLI isn't reachable so
-the suite stays green in CI / on machines without the credentials.
+Deterministic mock unit tests run in every environment.  Live integration
+tests require ``DEJAVU_VIRTUALS_LIVE=1`` (and the acp CLI + signer) and
+skip cleanly otherwise so the suite stays green in CI / on sandbox hosts.
 """
 
 import pytest
@@ -12,6 +12,8 @@ from dejavu import virtuals
 _HAS_ACP = virtuals.acp_available()
 
 
+# ---- deterministic unit tests (always run) ---------------------------------
+
 def test_agent_identity_constants():
     """The registered dejavu agent constants are present."""
     assert virtuals.DEJAVU_AGENT_ID.startswith("01a01184")
@@ -19,13 +21,50 @@ def test_agent_identity_constants():
     assert virtuals.DEJAVU_SOLANA
 
 
-@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed (skip on CI)")
+def test_exercise_returns_identity_without_live_signer(monkeypatch):
+    """exercise() returns the agent IDENTITY even when the live signer path
+    is unavailable.  available must be False and error must explain why."""
+    monkeypatch.delenv("DEJAVU_VIRTUALS_LIVE", raising=False)
+    r = virtuals.exercise()
+    # In a non-live environment the signer query fails, so available is False.
+    assert r.available is False
+    assert r.agent_id == virtuals.DEJAVU_AGENT_ID
+    assert r.wallet == virtuals.DEJAVU_WALLET
+    assert r.signer_policy is None
+    assert "signer query failed" in (r.error or "")
+    assert "DEJAVU_VIRTUALS_LIVE" in (r.error or "")
+
+
+def test_run_sessions_surfaces_virtuals_identity(monkeypatch):
+    """The full loop surfaces the Virtuals receipt even in dry/deterministic
+    mode — the identity constants travel, available=False is honest."""
+    monkeypatch.delenv("DEJAVU_VIRTUALS_LIVE", raising=False)
+    import os
+    import tempfile
+
+    from dejavu.agent import run_sessions
+    from dejavu.config import Config
+
+    res = run_sessions(
+        db_path=os.path.join(tempfile.mkdtemp(), "v.db"),
+        config=Config(dry_run=True),
+        virtuals=True,
+    )
+    assert res["virtuals"] is not None
+    assert res["virtuals"]["agent_id"] == virtuals.DEJAVU_AGENT_ID
+    assert res["virtuals"]["available"] is False
+    assert res["virtuals"]["signer_policy"] is None
+
+
+# ---- live integration tests (require DEJAVU_VIRTUALS_LIVE=1) ----------------
+
+@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed or DEJAVU_VIRTUALS_LIVE not set (skip on CI)")
 def test_acp_bin_path_exists():
     """The acp CLI binary should exist at the known path."""
     assert virtuals.acp_available()
 
 
-@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed (skip on CI)")
+@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed or DEJAVU_VIRTUALS_LIVE not set (skip on CI)")
 def test_exercise_returns_registered_agent():
     """exercise() returns the dejavu agent with a live signer policy."""
     r = virtuals.exercise()
@@ -36,14 +75,20 @@ def test_exercise_returns_registered_agent():
     assert r.signer_policy in ("ACP_ONLY", "restricted", "unrestricted", "deny-all")
 
 
-@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed (skip on CI)")
-def test_run_sessions_with_virtuals():
+@pytest.mark.skipif(not _HAS_ACP, reason="acp-cli not installed or DEJAVU_VIRTUALS_LIVE not set (skip on CI)")
+def test_run_sessions_with_virtuals_live():
     """The full loop surfaces the Virtuals receipt when enabled."""
+    import os
+    import tempfile
+
     from dejavu.agent import run_sessions
     from dejavu.config import Config
-    import os, tempfile
-    res = run_sessions(db_path=os.path.join(tempfile.mkdtemp(), "v.db"),
-                       config=Config(dry_run=True), virtuals=True)
+
+    res = run_sessions(
+        db_path=os.path.join(tempfile.mkdtemp(), "v.db"),
+        config=Config(dry_run=True),
+        virtuals=True,
+    )
     assert res["virtuals"] is not None
     assert res["virtuals"]["available"] is True
     assert res["virtuals"]["wallet"] == virtuals.DEJAVU_WALLET

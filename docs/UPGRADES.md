@@ -1,5 +1,7 @@
 # THE FLEET — memory-deepening upgrades (researched 2026-08-23)
 
+> **HISTORICAL PLAN — superseded, not current readiness.** This document preserves earlier design decisions, counts, claims and TODOs. Use [the current README](../README.md) and the final audit instead. Earlier partner multipliers, production/PMF claims and completed-submission checkboxes here are not current verification. Pre-September work is prior work; preserve its history.
+
 Fusion of (a) full audit of the vendored `sibyl_memory_client` SDK surface vs
 what our code actually calls, and (b) state-of-the-art agentic-memory research
 (MemGPT/Letta, Generative Agents, Reflexion, Voyager, A-MEM, Mem0, Zep/Graphiti,

@@ -3,9 +3,8 @@
 The memory-driven decision (a Book) becomes a REAL Base transaction. Two modes
 used in the demo:
 
-  * `de_risk`  (recalled a crisis lesson) -> transfer dust ETH to the fee
-    recipient, labelled a de-risk / hedge settlement. Tx hash is the proof the
-    agent *acted onchain because it remembered*.
+  * `de_risk`  (recalled a crisis lesson) -> symbolic dust transfer to the fee
+    recipient. A returned hash reports broadcast only, not confirmation.
   * `hold`     (no stress / naive)         -> a dust self-transfer (keep-alive).
 
 `execute()` defaults to dry-run for safety. Set `dry_run=False` (env
@@ -62,6 +61,7 @@ class OnchainReceipt:
             "details": self.details,
             "tx_hash": self.tx_hash,
             "explorer_url": self.explorer_url,
+            "live_tx": self.tx_hash is not None and not self.dry_run,
         }
 
 
@@ -97,9 +97,9 @@ def _broadcast(url: str, signed: SignedTransaction) -> str:
 def execute(book, config: Config) -> OnchainReceipt:
     """Turn a Book into an onchain action on Base Mainnet.
 
-    With memory (de-risk) the agent moves dust to the fee recipient — an actual
-    executed transaction. The tx hash is the demo's "it didn't just remember, it
-    acted" proof.
+    With memory (de-risk) the adapter broadcasts symbolic dust to the fee
+    recipient. This is not a portfolio hedge. A returned hash (and live_tx)
+    means broadcast, not mined success; confirmation needs separate read-back.
     """
     action = "de_risk" if book.equity <= 0.05 else "hold"
     details = {"equity_target": round(book.equity, 3),

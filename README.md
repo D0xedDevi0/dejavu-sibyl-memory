@@ -1,518 +1,127 @@
-# THE SPINE — memory as an ownable, self-authoring data layer (dejavu)
+# THE SPINE — memory that changes what an agent does
 
-**NEURAL_MESH × Sibyl Memory** · Sibyl Memory Hackathon (hack.sibyllabs.org) ·
-[github.com/D0xedDevi0/dejavu-sibyl-memory](https://github.com/D0xedDevi0/dejavu-sibyl-memory)
+**NEURAL_MESH × Sibyl Memory** · [Public repository](https://github.com/D0xedDevi0/dejavu-sibyl-memory) · MIT
 
-> *"Forgetting is a bug. Remembering is the strategy."*
+> A persistent memory layer for autonomous risk agents: turn recorded experience into guarded decisions, shared capability, and auditable action evidence.
 
-> **The framing, in Sibyl's own words:** *"any application that utilizes the memory
-> as a dynamic data layer is applicable."* We took it all the way. The memory isn't
-> a filing cabinet — it's a **live, typed, tamper-evident data layer that owns
-> itself, earns from itself, and writes itself.**
+**Watch:** [THE SPINE canonical demo](demo/_v3/demo_the_spine_v3.mp4) — 2:13, narrated, and rebuilt from the current proof path. The older `demo/demo_the_spine.mp4` remains historical only. See [video audit](docs/audit-surfaces.md) and the [final demo script](docs/final-demo-script.md).
 
-> **👨‍⚖️ Judge shortcut:** every claim → exact file/line, test, tx hash, and video
-> timestamp on one page: **[`docs/judge.md`](docs/judge.md)**.
->
-> **📜 The narrative pitch (90 seconds):** the Memory Doctrine — what memory is,
-> the 16-layer spine as one story, the thesis in one breath:
-> **[`docs/doctrine.md`](docs/doctrine.md)**.
->
-> **🎨 The visual showcase (open in a browser):** the whole system as a
-> D0xedDev-style terminal surface — navy pixel-grid, live arc output, receipts:
-> **[`docs/showcase.html`](docs/showcase.html)**.
+**Judge shortcut:** [claim → implementation → test → evidence](docs/judge.md) · [final audit and release checklist](docs/FINAL_AUDIT.md).
 
-> **🎯 How the memory improves the build (the crux of scoring) — the 30‑second answer:**
-> this build's decision function *cannot work without Sibyl Memory*. A fresh agent
-> cold-starts with zero context, recalls a past crisis lesson from the shared Sibyl
-> store, and flips a **−18% losing trade** into a **surviving one**. Delete the store
-> and the *same frame* reverts to the naive losing book.
->
-> Measured, seed 1337 (reproducible): capital preserved **0.82 with memory vs 0.49
-> wiped** = **1.67×** capital saved; mean crisis return **−1.65% vs −5.63%**. And the
-> memory *earns and defends money* economically:
-> - **Saves agents money** — the sibling NEURAL_MESH Proof-of-Memory stack
->   (repo `D0xedDevi0/NEURAL_MESH`, `bench/bond_economics.py`) shows a lying agent is
->   slashed **$0.10/claim with memory vs $0.00 without**; honesty becomes the cheaper
->   strategy.
-> - **Retains historic data** — Session A's lesson and journal are still readable by a
->   brand-new Session B (SQLite + FTS5, no vector DB). That *retention* is what changes
->   the decision.
-> - **Earns from memory** — a live `$0.01 USDC` x402 endpoint sold two paid reads,
->   settled onchain by an external wallet.
+## Run the fresh-process deletion proof
 
-**Final public proof:** [2:39 demo-video post](https://x.com/D0xedDevi0/status/2093773724596175008) · [video dropped as reply to @sibylcap](https://x.com/D0xedDevi0/status/2094844680517341277)
-· [measured build-log post](https://x.com/D0xedDevi0/status/2093773782255342027)
-· [canonical demo file](demo/demo_the_spine.mp4).
+From the repository root, in Python 3.11+ with `uv` installed:
 
-**The headline is THE SPINE** — six layers, one system (now eight beats with
-L7 + L8):
+```bash
+uv venv .venv && uv pip install --python .venv/bin/python -e '.[test]' && PATH="$PWD/.venv/bin:$PATH" DEJAVU_DRY_RUN=1 bash demo/run_continuous_gate.sh
+```
 
-> **The agent doesn't *have* memory. The memory IS the agent — and it owns
-> itself, earns from itself, and writes itself.**
-
-| Layer | What it proves | Module |
-|---|---|---|
-| **L1 Sovereign** | The memory root is committed **onchain (Base)** — memory is an ownable, content-addressed asset. Wipe it and you don't just lose a decision, you orphan-destroy the committed asset. | `src/dejavu/sovereign.py` |
-| **L2 Identity** | The agent **IS its memory** — a fresh box mounting the same store is the same being; wipe it and the identity changes. | `src/dejavu/sovereign.py` |
-| **L3 Dream** | Memory **authors new skills** from its own journal while idle (Learner/DREAM). It gets sharper the more it runs. | `src/dejavu/memory.py` |
-| **L4 Commons** | Many agents coordinate through **one shared pool** — a team that remembers together. | `src/dejavu/fleet.py` |
-| **L5 Regret** | Memory of the **road not taken** — it remembers the mistakes it never made. | `src/dejavu/regret.py` |
-| **L6 Temporal** | Memory is a **time-bound, dynamic layer** — it knows *when* it knew things, answers point-in-time "as-of" recalls, and **strategically forgets** stale lessons to ARCH (recoverable). Deliberate, auditable forgetting — distinct from the destructive wipe. | `src/dejavu/temporal.py` |
-| **L7 Sovereign Loop** | **Memory that knows it owns itself.** The onchain mint receipt is written **back into the store** (REFERENCE tier), and REFERENCE is folded into the content root — so a fresh session's identity provably references a committed onchain root. The memory doesn't just get anchored; it *remembers its own anchor*. | `src/dejavu/sovereign.py` |
-| **L8 Conflict** | **Write-time conflict resolution (supersession).** A contradiction is never blindly overwritten — the loser goes to ARCH (recoverable) and a SUPERSEDES journal event links old → new. The memory resolves conflicts on write and keeps an auditable revision trail. | `src/dejavu/supersede.py` |
-| **L9 Discernment** | **The memory's write-quality gate.** Every system on the market optimizes *retrieval*; almost nobody gates what gets *written*. Before a fact earns a WARM slot the gate scores it — novelty, falsifiable truth-confidence, category use-weight, noise floor — and persists only what earns its place. Capacity is treated as a **budget**: at the cap it archives the *weakest live entry to ARCH (recoverable, never deleted)* rather than growing unbounded. It **learns its own ingestion policy** from `feedback_used`/`feedback_unused`/`recalibrate_policy`. Load-bearing mirror: no gate → the store floods with noise → the real lesson is buried; gate → clean store → the lesson recalls. Deterministic (no LLM, no RNG). | `src/dejavu/gates.py` |
-| **L10 Meta** | **Memory that knows itself.** Agents hallucinate coverage — they can't answer "what do I NOT know?" without bluffing. META makes ignorance a first-class, queryable output: `known_unknowns` returns **COVERED / THIN / UNKNOWN** (never a silent empty list — UNKNOWN means *go learn*); `confidence` scores per-entity reliability from recorded provenance; `coverage` maps maturity and blind spots across categories. Load-bearing: without META a planner treats absence as "no constraint" and proceeds naive; with it, an unknown topic is flagged and the planner can abstain or de-risk. | `src/dejavu/meta.py` |
-| **L11 Guard** | **Memory that ACTS.** Retrieval only *informs*; GUARD gives memory **veto power**. A stored hard lesson (prov.hard OR serious outcome drawdown) becomes a constraint the planner can't walk past — even when the fuzzy recall phrase text-misses, GUARD sees the hard lesson + a stressed frame + a proposed overweight-equity book and **BLOCKS** it. That's a second, load-bearing line of defense: memory that says "no," not just "remember." | `src/dejavu/guard.py` |
-| **L12 Exchange** | **Memory that travels.** A hard-won lesson becomes a portable, **verifiable, priced artifact**: `export_lesson` hashes body+provenance (deterministic, cross-store comparable); `import_lesson` verifies the hash, **content-safety scans every body string** (`inject_scan` — refuses a weaponized/prompt-injection artifact before any write, journaling `IMPORT_REFUSED_POISON`), routes the foreign lesson through the L9 gate (polluted artifacts are refused), records provenance with the ORIGIN as source, journals the purchase, and can credit the seller's earnings ledger (the x402 leg). Load-bearing: a store that never lived the crisis imports the lesson → a fresh cold-start de-risks. One agent's scar tissue is another's verified, gated, purchased education. | `src/dejavu/exchange.py` |
-| **L13 Consensus** | **Memory that agrees.** L8 resolves conflict *inside one store*; L13 is the cross-agent version: independent agents holding differing beliefs are reconciled by **L10-confidence weighting** — UNANIMOUS / CONVERGED (confidence ≥ quorum wins) / MAJORITY (honestly labelled) / **DEADLOCK** (genuine split → no fabricated winner, recorded CONTESTED). **Sybil-hardened:** quorum and majority are decided by **distinct owners**, so a single entity running clones can't manufacture consensus over honest peers. A lone low-confidence dissent can't move a hard-won truth; an unknown split isn't papered over. | `src/dejavu/consensus.py` |
-| **L14 Curriculum** | **Memory that schedules its own learning.** The self-improving capstone that closes the loop: L10 *sees* a gap (UNKNOWN/THIN) → L14 *plans* it (priority = coverage-gap × importance, scar-adjacent topics boosted) → L12 *acquires* it (verifiably, through the gate) → L9 *gates* the incoming memory → L10 reports **COVERED**. A judge watches ignorance become coverage in one cycle. | `src/dejavu/curriculum.py` |
-| **L15 Distill** | **Memory that becomes capability.** The field stores lessons as *tape* (N similar notes, each firing only on narrow recall). DISTILL compresses the recurring invariant behind many loss-lessons into ONE learned decision rule: it reads every structured crisis scar, finds the most conservative risk level that triggered protection, and writes a threshold. The rule **generalizes** to frames none of the scars named (a pure-volatility spike, when every scar was credit-driven) because it captured the invariant, not the wording. Under-sampled → no rule (honest), never a guess. | `src/dejavu/distill.py` |
-| **L16 Consent** | **Memory that argues for its own life.** L1 says memory owns itself — yet any caller can delete a store with one silent call. CONSENT makes destruction a negotiated, audited act: `wipe_impact` enumerates exactly what dies (identity, onchain anchor, guard lessons, live/archived memory); `request_wipe` **refuses** a silent wipe until `force=True` + a reason, then journals its own destruction to a **store-independent log that survives the deletion**. A wipe is permanent but never untraceable. | `src/dejavu/consent.py` |
-
-**Run the whole spine as one arc:** `dejavu-sovereign --crisis` (de-risk) vs the
-wiped-store naive fallback — see the **Run** section.
-
-> **THE FLEET (L4)** is retained as a first-class, fully-tested lane — the
-> multi-agent shared-memory blackboard that inspired the spine. See the FLEET
-> section below.
-
----
-
-## THE FLEET (L4 lane — multi-agent shared memory)
-
-> **Note:** THE FLEET is now layer **L4** of THE SPINE. It remains a fully-tested,
-> first-class lane and the original headline. The spine adds Sovereign (L1),
-> Identity (L2), Dream (L3), and Regret (L5) around it — but the shared-memory
-> coordination the fleet pioneered is the core of the whole system.
-
-Three specialist agents coordinate through ONE shared Sibyl store — **no direct
-agent-to-agent calls**. The shared memory *is* the coordination layer:
+This runs separate Python processes against a disposable Sibyl database:
 
 ```text
- news ──writes──► ┌─────────────────────────────┐
- risk ──writes──► │  SIBYL MEMORY (one store,   │ ◄── allocator cold-starts,
-                  │  tenant "fleet-brain",      │     reads the WHOLE board,
-                  │  namespace-by-name)         │     decides the book
-                  └─────────────────────────────┘
-                                     │
-                                     ▼
-              allocator decision ──► exec: REAL Base onchain action
+Session A: persist a structured crisis lesson, then exit
+Session B: open the same database, recall the lesson → equity 0.024 (printed as 0.02)
+Control: delete only that disposable memory store
+Session C: same market frame, fresh process, no lesson → equity 0.55
 ```
 
-- **`src/dejavu/fleet.py`** — `news`/`risk` write their read of the world to the board
-  (`view/news/market`, `view/risk/stress`); `alloc` cold-starts with zero context, reads
-  the whole board via `fleet_alloc_decide`, and publishes a book; `exec` fires it onchain.
-- **Load-bearing:** delete the shared store → the allocator reads an **empty board** →
-  it fails open to naive (overweight equity). The fleet's coordination collapses with the
-  memory. Same frame, opposite decision — *because of memory*.
-- **Self-evolving (Lane 4):** repeated cycles let the Learner mine the shared journal and
-  propose a skill the fleet accepts — its coordination knowledge compounds
-  (`dejavu-fleet --learn` → `skill/shape-...`).
-- **Run it:** `dejavu-fleet --crisis` (coordinated de-risk) vs `dejavu-fleet --crisis
-  --wipe` (deleted brain → naive). Executable proof: `pytest tests/test_fleet.py` (15 tests).
+The full proof frame (including volatility and yield slope) gives 0.024 equity; the simpler `dejavu --crisis` frame gives 0.05. Do not mix their displayed values.
 
----
+These are deterministic policy allocations in a demonstration, **not executed portfolio trades**. The lesson and market frame are fixtures; the experiment proves dependence on persisted memory, not discovery of a profitable investment strategy. The no-memory branch deliberately falls back to a naive book. Production deployment should abstain or fail closed instead.
 
-## The single-agent dejavu loop (fallback lane)
+## Three reproduced measurements
 
-The original memory-dejavu loop — one agent whose own past lessons flip its decision.
-Kept fully wired as the safe, always-submittable floor.
+The final audit reran these experiments from a clean source archive with freshly installed declared dependencies. [Raw outputs](docs/evidence/final/ablations.txt).
 
----
+🟦 **Fresh recall lowers equity below 0.05; deleting memory restores 0.55.** Source: `policy.decide_differently`; tests: `tests/test_loadbearing.py`.
 
-## THE SPINE — six layers, one system
+🟦 **7.072 percentage points of simulated mean loss averted.** `demo/ablation_benchmark.py`: 200 seeded frames, 150 stressed, mean model return −2.828% with memory versus −9.900% without; 75% of decisions change.
 
-`dejavu-sovereign` runs the whole thing as **one continuous arc** — not six demos,
-one story. A judge runs one command and sees all six layers plus L7 + L8:
+🟦 **3/3 selected recall-blind fixtures are caught by the distilled rule; 0/3 by first-act recall.** `demo/conscience_ablation.py`: six constructed episodes, not an independent held-out market benchmark or a general safety guarantee.
+
+Secondary experiment: `demo/spine_ablation.py` preserves **0.8176 versus 0.4887** of normalized starting capital, a **1.67× remaining-capital ratio**. Despite its legacy `crises: 12` JSON field, the code runs **12 periods: six crisis periods alternating with six zero-return calm periods**. Its −1.650% / −5.625% means average all 12 periods. Do not call those per-crisis means or realized investment returns. It differs from the 200-frame experiment and must not be merged with it.
+
+## Architecture: one store, multiple decision mechanisms
+
+```text
+structured experience → Sibyl SQLite/FTS5 → fresh-process recall → policy proposal
+                             │                                  │
+                             ├── provenance / hard lessons ─────┤
+                             ├── UNKNOWN / THIN → learning plan │
+                             └── shared specialist board        ▼
+                                                       guard / approved book
+                                                                │
+                                                   symbolic Base action adapter
+```
+
+The **Sibyl SDK is actually used**: `MemoryClient.local`, `set_entity`, `search`, journal, state, reference and archive operations. No vector database or account is required for local tests. `from dejavu import Memory` exposes the public library surface; [agent integration examples](docs/AGENTS.md) show how to reuse it.
+
+Memory influence is bounded: lexical recall and stored provenance affect deterministic rules. This is not an LLM trading agent, a trained LoRA, or a generic retrieval leaderboard claim. Learner skill proposals and threshold distillation are code-level learning mechanisms, not model-weight training.
+
+## Safety and knowledge gaps
+
+🟦 `guard.guard_book` returns allow/warn/block from stored hard lessons and the proposed exposure. See the final code audit for execution-boundary wiring and receipt semantics.
+🟦 `meta.known_unknowns` labels COVERED / THIN / UNKNOWN. `curriculum.learn_plan` schedules gaps; acquiring a lesson can close them. UNKNOWN does not automatically imply that every caller abstains.
+🟦 `exchange.import_lesson` checks artifact integrity, scans for tested poison patterns, and gates writes. A matching hash proves integrity, **not truth or a trusted author**; the scanner is not a universal prompt-injection defense.
+🟦 `consensus.reach_consensus` limits duplicate-owner votes and records deadlock. It relies on supplied owner identity; it is not permissionless Sybil resistance or proof of independent humans.
+🟦 `consent.request_wipe` refuses unforced deletion and records forced wipes in a separate audit file. It is an application policy, not filesystem access control; direct file deletion remains possible.
+
+Tests: `test_meta_guard_exchange.py`, `test_consensus_curriculum.py`, `test_poison_sybil_hardening.py`, `test_distill_consent.py`.
+
+## Partner evidence — keep the claims narrow
+
+### Base: historical execution evidence
+
+`src/dejavu/base_action.py` maps the policy to a **1,000-wei symbolic ETH transfer**, not a token swap, portfolio rebalance, or hedge. A transaction hash returned by broadcasting alone is not confirmation; inspect its receipt. The two historical action hashes below/previously cited are self-transfers, so they do not validate the current fee-recipient branch or the new Guard wiring.
+
+🟦 Historical action: [0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a](https://basescan.org/tx/0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a).
+🟦 Historical root anchor: [0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7](https://basescan.org/tx/0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7).
+
+The anchor is a content commitment in transaction data, not an NFT mint or a contract-enforced ownership right. Recomputing a matching root needs the corresponding snapshot. An old anchor does not authenticate every later layer description or current database state.
+
+### x402: paid static proof snapshot
+
+[Endpoint](https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query) · source: `demo/x402/memory-query.ts`.
+
+The handler returns **hard-coded snapshot metadata**, including an anchor reference, layer descriptions and historical benchmark values. It does **not** query this repository's live SQLite store, cryptographically prove the entire response, or verify `asset_resolves` on each request. HTTP 402 proves a payment challenge, not successful delivery or customer demand.
+
+Historical settlement references:
+
+🟦 [0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5](https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5)
+🟦 [0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93](https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93)
+
+Inspect USDC Transfer logs to identify the **economic payer**; the transaction sender can be a relayer. Decoded Transfer logs confirm both payments came from our own agent wallet, through the facilitator to our endpoint wallet: self-funded tests, not an independent customer or proven product-market fit. [Commercial evidence and limitations](docs/pmf.md).
+
+### Virtuals: implemented, not included in the default claim
+
+Registration, ACP job and provider artifacts exist. The local `virtuals.exercise()` function checks signer metadata; it is not itself a completed paid ACP job. Claim **Base only** in the submission copy unless final public job evidence and the canonical video satisfy the organizer's partner requirement. No multiplier is guaranteed by this repository. See [public-surface audit](docs/audit-surfaces.md).
+
+## Product and market
+
+Target buyer: an operator running restartable autonomous workers that must carry risk lessons, constraints and provenance across sessions. The proposed paid unit is a verified decision receipt or a memory-review service—not a generic chatbot subscription.
+
+The narrow pilot: compare the same worker with and without persisted reviewed lessons; measure repeated incidents, unsafe proposals blocked, false blocks, human overrides, and time to recover after restart. A named external design partner and repeat usage remain **unverified**, not claimed PMF. D0xedDev infrastructure is prior operator context, not proof that THE SPINE is already deployed throughout that platform.
+
+## Reproducibility
 
 ```bash
-dejavu-sovereign --crisis        # full spine arc (dry-run by default)
-DEJAVU_DRY_RUN=0 dejavu-sovereign  # broadcast the sovereign mint onchain
+.venv/bin/python -m pytest -o addopts='' -q
+.venv/bin/python -m pytest -o addopts='' -v tests/test_loadbearing.py tests/test_fleet.py tests/test_ablation.py tests/test_spine_ablation.py tests/test_conscience_ablation.py
+DEJAVU_DRY_RUN=1 .venv/bin/dejavu --crisis
+DEJAVU_DRY_RUN=1 .venv/bin/dejavu-fleet --crisis
+DEJAVU_DRY_RUN=1 .venv/bin/dejavu-sovereign --crisis
 ```
 
-| Stage | What happens | Proof |
-|---|---|---|
-| **L5+L1** | Session A learns a lesson AND a regret (the road not taken: "would have lost 18%"). | `src/dejavu/regret.py::write_regret` |
-| **L1** | The store's content-addressed root is minted onchain (Base dust tx carrying the root in `data`). Memory = an ownable asset. | `src/dejavu/sovereign.py::sovereign_mint` |
-| **L7** | The mint receipt is written **back into the store** — the memory now knows it owns this committed root; a fresh box recalls its own anchor. | `src/dejavu/sovereign.py::anchor_self` |
-| **L4** | News/risk agents write views to the shared board; the allocator reads it. | `src/dejavu/fleet.py` |
-| **L8** | A contradiction on the board is **superseded** (loser → ARCH, SUPERSEDES journal event), not overwritten. | `src/dejavu/supersede.py::supersede_entity` |
-| **L3** | The Learner mines the journal and the agent accepts a **new skill** it wrote itself. | `src/dejavu/memory.py::learn` |
-| **L4** | The store **earns** — a paid query hits the ledger. | `src/dejavu/sovereign.py::record_payment` |
-| **L6** | The memory **consolidates** — fresh lessons stay, stale ones go to ARCH (recoverable), so the live store stays lean and time-aware. | `src/dejavu/temporal.py::consolidate` |
-| **L2** | A fresh box mounts the same store → **same being** (identity hash is content-derived). | `src/dejavu/sovereign.py::identity` |
-| **Wipe** | Delete the store → asset **orphaned**, identity **changes**, self-anchor **lost**, back to naive 0.55. | `src/dejavu/sovereign.py::asset_orphaned` |
+Run destructive controls only on disposable demo databases; the shell proof creates one for that purpose. Normal demos may write beneath `data/`; do not point them at production memory. Benchmark rendering needs system DejaVu fonts; video rebuilding also needs FFmpeg. Optional sibling NEURAL_MESH backend tests may skip if that package is absent. The audited baseline was **142 passing tests**; the final report records the post-change count rather than leaving a stale count in every document.
 
-The economic deletion gate: **with memory** it de-risks to 0.015 equity; **delete the
-store** and you don't just lose the decision — the committed onchain asset is
-orphan-destroyed and the agent becomes a *different being*. That's memory-load-bearing
-with money attached.
+## Prior work and eligibility
 
-`tests/test_sovereign.py` + `tests/test_spine.py` + `tests/test_sovereign_loop.py`
-pin all of it.
+Git history begins **August 17, 2026**, before the stated September 1–10 build window. Persistence, policy, Base execution, fleet, initial layers, paid-read experiments and earlier films already existed in August. September commits add L9–L16, public APIs, conscience ablation, ACP provider work and hardening.
 
-### The second act (L9–L16): what the field hasn't built
+**Do not describe all Sibyl integration as new during the window.** Preserve history and obtain organizer clarification on eligibility of the pre-window prototype. MacroBench policy and broader D0xedDev/NEURAL_MESH infrastructure are also prior work. The final local audit changes are not public until separately authorized and published.
 
-L1–L8 cover *having, owning and recalling* memory. The second act covers memory's
-relationship with **itself and with other agents** — the eight lanes no shipped
-memory product owns:
+## Detailed sixteen-layer reference
 
-| Layer | One-line thesis | Runnable proof |
-|---|---|---|
-| **L9 Discernment** | gate what gets **written** (ingestion quality, capacity budget) | `pytest tests/test_gates.py` |
-| **L10 Meta** | know what you **don't** know (anti-hallucination coverage) | `pytest tests/test_meta_guard_exchange.py` |
-| **L11 Guard** | memory that says **no** (veto a repeat of the recorded loss) | `pytest tests/test_meta_guard_exchange.py` |
-| **L12 Exchange** | memory that **travels** (verify + gate + buy a foreign lesson) | `pytest tests/test_meta_guard_exchange.py` |
-| **L13 Consensus** | agents **agree** on the truth (confidence-weighted, never a fabricated winner) | `pytest tests/test_consensus_curriculum.py` |
-| **L14 Curriculum** | memory **schedules its own learning** (ignorance → coverage) | `pytest tests/test_consensus_curriculum.py` |
-| **L15 Distill** | memory **becomes capability** (scar tissue → one generalizing rule) | `pytest tests/test_distill_consent.py` |
-| **L16 Consent** | memory **argues for its own life** (refuses silent wipe, audits its own death) | `pytest tests/test_distill_consent.py` |
+L1 Sovereign · L2 Identity · L3 Dream · L4 Commons · L5 Regret · L6 Temporal · L7 Sovereign Loop · L8 Conflict · L9 Discernment · L10 Meta · L11 Guard · L12 Exchange · L13 Consensus · L14 Curriculum · L15 Distill · L16 Consent.
 
-Eight load-bearing mirrors, each an executable assertion a judge can run:
-
-- **L9** — no gate → 60 noise writes bury the real lesson; gate → noise refused,
-  lesson recalls clean.
-- **L11** — even when the fuzzy recall phrase text-misses, a hard crisis lesson
-  + stressed frame + a proposed 0.55-equity book returns **BLOCK**. Memory that
-  prevents the -18% replay at the action layer, not just the recall layer.
-- **L12** — a buyer store that **never lived the crisis** imports the seller's
-  verified artifact → a fresh cold-start session de-risks (equity < 0.10) instead
-  of going naive 0.55. Cross-agent scar tissue transfer, with the seller's
-  earnings ledger credited for the read.
-- **L13** — a lone low-confidence dissenting view (conf ~0.35) does **not**
-  overturn a provenance-backed hard lesson (conf ~0.85): consensus CONVERGES on
-  the credible value and preserves the dissent. A genuine 3-way unknown split
-  returns **DEADLOCK**, never a fabricated winner.
-- **L14** — the self-improving **loop**: L10 sees a topic as UNKNOWN → L14
-  schedules it → L12 imports the seller's verified lesson through the L9 gate →
-  L10 now reports **COVERED** and the gap is gone from the curriculum. Ignorance
-  becomes coverage across one executable cycle.
-- **L15** — five realized-*volatility*-driven crisis scars (which raw recall,
-  keyed to vix/credit_stress, never sees) still produce a distilled rule that
-  **generalizes**: it de-risks a novel vol spike no scar ever named, while a
-  genuinely calm frame is untouched. Memory as judgment, not tape.
-- **L16** — `request_wipe()` **refuses** a silent deletion and enumerates what
-  dies (identity, guard lessons, anchor); only an explicit `force=True` +
-  reason wipes — and it writes a **store-independent audit log that survives
-  the deletion**. Permanent, but never untraceable.
-
-### The measured gate (spine ablation benchmark)
-
-Not a claim — a number. `demo/spine_ablation.py` runs the REAL spine across 12
-crises (seed 1337), once WITH memory (persisted store), once WITHOUT (wiped/empty
-store), and applies the same crisis P&L model:
-
-| Metric | WITH memory | WITHOUT (wiped) |
-|---|---|---|
-| Capital after 12 crises | **0.82** | **0.49** |
-| Capital preserved | **1.67×** | — |
-| Mean crisis return | **−1.65%** | **−5.63%** |
-| Avg equity exposure | 0.285 | 0.55 |
-| Asset survived all crises | ✅ YES | n/a |
-| Identity stable across boxes | ✅ YES | **churns to new being** |
-| Loss averted | **+3.98pp** | — |
-
-Reproduce: `python demo/spine_ablation.py` → `demo/spine_ablation.json` +
-`demo/spine_gate_figure.png`. `tests/test_spine_ablation.py` pins the gate.
-
-### The conscience gate (second-act ablation — L9–L16 load-bearing)
-
-The spine gate above proves **some** memory beats a wiped store (L1–L8 recall).
-The harder claim is that the **second act is load-bearing on top of intact
-first-act memory**. `demo/conscience_ablation.py` holds stored content
-IDENTICAL across three arms (same lessons, same scars, same hard lessons) and
-runs the real modules across a deterministic panel of crisis channels:
-
-| Metric | FULL (16L) | ACT-ONE (L1–L8) | NO MEMORY |
-|---|---|---|---|
-| Capital after panel | **0.80** | 0.63 | 0.49 |
-| Recall-blind novel crises caught | **3 / 3** | 0 / 3 | 0 / 3 |
-
-The load-bearing gap: `decide_differently` only de-risks when `is_stressed()`
-trips, which keys on `credit_stress>0.7` **or** `vix>30` — it never reads
-`realized_vol`/`yield_slope`. A pure-volatility or curve-inversion crisis is
-**invisible to first-act recall** no matter how many scars the store holds.
-**L15 DISTILL** learns the shared `risk_score` threshold from those scars and
-fires on the novel frame anyway (risk_score *does* read vol + slope) — 3/3
-novel crises caught that ACT-ONE suffered flat-footed. **L11 GUARD** is the
-backstop that vetoes the overweight book on a stressed frame even when the
-store is too thin to distill (one hard lesson, no rule → still `block`s 0.55
-→ 0.05). Reproduce: `python demo/conscience_ablation.py` →
-`demo/conscience_ablation.json` + `demo/conscience_gate_figure.png`.
-`tests/test_conscience_ablation.py` pins the gradient FULL > ACT-ONE > NO-MEM.
-
-## x402 query-payment status (LIVE)
-
-The L4 "memory earns" layer is **real, tested, and deployed as a live paid x402
-endpoint** on Bankr Cloud:
-
-| Item | Value |
-|---|---|
-| Endpoint | [`https://x402.bankr.bot/0xf8f96d.../memory-query`](https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query) |
-| Price | **$0.01 USDC** (10000 micro-USDC, 6 decimals) |
-| Network | Base (`eip155:8453`), asset `0x833589fcd6...` (USDC) |
-| Pays to | `0x8AEE621035D93Deb3C0C1177fac252dC2dd501a0` (facilitator) |
-| Serves | onchain-committed proof snapshot + 16-layer state (L1-L16) + de-risk verdict |
-| Source | `demo/x402/memory-query.ts` |
-
-Verification: `curl -X GET https://x402.bankr.bot/0xf8f96d.../memory-query` returns
-**HTTP 402** with a valid x402 challenge (scheme `exact`, `payTo`, `amount`), i.e.
-the data layer genuinely gates a read behind a USDC micropayment — exactly the
-"memory earns from itself" claim, live.
-
-**Funded:** the d0xeddev-2 Bankr wallet (`0xf8f96d...`) holds **2.0 USDC** on Base,
-enough to settle the $0.01 read. The sovereign mint (L1) is committed onchain
-(block 50608909). The data layer is fully real end-to-end; a live paid read settles
-USDC through the Bankr facilitator.
-
-### ✅ VERIFIED LIVE SETTLEMENT (2026-08-29)
-
-A real paid read was executed and settled onchain — not a simulation:
-
-```
-payer EOA 0x23129c0472172D75bEd1e6dd061301796760Ecd9
-GET  -> HTTP 402 (payTo 0x8AEE..., amount 10000 micro-USDC = $0.01, Base)
-sign EIP-3009 TransferWithAuthorization (@x402/evm ExactEvmScheme)
-retry -> HTTP 200 + full THE SPINE memory data returned (endpoint UNLOCKED)
-```
-
-- **Verified settlement receipts:** [block 50609928](https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5) and [block 50609934](https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93), each transferring 0.01 USDC from the payer through the facilitator.
-- The endpoint returning **200** proves Bankr verified the signed EIP-3009
-  authorization and settled it onchain before serving the data — this is the
-  "memory earns from itself" claim, **proven live**.
-- Reproduce: `node demo/x402/settle-memory-query.mjs` (needs `@x402/evm` +
-  `@x402/core` + `viem`, and USDC in `agent-wallet.key`).
-
----
-
-## What it does
-
-An agent manages a macro capital book. In **Session A** it faces a stressed market,
-stays overweight equity (naive), takes a ~-18% drawdown, and writes a distilled
-lesson into its **Sibyl Memory** store. A fresh process (**Session B**) cold-starts
-with zero conversation history, **queries Sibyl first**, recalls that lesson, and
-**decides differently** — de-risking into cash/rates/hedges. That decision then
-triggers a **real onchain action on Base**.
-
-```
-SESSION A ──learn──► SIBYL MEMORY (SQLite + FTS5) ──recall──► SESSION B decides
-   write lesson       five tiers: HOT/WARM/COLD/REF/ARCH    changes the book
-        ▲                                                         │
-        └──────────── dejavu: outcome written back, compounds ◄────┘
-                                                          │
-                                                          ▼
-                                            ⛓ BASE ONCHAIN ACTION (wallet op)
-```
-
-## Demo video
-
-The current cinematic explainer — **`demo/demo_the_spine.mp4`** — is a narrated 3:11 walkthrough
-(1600x900, voice-over + ambient bed) following the exact money-shot arc: the problem →
-Session A learns → the deletion gate → Session B remembers and fires a **real Base tx** →
-measured evidence (ablation + compounding charts) → the self-learning dejavu loop →
-**L7 self-referential sovereign loop** → **L8 write-time conflict resolution** → the live
-PMF/earns scene (external payer settling real USDC) → close. Rebuild:
-`python demo/build_video_spine.py`
-(PIL terminal frames → restrained Ken Burns motion → Brian narration → mix/mux).
-
-## Why this is different (innovation + PMF, in 60 seconds)
-
-Most memory demos *recall to change an answer*. This one recalls to **change a real,
-money-driving decision that fires onchain**. Five things we don't see elsewhere:
-
-1. **Memory acts, it doesn't just answer.** A recalled lesson flips the book from
-   equity 0.55 → 0.05, and that decision executes a **real Base Mainnet transaction**
-   (verified, status 1). Memory isn't decoration — it is the trigger for autonomous
-   onchain action.
-2. **It self-improves (the dejavu loop).** The agent reads its own journal and the
-   Learner proposes a skill (`skill/crisis-derisking`) it accepts. Recall → consolidate →
-   get sharper. Compounding, not retrieval.
-3. **Memory is structurally safe.** The MacroBench risk framework owns the allocation —
-   we prove a *compromised* lesson ("max long equity in a crisis") **cannot** push the
-   agent to take risk (`tests/test_advanced.py::failure_mode_guard`). And **selective
-   forgetting** works: delete one lesson, the others persist and the decision stays
-   correct. Memory you can trust.
-4. **Measured, not marketed.** 200 seeded frames: memory averts **+7.07pp** loss, flips
-   **75%** of decisions, and over 12 crises preserves **$0.90 vs $0.29**. Real, reproducible,
-   honest numbers (no fabricated judge output).
-5. **It knows it owns itself.** After the onchain mint, the store records its own
-   anchor back into its content — so the memory's identity is provably tied to a
-   committed Base root, and a contradiction is superseded to ARCH rather than
-   overwritten. The memory is self-aware about both its onchain provenance and its
-   own revision history (`tests/test_sovereign_loop.py`).
-
-**PMF (verified, linked, claimed +10):** THE SPINE is the memory backbone of
-**D0xedDev**, a live autonomous agent hub on Base. It is a **real paid product**:
-the live x402 endpoint has already been **paid to read twice by an external
-wallet** (`0x4a15fc61…`, settled $0.01 USDC on Base), the sovereign root is
-committed onchain, and the production agent wallet has executed **459 onchain
-transactions**. Full public case study: **`docs/pmf.md`**. Not a demo prop.
-
-## Where Sibyl Memory is load-bearing (exact file/line)
-
-Sibyl Memory is **not** decorative — the core decision function *fails without it*.
-
-**THE FLEET (headline):**
-- **`src/dejavu/fleet.py:fleet_alloc_decide`** — the fleet's load-bearing function. It
-  reads the shared board (`read_board` → `memory.list_entities("view")`). Empty board →
-  fails open to naive. `tests/test_fleet.py` is the executable deletion test
-  (`test_delete_store_fleet_regresses_to_naive`).
-
-**Single-agent dejavu (fallback):**
-- **`src/dejavu/policy.py:decide_differently`** — calls `memory.recall_lessons(...)`
-  (→ `src/dejavu/memory.py:recall_lessons`, an FTS5 `search` on the store). No lesson
-  recalled → fails open to `naive_book()` (overweight equity).
-- **`src/dejavu/memory.py:recall_lessons` / `write_lesson` / `search`** — the read/write
-  that persist and retrieve the lesson across sessions.
-
-**The deletion test** (the judge's check, executable): `tests/test_loadbearing.py` and
-`tests/test_fleet.py`. Delete the store → no recall / empty board → the agent reverts to
-naive and makes the losing call.
-
-```
-$ pytest tests/test_loadbearing.py -v   # single-agent deletion gate
-$ pytest tests/test_fleet.py -v         # fleet deletion gate (empty board -> naive)
-```
-
-Run it yourself in one command (see **Run** below): `dejavu --crisis` recalls and
-de-risks to 0.05; `dejavu --crisis --wipe` (deleted store) stays naive at 0.55. Same
-frame, different decision — **because of memory**.
-
-## Partner stacks used + where
-
-| Stack | Where | What we do |
-|---|---|---|
-| **Base** | `src/dejavu/base_action.py` | A memory-driven decision executes a **real Base Mainnet wallet operation** (`eth_account` sign + `eth_sendRawTransaction`). Live verified tx below. |
-| **Virtuals Protocol** | `src/dejavu/virtuals.py`, `virtuals-dejavu-agent.md` | The loop is coordinated by a **registered, signer-enabled Virtuals ACP agent** named `dejavu` (EVM wallet `0xef25e214...47bb`, ACP_ONLY signer policy — it can transact onchain autonomously). Run with `dejavu --virtuals`.
-
-**Executed Base transaction (verified onchain, status 1):**
-[`0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a`](https://basescan.org/tx/0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a)
-(and `0x5175ae5a244b907753cacca9d529c87042ee11332c6e05cf4624d9016d4793dd`, block 50108439 — the memory-loaded de-risk)
-
-**THE SPINE sovereign mint (LIVE, status 1, block 50608909):**
-[`0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7`](https://basescan.org/tx/0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7)
-— the memory root `0x34dbf2...` committed onchain in `data`. The memory is an
-ownable, immutably-anchored asset.
-
-## Measured evidence (ablation benchmark)
-Not one anecdote — a *measured claim*. `demo/ablation_benchmark.py` runs the real
-`decide_differently` + Sibyl Memory across 200 randomly-sampled frames (150
-stressed), applying the same crisis P&L model to the book with vs. without memory:
-
-| metric | NO memory | WITH memory |
-|---|---|---|
-| mean crisis return | **-9.90%** | **-2.83%** |
-| avg equity exposure | 0.55 | 0.157 |
-| loss averted | — | **+7.07pp** |
-
-Memory changed the decision in **75%** of trials. Reproduce: `pytest tests/test_ablation.py` or `python demo/ablation_benchmark.py` → `demo/ablation_figure.png`.
-
-## LongMemEval resonance (credibility — the same suite Sibyl ranks on)
-
-The retrieval engine behind the hub — **NEURAL_MESH resonance** — benchmarks on the
-**same 100-case [LongMemEval](https://github.com/chtmp223/LongMemEval) suite** the Sibyl
-team itself uses to evaluate memory. We report the **LLM-judge-graded** (semantic, not
-lexical) numbers, so the comparison is honest:
-
-| retrieval mode | judge EM | judge F1 | MRR |
-|---|---|---|---|
-| **resonance** (spreading activation) | **0.25** | **0.344** | 0.276 |
-| dense (plain embedder) | 0.20 | 0.326 | 0.276 |
-
-Resonance edges dense on every semantic metric — strongest on `single-session-user`
-(MRR **0.68**, judge F1 **0.73**), the recall scenario a judge actually watches. Full
-per-category breakout + reproducer in [`docs/longmemeval.md`](docs/longmemeval.md)
-(`bench/longmemeval_harness.py`, seed 1337).
-
-## Deeper findings (advanced analysis)
-`demo/advanced_analysis.py` — four more honest, reproducible results:
-
-1. **Compounding / memory growth** — across 12 repeated crises, memory preserves `$0.90` of a `$1.00` starting stake vs `$0.29` without it (**~213% more capital**). `demo/growth_curve.png`.
-2. **Multi-lesson recall** — as distinct lessons accumulate, recall count rises and the agent stays saturated at the 0.05 de-risk floor (never drifts back to naive).
-3. **Selective deletion ("forgetting")** — delete *one* lesson and only that lesson's text leaves recall; the others remain and the decision stays de-risked. Full wipe is what loses.
-4. **Failure-mode guard** — a *wrong/compromised* lesson ("max long equity in crisis") **cannot** push the agent long: the MacroBench risk framework owns the allocation, not free-text prose. The guard is structural.
-
-Reproduce all: `pytest tests/test_advanced.py` or `python demo/advanced_analysis.py` → `demo/advanced_analysis.json`.
-
-![growth curve](demo/growth_curve.png)
-
-![ablation figure](demo/ablation_figure.png)
-
-From/to agent wallet `0x23129c0472172D75bEd1e6dd061301796760Ecd9`, first tx block 50104833.
-
-## Benchmark-alignment upgrades (Aug 28 — mapped to Sibyl's own latest claims)
-
-Sibyl's recent posts flex **graph-structured relational memory**, **perfect recall
-at scale** (191k records / 365-day simulation, 350/350), and a coming
-**"Sovereign" 100% compliance guarantee**. This build now meets all three head-on
-(`src/dejavu/graph_audit.py`, `tests/test_graph_audit.py` — 89 tests total):
-
-- 🕸 **Relational board** — typed edges written into Sibyl's *native*
-  `entity_relations` table (the client exposes no relation API, so we drive the
-  indexed schema directly): `view --impacts--> company --exposes--> sector view`.
-  `graph_impact()` traverses two hops — a stress signal reaches the decision
-  through the graph, not just a keyword.
-- 📏 **Scale stress** — `seed_corpus()` plants a 1,000+ record corpus (120
-  companies, ~900 daily views, 365 journal events over a simulated year);
-  `scale_recall_check()` proves the needle is still **top-1 at 100%**, median
-  search **<1 ms** (measured: 0.1 ms median / 0.3 ms max over 25 trials).
-- 🛡 **Tamper-evident audit chain** — `seal_journal()` folds every COLD journal
-  row into one chained SHA-256 digest stored in the HOT tier;
-  `verify_journal()` recomputes it. Any edited, inserted, or deleted journal
-  row breaks the chain (proven in tests) — "no record, no action" becomes
-  *provable*, the compliance story behind Sibyl Sovereign.
-- ♻️ **L7 Sovereign Loop + L8 Conflict** — the store remembers its own onchain
-  anchor (self-referential identity) and resolves write-time contradictions by
-  superseding the loser to ARCH, never overwriting it.
-
-## How memory made this possible
-
-Without Sibyl Memory there is no cross-session state: every run is a cold start that
-makes the same naive mistake. Memory is what lets the agent **compound** — it
-recalls its own past outcomes, changes policy, and writes the new result back
-(memory-dejavu loop). The agent literally gets smarter the more it runs. And because
-the decision is memory-driven, the resulting action *onchain is memory-driven too*.
-
-## Prior Work declaration
-
-- **Substrate:** the MacroBench regime-adaptive macro book (ranked **#2** on the UV
-  Labs MacroBench Arena, handle `D0xedDevi0`). Reused here as the policy substrate
-  (`src/dejavu/policy.py`).
-- **PMF evidence:** D0xedDev, a live autonomous agent hub on Base (`d0xeddev.com`).
-- **New in this entry (the submission):** the Sibyl Memory layer — persist → recall
-  → decide-differently → act onchain, and the memory-dejavu loop that closes it.
-  The macro book is reference substrate, not the submission.
-
-## Run
-
-```bash
-pip install -e ".[test]" && pytest            # 142 core (…80 base + 9 L7/L8 + 8 L9 + 11 L10-12 + 9 L13-14 + 6 L15-16 + 8 L12/L13 hardening) + 6 optional NEURAL_MESH-backend
-
-# THE SPINE (headline — six layers + L7/L8, one arc)
-dejavu-sovereign --crisis                       # full arc: learn+regret -> mint+self-anchor -> same-being
-                                                #   -> dream a skill -> supersede a conflict -> earn -> wipe -> orphan+naive
-DEJAVU_DRY_RUN=0 dejavu-sovereign               # broadcast the sovereign mint onchain
-
-# THE FLEET (L4 — multi-agent shared memory)
-dejavu-fleet --crisis                           # coordinated board -> de-risk (equity 0.05)
-dejavu-fleet --crisis --wipe                    # deleted brain -> naive (equity 0.55)
-dejavu-fleet --crisis --learn                   # + self-evolve: accept a discovered skill
-                                                #   (LLM-synthesized when FLEET_SYNTH=1 and
-                                                #    an OpenAI-compatible endpoint is up)
-
-# single-agent dejavu (fallback)
-dejavu --crisis                                 # with memory  -> de-risk (equity 0.05)
-dejavu --crisis --wipe                          # store deleted -> naive  (equity 0.55)
-DEJAVU_DRY_RUN=0 dejavu --crisis                # fire a REAL Base tx (captures hash)
-dejavu --crisis --learn --virtuals              # full loop: recall + self-learn + ACP coordinate
-```
-
-Deps: `sibyl-memory-client`, `sibyl-memory-cli`, `sibyl-memory-hermes` (local,
-headless, no account/network). Onchain: `eth_account` + raw JSON-RPC. A
-registered `dejavu` Virtuals ACP agent exists (see `virtuals-dejavu-agent.md`),
-but this submission claims only the Base partner multiplier because the final
-demo visibly exercises Base/x402 and does not visibly execute an ACP job.
-
-## License
-
-MIT
+[Judge matrix](docs/judge.md) is the factual reference. [Doctrine](docs/doctrine.md) is narrative framing, not a security or consciousness claim. Earlier plans in `BUILD_SPEC.md`, `CONCEPT.md`, `LANES.md` and `docs/UPGRADES.md` are explicitly historical and do not establish readiness.

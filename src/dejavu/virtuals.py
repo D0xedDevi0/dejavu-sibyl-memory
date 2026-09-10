@@ -57,7 +57,11 @@ def _env() -> dict:
 
 
 def acp_available() -> bool:
-    return ACP_BIN.exists() and shutil.which(str(ACP_BIN)) is not None
+    """True only when the acp CLI is present AND the caller has explicitly
+    opted into live Virtuals integration via DEJAVU_VIRTUALS_LIVE=1."""
+    return (ACP_BIN.exists()
+            and shutil.which(str(ACP_BIN)) is not None
+            and os.environ.get("DEJAVU_VIRTUALS_LIVE") == "1")
 
 
 def check_signer() -> dict | None:
@@ -76,14 +80,24 @@ def check_signer() -> dict | None:
 
 
 def exercise() -> VirtualsReceipt:
-    """Coordinate the loop through the Virtuals dejavu agent identity."""
+    """Coordinate the loop through the Virtuals dejavu agent identity.
+
+    ``available`` is True only when the acp CLI IS present AND the live
+    Virtuals integration is opted-in AND the signer query succeeds.  Without
+    all three, ``available`` is False and the error field explains why —
+    the agent identity constants still surface so callers can record the
+    identity even when the live signer path is unavailable."""
     signer = check_signer()
     return VirtualsReceipt(
-        available=True,
+        available=signer is not None,
         agent_id=DEJAVU_AGENT_ID,
         wallet=DEJAVU_WALLET,
         solana_wallet=DEJAVU_SOLANA,
         signer_policy=(signer or {}).get("policy"),
-        error=None if signer else "signer query failed (check TS_KEYRING_BACKEND=file)",
+        error=(
+            None if signer
+            else "signer query failed "
+                 "(set DEJAVU_VIRTUALS_LIVE=1 and TS_KEYRING_BACKEND=file for live path)"
+        ),
         details={"signer": signer},
     )

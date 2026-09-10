@@ -54,18 +54,25 @@ def test_run_sessions_includes_onchain_receipt():
     assert res["onchain"]["action"] == "de_risk"  # crisis + memory -> de-risk
 
 
-def test_real_signing_constructs_valid_tx():
-    """Sign the real dust transfer locally (no broadcast) to prove the path."""
-    if not os.path.exists("/opt/data/.secrets/agent-wallet.key"):
-        pytest.skip("agent wallet key not present")
-    cfg = Config(dry_run=True)
-    acct = _load_account(cfg)
+def test_real_signing_constructs_valid_tx(tmp_path):
+    """Sign and recover with an ephemeral key — no real wallet needed.
+
+    Uses an on-the-fly generated private key that lives only for this test.
+    Never touches any production secret on disk."""
+    from eth_account import Account as _Acc
+
+    key_path = tmp_path / "ephemeral.key"
+    acct = _Acc.create()
+    key_path.write_text(acct.key.hex())
+
+    cfg = Config(dry_run=True, wallet_key=key_path)
+    loaded = _load_account(cfg)
+    assert loaded.address == acct.address
+
     tx = {
         "to": acct.address, "value": 1000, "gas": 21000,
         "gasPrice": 1, "nonce": 0, "chainId": 8453,
     }
-    signed = acct.sign_transaction(tx)
+    signed = loaded.sign_transaction(tx)
     assert signed.hash  # a deterministic, broadcastable signed tx
-    # The from-address derived from the signature must match our wallet.
-    from eth_account import Account as _Acc
     assert _Acc.recover_transaction(signed.raw_transaction) == acct.address
