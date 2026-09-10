@@ -1,5 +1,7 @@
 # 🟦 THE MEMORY DOCTRINE
 
+> **Narrative, not a capability guarantee.** “Conscience,” “alive,” “owns itself,” and “will” are metaphors for deterministic software. The deletion experiments use simulated returns, Base actions are symbolic transfers/content anchors, and the paid endpoint is a static snapshot. Application-layer consent can be bypassed by filesystem access. Current factual scope: [README](../README.md) and [judge matrix](judge.md).
+
 ### What memory actually is, once you stop treating it like a database.
 
 Every "AI memory" product on the market is a **retrieval system**. Embeddings.
@@ -128,12 +130,12 @@ survives the deletion**. Permanent, but never untraceable.
 
 > **The field built memory retrieval. We built memory with a conscience — it
 > knows what it doesn't know (L10), vetoes what hurts (L11), trades what it
-> learns (L12, live on x402), agrees on truth (L13), schedules its own education
+> learns (L12 local artifact exchange; separate paid snapshot endpoint), agrees on truth (L13), schedules its own education
 > (L14), distills experience into capability (L15), and defends its own right to
 > exist (L16). Every layer is deterministic, no-LLM, and load-bearing with an
 > executable test each.**
 
-Act One proves memory is **load-bearing** (delete it and you lose real money).
+Act One proves memory is **load-bearing in the simulated policy experiment** (deletion restores the naive book).
 Act Two proves memory is **alive** — it polices its own inputs, knows its own
 gaps, refuses its own harm, shares across minds, converges with its team, grows
 on purpose, and will not be silently erased.

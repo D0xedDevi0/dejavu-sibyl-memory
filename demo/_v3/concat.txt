@@ -1,0 +1,7 @@
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/title.mp4'
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/proof.mp4'
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/guard.mp4'
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/gaps.mp4'
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/measured.mp4'
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/base.mp4'
+file '/opt/data/sibyl-hackathon/demo/_v3/segs/close.mp4'

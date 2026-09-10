@@ -1,11 +1,13 @@
 # NEURAL_MESH × Sibyl Memory — BUILD SPEC (goals, architecture, exact steps)
 
+> **HISTORICAL PLAN — superseded, not current readiness.** This document preserves earlier design decisions, counts, claims and TODOs. Use [the current README](README.md) and the final audit instead. Earlier partner multipliers, production/PMF claims and completed-submission checkboxes here are not current verification. Pre-September work is prior work; preserve its history.
+
 **Hackathon:** Sibyl Memory Hackathon · hack.sibyllabs.org
 **Team:** NEURAL_MESH · slug `neural-mesh-eea5`
 **Build window:** Sep 1–10, 2026 (all UTC) · Submit ≤ Sep 10 23:59 UTC
 **Repos/docs:** CONCEPT.md (vision) · this file (executable spec)
 
-> THIS IS THE SOURCE OF TRUTH FOR THE BUILD. A fresh agent session must be able
+> HISTORICAL BUILD PLAN (no longer source of truth). A fresh agent session once was expected
 > to pick this up cold and execute the roadmap with zero backstory. Everything
 > verified against the real SDK is marked **[VERIFIED]**. Everything that still
 > needs hands-on work is marked **[TODO]** with the exact next action.

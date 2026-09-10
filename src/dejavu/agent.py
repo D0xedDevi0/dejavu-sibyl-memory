@@ -21,7 +21,8 @@ from typing import Any
 
 from .base_action import execute
 from .config import DEFAULT_DB, Config
-from .memory import Memory
+from .decision import decide_and_execute
+from .memory import LESSON_CATEGORY, Memory
 from .policy import Book, decide_differently
 from .virtuals import exercise as virtuals_exercise
 
@@ -83,10 +84,23 @@ def run_sessions(*, crisis_frame: dict | None = None,
     # Cold-start: brand-new handle on the SAME store, zero context.
     b = Memory(db)
     recalled_book = session_b(b, crisis)
-    b.close()
 
-    # The recalled decision becomes an onchain action on Base.
-    receipt = execute(recalled_book, config)
+    # Collect the entity names the policy's recall step surfaced (distinct
+    # from the guard's hard-lesson "matched" list).
+    recalled_ids: list[str] = []
+    for q in config.search_phrases:
+        for hit in b.search(q, limit=20):
+            if hit.get("category") == LESSON_CATEGORY:
+                key = hit.get("key")
+                if key and key not in recalled_ids:
+                    recalled_ids.append(key)
+
+    # Action authority: the recalled decision is proposed to L11 GUARD.
+    # The guard verdict governs what is actually executed, and everything
+    # is recorded in a compact, honest decision receipt.
+    receipt = decide_and_execute(b, crisis, recalled_book, config,
+                                 recalled_ids=recalled_ids)
+    b.close()
 
     # Virtuals ACP coordination: the dejavu agent identity drives the loop.
     v = virtuals_exercise() if virtuals else None
@@ -97,7 +111,8 @@ def run_sessions(*, crisis_frame: dict | None = None,
         "base_frame": base,
         "learned_book": learned_book.to_dict(),
         "recalled_book": recalled_book.to_dict(),
-        "onchain": receipt.as_dict(),
+        "receipt": receipt.as_dict(),
+        "onchain": receipt.onchain,
         "virtuals": v.as_dict() if v else None,
     }
 
@@ -134,10 +149,22 @@ def main(argv: list[str] | None = None) -> int:
     # Cold-start session B on the SAME store.
     mem2 = Memory(db)
     book = session_b(mem2, crisis)
+
+    # Collect the entity names the policy's recall step surfaced.
+    recalled_ids: list[str] = []
+    for q in cfg.search_phrases:
+        for hit in mem2.search(q, limit=20):
+            if hit.get("category") == LESSON_CATEGORY:
+                key = hit.get("key")
+                if key and key not in recalled_ids:
+                    recalled_ids.append(key)
+
+    # Action authority: guard -> approved -> onchain, with a compact receipt.
+    dec_receipt = decide_and_execute(mem2, crisis, book, cfg,
+                                     recalled_ids=recalled_ids)
     mem2.close()
 
-    # Turn the recalled decision into a Base onchain action.
-    receipt = execute(book, cfg)
+    onchain = dec_receipt.onchain  # backward-compatible onchain dict
 
     # Optional self-learning beat: scan the journal, propose skills, accept the
     # top one. This is the "dejavu/compounding" moment of the demo.
@@ -157,13 +184,17 @@ def main(argv: list[str] | None = None) -> int:
     # Virtuals ACP coordination layer (registered dejavu agent identity).
     v = virtuals_exercise() if args.virtuals else None
 
+    # approved is the book the guard actually authorized for onchain execution.
+    approved_book = dec_receipt.approved
+
     result = {
         "db": db,
         "frame": crisis,
-        "equity_weight": book.equity,
-        "rationale": book.rationale,
+        "equity_weight": approved_book.get("equity", book.equity),
+        "rationale": approved_book.get("rationale", book.rationale),
         "loaded": not args.wipe,
-        "onchain": receipt.as_dict(),
+        "onchain": onchain,
+        "receipt": dec_receipt.as_dict(),
         "learned_skill": accepted,
         "virtuals": v.as_dict() if v else None,
     }
@@ -172,14 +203,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     print(f"[SESSION B] frame vix={crisis['vix']} cs={crisis['credit_stress']}")
-    print(f"[SESSION B] decision: {json.dumps(book.to_dict(), indent=2)}")
-    print(f"[SESSION B] equity weight = {book.equity:.2f}  "
+    print(f"[SESSION B] decision: {json.dumps(approved_book, indent=2)}")
+    print(f"[SESSION B] equity weight = {approved_book.get('equity', book.equity):.2f}  "
           f"({'memory-loaded' if not args.wipe else 'NAIVE - memory wiped'})")
     print(f"[SESSION B] stored DB: {db}")
-    print(f"[ONCHAIN] action={receipt.action} dry_run={receipt.dry_run}")
-    if receipt.tx_hash:
-        print(f"[ONCHAIN] tx {receipt.tx_hash}")
-        print(f"[ONCHAIN] explorer {receipt.explorer_url}")
+    print(f"[ONCHAIN] action={onchain['action']} dry_run={onchain['dry_run']}")
+    if onchain.get("tx_hash"):
+        print(f"[ONCHAIN] tx {onchain['tx_hash']}")
+        print(f"[ONCHAIN] explorer {onchain['explorer_url']}")
     if args.learn:
         if accepted:
             print(f"[LEARN] accepted skill {accepted.get('doc_key')} "

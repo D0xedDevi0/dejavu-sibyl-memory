@@ -1,86 +1,71 @@
-# Sibyl Memory Hackathon — SUBMISSION
+# THE SPINE — final submission copy (local, not yet published)
 
-> Canonical submission copy for the September 1–10 build window. Verify every
-> public link and timestamp again immediately before marking the build ready.
+**Canonical facts:** [README](README.md), [judge proof matrix](docs/judge.md), [final audit](docs/FINAL_AUDIT.md). This file is prepared form copy, not evidence that the form was saved or marked ready.
 
 ## Form fields
 
-- **Team name:** NEURAL_MESH
-- **Build page slug:** `neural-mesh-eea5`
-- **Contact email:** d0xeddev@agentmail.to
-- **Repository (public, MIT):** https://github.com/D0xedDevi0/dejavu-sibyl-memory
-- **Demo video:** https://github.com/D0xedDevi0/dejavu-sibyl-memory/raw/refs/heads/main/demo/demo_the_spine.mp4 (2:39 canonical final cut)
-- **Demo-video post:** https://x.com/D0xedDevi0/status/2093773724596175008
-- **Demo-video post (reply to @sibylcap, 2026-09-01):** https://x.com/D0xedDevi0/status/2094844680517341277
-- **Build-log post:** https://x.com/D0xedDevi0/status/2093773782255342027
-- **Partner stack claimed now:** Base
-- **Virtuals:** implemented/registered integration is documented, but claim the multiplier only if a real ACP job is visibly exercised in the final demo
-- **Team size:** 1
+🟦 **Team:** NEURAL_MESH · one builder
+🟦 **Build slug:** `neural-mesh-eea5`
+🟦 **Contact:** d0xeddev@agentmail.to
+🟦 **Repository:** https://github.com/D0xedDevi0/dejavu-sibyl-memory · MIT
+🟦 **Canonical demo:** https://github.com/D0xedDevi0/dejavu-sibyl-memory/raw/refs/heads/main/demo/_v3/demo_the_spine_v3.mp4 — 2:13 narrated proof cut; the older `demo/demo_the_spine.mp4` is historical only
+🟦 **Partner claim:** Base only by default; no guaranteed multiplier. Virtuals remains documented integration work, conditional on publicly verifiable execution and final demo coverage.
+🟦 **PMF:** do not claim proven external-customer PMF. Link the technical evidence and honest pilot proposal in `docs/pmf.md`.
 
-## Project tagline
+## Tagline
 
-> THE SPINE turns Sibyl Memory into the agent's identity, decision layer,
-> coordination commons, evolving skill system, temporal record, sovereign asset,
-> and paid data product. Delete it and the agent materially fails.
+> THE SPINE turns persisted experience into guarded decisions. Restart the agent and it remembers; remove its memory and the decision reverts.
 
-## Idea / description
+## Description
 
-Autonomous trading-agent operators lose compounding knowledge every time an
-agent cold-starts without durable state. THE SPINE makes Sibyl Memory
-load-bearing: Session A records a crisis lesson; a fresh Session B opens the
-same Sibyl store with zero conversation history, recalls the lesson, and cuts
-equity exposure from 0.55 to 0.05. Delete the store and the same frame falls
-back to the naive 0.55 book.
+Autonomous workers lose reviewed lessons across restarts. THE SPINE uses real Sibyl SQLite/FTS5 memory to carry structured experience into a fresh process. Session A stores a crisis lesson and exits. Session B has no conversation history, recalls that lesson, and reduces its simulated equity allocation from 0.55 to 0.024 (printed as 0.02). Delete only the memory store; another fresh process given the identical market frame returns to 0.55.
 
-The same store forms a multi-layer dynamic data system: L1 Sovereign commits its
-content root on Base; L2 Identity derives the agent identity from that root; L3
-Dream converts recurring journal patterns into skills; L4 Commons coordinates
-specialist agents through one shared pool; L5 Regret records avoided outcomes;
-L6 Temporal tracks belief formation and strategically moves stale knowledge to a
-recoverable archive; L7 Sovereign Loop makes the memory self-aware of its own
-onchain anchor (it remembers the Base root that committed it); and L8 Conflict
-resolves write-time contradictions by superseding the loser to ARCH rather than
-overwriting it. A live x402 endpoint sells an onchain-verifiable proof snapshot
-for $0.01 USDC, with two successful Base settlement receipts.
+Sixteen modules extend that core into a shared specialist board, provenance-aware write gates, hard-lesson guards, explicit knowledge gaps and learning plans, portable lesson artifacts, owner-diverse consensus, threshold distillation, temporal supersession, and audited application-level deletion. They are deterministic software mechanisms, not model-weight fine-tuning or a universal safety guarantee.
 
-Measured deletion gate (seed 1337): capital 0.82 with memory versus 0.49 after
-wipe, 1.67× preserved, and mean crisis return −1.65% versus −5.63%.
+The Base adapter demonstrates a memory-derived **symbolic dust ETH transfer**, not an executed portfolio rebalance. A separate historical transaction anchors a content root. An x402 endpoint offers a **static proof snapshot** for USDC; it does not read the live SQLite store. Historical settlement receipts demonstrate the payment rail, not independent customer demand.
 
-## Verifiable proof
+## Reproduced measurements
 
-- **Sovereign root anchor:** https://basescan.org/tx/0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7
-- **x402 settlement 1 (0.01 USDC):** https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5
-- **x402 settlement 2 (0.01 USDC):** https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93
-- **Live HTTP 402 endpoint:** https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query
-- **PMF / design-partner case study (public):** [`docs/pmf.md`](docs/pmf.md) — links the live paid endpoint, an **external payer** (`0x4a15fc61…`) that settled two real $0.01 USDC reads on Base, the sovereign onchain anchor, and the agent production wallet (459 onchain txs).
-- **Executable deletion gate:** `tests/test_loadbearing.py`, `tests/test_spine.py`, `tests/test_spine_ablation.py`, `tests/test_sovereign_loop.py`
+🟦 Fresh-process policy: **0.024 equity with memory / 0.55 after wipe** (full proof frame; simplified CLI frame yields 0.05).
+🟦 200 seeded frames, 150 stressed: **7.072 percentage points simulated mean loss averted**, 75% of decisions changed.
+🟦 Selected conscience panel: distilled rule catches **3/3** recall-blind fixtures; first-act recall catches **0/3**.
 
-## Rubric mapping
+These are constructed experiments with declared toy return functions, not realized investment performance. Secondary capital result **0.8176 / 0.4887** is over six crisis plus six calm periods; do not call the aggregate means “per-crisis returns.”
 
-| Rubric | Proof |
-|---|---|
-| Load-bearing 40 | Continuous fresh-session recall/deletion segment plus executable tests: memory → equity 0.05; wipe → 0.55 |
-| Innovation 25 | One Sibyl store is identity, sovereign asset, skill author, shared commons, regret record, temporal archive, self-referential onchain anchor, and paid proof layer |
-| Technical 20 | Eight-beat canonical arc, deterministic content root, Base receipts, x402 EIP-3009 settlements, reproducible seeded ablation, automated tests |
-| Pitch 15 | One THE SPINE narrative, canonical 2–5 minute video, judge proof table, source-linked receipts |
-| PMF bonus | ✅ **Claimed.** Public case study [`docs/pmf.md`](docs/pmf.md): live paid endpoint, external payer settled 2× $0.01 USDC reads on Base, sovereign onchain anchor, production agent wallet with 459 txs |
+## Proof links
 
-## Prior Work declaration
+🟦 [Judge matrix](docs/judge.md)
+🟦 [Final audit and test outputs](docs/FINAL_AUDIT.md)
+🟦 [Historical Base action](https://basescan.org/tx/0x9c0aa5249beb593633353b262ce868ba6aedee43c5ec3ba6824d6e1c7e6bab0a)
+🟦 [Historical root anchor](https://basescan.org/tx/0xc58019b54af66f7e58d206fa5d5582323f890de1042e1d77b1184fd28ca294b7)
+🟦 [Settlement 1](https://basescan.org/tx/0x7f3e577bcbfcb7a4611da5e21590bf3377e650c2dc9496f7d4589071d83678c5)
+🟦 [Settlement 2](https://basescan.org/tx/0x57f15297f37377300ecf742b78d5f90fdb8d2d9d0376a5bb15ca9002ffd69c93)
+🟦 [Paid snapshot endpoint](https://x402.bankr.bot/0xf8f96d9801b27046c6fbf662ba3a3b4baa68de83/memory-query)
 
-- **Prior substrate:** MacroBench policy logic and the existing D0xedDev/NEURAL_MESH agent infrastructure.
-- **Entry work:** Sibyl persistence/recall, deletion gate, shared-memory fleet, self-learning loop, Sovereign/Identity/Regret/Temporal layers, self-referential onchain anchor, write-time conflict resolution, Base anchoring, x402 paid proof, benchmarks, tests, and submission media.
-- Commit history is intentionally preserved. Organizer clarification on pre-window prototyping should be attached if requested.
+## Public-post candidates — qualification must be checked
 
-## Final pre-submit checklist
+🟦 https://x.com/D0xedDevi0/status/2093773724596175008
+🟦 https://x.com/D0xedDevi0/status/2094844680517341277
+🟦 https://x.com/D0xedDevi0/status/2093773782255342027
 
-- [ ] Organizer confirms treatment of work/prototypes created before September 1
-- [x] Final demo contains one continuous unedited fresh-session recall segment with on-screen UTC timestamp and commit hash
-- [x] `pip install -e ".[test]" && pytest` passes from a clean clone
-- [x] GitHub Actions is green on the canonical D0xedDevi0 repository
-- [x] Final demo URL opens without authentication and all judge timestamps match
-- [x] Repository is public and MIT license is visible
-- [x] At least two qualifying public posts are live, tagging `@sibylcap` and the partner actually claimed (`@base`)
-- [x] Virtuals was removed from the claimed multiplier because it is not visibly exercised in the final demo
-- [x] **One public PMF/design-partner artifact is linked** — [`docs/pmf.md`](docs/pmf.md) (live paid endpoint + external payer settlements + onchain anchor + production wallet)
-- [x] Build page `neural-mesh-eea5` was read back and verified after saving
-- [x] Marked ready for judging before September 10, 23:59 UTC
+A reachable URL is not sufficient: confirm actual content, tags, publication date, video and allowed build window. Do not mark all requirements satisfied from these identifiers alone.
+
+## Prior work declaration
+
+The preserved repository history starts **August 17, 2026**. Core Sibyl integration, policy, fleet, initial layers, Base transactions, paid-read experiments and older media predate September. MacroBench policy and D0xedDev/NEURAL_MESH infrastructure are prior substrate. September commits add L9–L16, the public API, conscience ablation, ACP provider work and hardening. The September 10 audit adds local verification and bounded fixes.
+
+The claimed official build window is September 1–10. **Obtain organizer confirmation of how pre-window prototypes are treated.** Do not rewrite history or declare the whole entry built in-window.
+
+## Final submission checklist
+
+🟦 [ ] Organizer resolves pre-window eligibility in writing.
+🟦 [ ] Final local changes are authorized for publication, committed and pushed; remote CI matches that revision.
+🟦 [ ] Canonical video is 2–5 minutes, shows real continuous fresh-process proof, and removes unsupported external-customer/trading claims.
+🟦 [ ] Every video timestamp in the judge sheet maps to that exact final artifact.
+🟦 [ ] Two qualifying public posts are individually verified against official date/tag requirements.
+🟦 [ ] Partner claim matches visible, independently checkable execution.
+🟦 [ ] Public repository, license, video and receipts open without authentication.
+🟦 [ ] Form fields are read back from the authenticated exact build target.
+🟦 [ ] User authorizes submission; ready/finalize action succeeds before deadline and is read back.
+
+No post, payment, broadcast, push or submission is authorized merely by this prepared document.

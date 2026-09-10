@@ -1,5 +1,7 @@
 # NEURAL_MESH × Sibyl Memory — Hackathon Concept (LOCKED)
 
+> **HISTORICAL PLAN — superseded, not current readiness.** This document preserves earlier design decisions, counts, claims and TODOs. Use [the current README](README.md) and the final audit instead. Earlier partner multipliers, production/PMF claims and completed-submission checkboxes here are not current verification. Pre-September work is prior work; preserve its history.
+
 **Build window: Sep 1–10, 2026 · Judging Sep 11–12 · Team: NEURAL_MESH**
 
 ## The one-liner
