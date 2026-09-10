@@ -51,7 +51,7 @@ The historical film's 02:49 frame explicitly reads **“EXTERNAL payer 0x4a15fc6
 
 ### Recommendation
 
-Keep `demo/demo_the_spine.mp4` only as the historical fallback. The verified local replacement is [`demo/_v3/demo_the_spine_v3.mp4`](../demo/_v3/demo_the_spine_v3.mp4), 133.523220 seconds (2:13), with real narration, captured fresh-process proof, bounded Guard receipt, honest Base evidence, and no external-customer assertion. It is not yet public because publication was not authorized.
+Keep `demo/demo_the_spine.mp4` only as the historical fallback. The verified local replacement is [`demo/_v3/demo_the_spine_v3.mp4`](../demo/_v3/demo_the_spine_v3.mp4), 133.523220 seconds (2:13), with real narration, captured fresh-process proof, bounded Guard receipt, honest Base evidence, and no external-customer assertion. It is public on the pushed `main` branch; the remote raw URL returned HTTP 200 and its SHA-256 matched the local artifact byte-for-byte.
 
 ## Unresolved surfaces
 

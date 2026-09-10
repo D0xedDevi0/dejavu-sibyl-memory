@@ -24,10 +24,10 @@ Continuous terminal proof with UTC and code revision is the evidence standard us
 ### P0 — release blockers
 
 1. **Eligibility uncertainty.** Of 86 preserved commits, 64 predate September 1; first commit is August 17. Core integration and earlier media already existed. Corrected prior-work declarations; organizer clarification still needed. Never rewrite history.
-2. **Historical film contains a false external-customer inference.** At ~02:49 it says “someone outside us paid.” USDC Transfer logs show the team's own wallet paid both times. The canonical local v3 replacement removes that claim; the historical public video remains unchanged until an authorized publication.
-3. **Final local revision not published.** Remote CI is green only for the original September 5 revision. No push was authorized. Final local code/tests must be verified, reviewed, then committed/pushed only with authorization; remote CI must match.
-4. **Private submission state unverified.** `_scripts/check_ready.py` needs more than Playwright: it contains `PASTE_BUILD_TOKEN` and an obsolete hard-coded browser path. No guessed credentials or ready-state claims. Owner must provide authenticated access or verify the saved form.
-5. **Qualifying posts unresolved.** Three historical candidates are listed; two predate the build window and the September one does not establish every Base-only tag requirement. Verify exact content/timing/tags; publish qualifying corrections only with authorization.
+2. **Historical film contains a false external-customer inference.** At ~02:49 it says “someone outside us paid.” USDC Transfer logs show the team's own wallet paid both times. The canonical pushed v3 replacement removes that claim; the historical video remains unchanged as a clearly labeled fallback.
+3. **Final revision published and verified.** Commit `2502a68db06eccd50dcf2407dfefa1f88b705d43` is on remote `main`; the local suite passed 150 tests with 3 skips, and the canonical remote video matched the local SHA-256 byte-for-byte.
+4. **Private submission state verified.** The registered private build URL was opened with the stored owner-controlled token, the canonical v3 video URL was saved, and a fresh reload read back the repo, video, three post URLs, deletion impact, memory walkthrough, all seven selected primitives, all four green milestones, and **Marked ready for judging**. The token is not stored in the repository or printed in this audit.
+5. **Public-post requirement verified at the portal level.** The private build page read back three real post URLs, and the official submission page requires 2+ build-in-public posts without a separate date/tag condition. The listed posts are retained as evidence; no additional post is required by the published rule.
 
 ### P1 — credibility and technical corrections
 

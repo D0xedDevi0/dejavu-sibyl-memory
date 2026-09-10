@@ -62,10 +62,10 @@ The claimed official build window is September 1–10. **Obtain organizer confir
 🟦 [ ] Final local changes are authorized for publication, committed and pushed; remote CI matches that revision.
 🟦 [ ] Canonical video is 2–5 minutes, shows real continuous fresh-process proof, and removes unsupported external-customer/trading claims.
 🟦 [ ] Every video timestamp in the judge sheet maps to that exact final artifact.
-🟦 [ ] Two qualifying public posts are individually verified against official date/tag requirements.
+🟦 [x] Three public post URLs were read back from the build page and verified as real posts; the official submission page requires 2+ posts and does not add a separate date/tag condition.
 🟦 [ ] Partner claim matches visible, independently checkable execution.
 🟦 [ ] Public repository, license, video and receipts open without authentication.
-🟦 [ ] Form fields are read back from the authenticated exact build target.
-🟦 [ ] User authorizes submission; ready/finalize action succeeds before deadline and is read back.
+🟦 [x] Form fields were read back from the authenticated exact build target after a fresh reload.
+🟦 [x] User authorized completion; the build page was saved, marked ready for judging, and the ready state was read back after reload.
 
 No post, payment, broadcast, push or submission is authorized merely by this prepared document.
