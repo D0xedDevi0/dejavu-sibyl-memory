@@ -2,6 +2,15 @@
 
 **NEURAL_MESH × Sibyl Memory** · [Public repository](https://github.com/D0xedDevi0/dejavu-sibyl-memory) · MIT
 
+> **STATUS: spine prototype (retired as a second production brain, 2026-10-03).**
+> The four strongest layers of this 16-layer spine — **L10 Meta** (known-unknowns),
+> **L12 Exchange** (tamper-evident content-hash transfer), **L13 Consensus**
+> (Sybil-hardened quorum), and **L14 Curriculum** (self-scheduled learning) — have
+> been ported into the canonical [`BasedNUKEM/NEURAL_MESH`](https://github.com/BasedNUKEM/NEURAL_MESH)
+> brain as `neural_mesh/{meta,exchange,consensus,curriculum}.py` (v0.37.0). This
+> repository remains as reference/evidence for the port, not a second production
+> memory system.
+
 > A persistent memory layer for autonomous risk agents: turn recorded experience into guarded decisions, shared capability, and auditable action evidence.
 
 **Watch:** [THE SPINE canonical demo](demo/_v3/demo_the_spine_v3.mp4) — 2:13, narrated, and rebuilt from the current proof path. The older `demo/demo_the_spine.mp4` remains historical only. See [video audit](docs/audit-surfaces.md) and the [final demo script](docs/final-demo-script.md).
