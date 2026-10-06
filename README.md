@@ -17,6 +17,13 @@
 
 **Judge shortcut:** [claim → implementation → test → evidence](docs/judge.md) · [final audit and release checklist](docs/FINAL_AUDIT.md).
 
+## Hackathon payout and account details
+
+- **Payout wallet:** `0x23129c0472172d75bed1e6dd061301796760ecd9` (the team’s agent wallet).
+- **Sibyl Memory / Claude Pro contact:** `basednukem@gmail.com`.
+
+The payout wallet is intentionally separate from the x402 endpoint-owner address in the historical proof section below. The x402 receipts identify the agent wallet as the economic payer in self-funded tests; they do not establish an independent customer.
+
 ## Run the fresh-process deletion proof
 
 From the repository root, in Python 3.11+ with `uv` installed:
